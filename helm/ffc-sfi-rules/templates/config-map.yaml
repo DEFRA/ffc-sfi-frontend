@@ -1,0 +1,6 @@
+{{- include "ffc-helm-library.container-config-map" (list . "ffc-sfi-rules.config-map") -}}
+{{- define "ffc-sfi-rules.config-map" -}}
+data:
+  NODE_ENV: {{ quote .Values.environment }}
+  PORT: {{ quote .Values.container.port }}
+{{- end -}}
