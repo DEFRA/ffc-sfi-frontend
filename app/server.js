@@ -1,15 +1,16 @@
 const path = require('path')
+
+const inert = require('@hapi/inert')
 const Hapi = require('@hapi/hapi')
 const nunjucks = require('nunjucks')
 const vision = require('@hapi/vision')
-const inert = require('@hapi/inert')
 
-const routes = [].concat(
+const routes = [
   require('./routes/assets'),
   require('./routes/healthy'),
   require('./routes/healthz'),
   require('./routes/home')
-)
+]
 
 async function createServer () {
   const server = Hapi.server({
