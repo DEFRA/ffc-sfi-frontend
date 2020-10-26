@@ -42,6 +42,9 @@ readinessProbe:
   periodSeconds: 10
   failureThreshold: 3
 
+service:
+  port: 80
+
 ingress:
   class: nginx
   endpoint: ffc-sfi-rules
