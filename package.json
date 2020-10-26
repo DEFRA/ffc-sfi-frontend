@@ -4,23 +4,46 @@
   "description": "POC app for SFI rules",
   "homepage": "https://github.com/DEFRA/ffc-sfi-rules",
   "main": "app/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DEFRA/ffc-sfi-rules.git"
+  },
   "scripts": {
-    "test": "jest --runInBand",
-    "start:watch": "nodemon --inspect=0.0.0.0 --ext js --legacy-watch app/index.js"
+    "build": "webpack",
+    "build:watch": "webpack --watch",
+    "start:nodemon": "nodemon --inspect=0.0.0.0 --ext js,njk --legacy-watch app/index.js",
+    "start:watch": "npm-run-all --parallel build:watch start:nodemon",
+    "test": "jest --runInBand"
   },
   "author": "Defra",
   "contributors": [
-    "Steve Hunt steven.hunt@defra.gov.uk"
+    "Steve Hunt <steven.hunt@defra.gov.uk>"
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
-    "@hapi/hapi": "^20.0.0"
+    "@hapi/hapi": "^20.0.0",
+    "@hapi/inert": "^6.0.3",
+    "@hapi/vision": "^6.0.1",
+    "govuk-frontend": "^3.9.1",
+    "nunjucks": "^3.2.2"
   },
   "devDependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^5.0.0",
+    "file-loader": "^6.1.1",
+    "html-webpack-plugin": "^4.5.0",
     "jest": "^26.4.0",
     "jest-junit": "^11.1.0",
+    "mini-css-extract-plugin": "^1.2.0",
     "nodemon": "^2.0.4",
-    "standard": "^14.3.4"
+    "npm-run-all": "^4.1.5",
+    "resolve-url-loader": "^3.1.2",
+    "sass": "^1.27.0",
+    "sass-loader": "^10.0.4",
+    "standard": "^15.0.0",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.2.0",
+    "webpack-cli": "^4.1.0"
   },
   "standard": {
     "globals": [
