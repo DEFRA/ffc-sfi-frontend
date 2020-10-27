@@ -5,6 +5,8 @@ const CopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
+const pathToGeneratedLayout = '../../views/layouts/layout.njk'
+
 const isDev = process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
 
 console.log(`Running webpack in ${isDev ? 'development' : 'production'} mode`)
@@ -64,15 +66,19 @@ module.exports = {
     publicPath: '/assets/'
   },
   plugins: [
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin({
+      // files were being removed on rebuild, this prevents that and shouldn't
+      // cause problems as all files are removed on initial build
+      cleanStaleWebpackAssets: false
+    }),
     new CopyPlugin({
       patterns: [
-        { from: './node_modules/govuk-frontend/govuk/assets/images', to: './images' }
+        { from: './node_modules/govuk-frontend/govuk/assets/images', to: 'images/' }
       ]
     }),
     new HtmlWebpackPlugin({
       inject: false,
-      filename: '../../views/layouts/layout.njk',
+      filename: pathToGeneratedLayout,
       template: 'app/views/layouts/_layout.njk'
     }),
     new MiniCssExtractPlugin({
