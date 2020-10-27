@@ -1,6 +1,7 @@
 const path = require('path')
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
@@ -64,6 +65,11 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
+    new CopyPlugin({
+      patterns: [
+        { from: './node_modules/govuk-frontend/govuk/assets/images', to: './images' }
+      ]
+    }),
     new HtmlWebpackPlugin({
       inject: false,
       filename: '../../views/layouts/layout.njk',
