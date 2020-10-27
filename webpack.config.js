@@ -67,6 +67,9 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin({
+      // do not delete the layout file as it gets overwritten each build and
+      // isn't within outputPath so causes problems with permissions
+      cleanAfterEveryBuildPatterns: [`!${pathToGeneratedLayout}`],
       // files were being removed on rebuild, this prevents that and shouldn't
       // cause problems as all files are removed on initial build
       cleanStaleWebpackAssets: false
