@@ -9,7 +9,9 @@ const routes = [
   require('./routes/assets'),
   require('./routes/healthy'),
   require('./routes/healthz'),
-  require('./routes/home')
+  require('./routes/home'),
+  require('./routes/results'),
+  require('./routes/sbi')
 ]
 
 async function createServer () {

@@ -26,13 +26,23 @@
       iconFallbackText: "Warning"
     }) }}
 
-    {{ govukButton({
-      classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
-      href: '/sbi',
-      isStartButton: true,
-      text: 'Start now'
-    }) }}
+    <form method="POST" action="/results">
+      {{ govukInput({
+        label: {
+          text: "Enter Single Business Identifier (SBI)",
+          classes: "govuk-label--l",
+          isPageHeading: true
+        },
+        id: "sbi",
+        name: "sbi"
+      }) }}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+    </form>
   </div>
   <div>
+
 </div>
 {% endblock %}
