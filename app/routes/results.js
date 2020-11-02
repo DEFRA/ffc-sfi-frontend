@@ -9,7 +9,7 @@ module.exports = {
   options: {
     validate: {
       payload: Joi.object({
-        sbi: Joi.string().required()
+        sbi: Joi.string().pattern(/^[0-9]{9}/).required()
       }),
       failAction: (request, h) => h.view('sbi', { errors: [{ text: 'Please enter an SBI', href: '#sbi' }] }).takeover()
     }
