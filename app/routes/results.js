@@ -11,7 +11,7 @@ module.exports = {
       payload: Joi.object({
         sbi: Joi.string().required()
       }),
-      failAction: (request, h) => h.view('sbi').takeover()
+      failAction: (request, h) => h.view('sbi', { errors: [{ text: 'Please enter an SBI', href: '#sbi' }] }).takeover()
     }
   }
 }
