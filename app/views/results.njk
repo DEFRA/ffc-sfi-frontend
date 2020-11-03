@@ -23,14 +23,25 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Results for {{ sbi }}</h1>
+    <h1 class="govuk-heading-l">Results for Single Business Identifier {{ sbi }}</h1>
 
     {{ govukWarningText({
       text: "This is not a real service and is for demonstration purposes only.",
       iconFallbackText: "Warning"
     }) }}
 
-    <p class="govuk-body">Coming soon!</p>
+    <p class="govuk-body">There is a total of {{ landcover.totalArea | round(3) }} (ha) of land for SBI {{ sbi }}. It is broken down into the following land types and parcels.</p>
+    <p class="govuk-body">
+    {% for lccc, data in landcover.landtypes %}
+      <h3>{{ data.description }} (code {{ lccc }}) has a total area of {{ data.totalArea | round(3) }} (ha). This consists of the following individual parcels:</h3>
+      {% for parcel in data.parcels %}
+        <ul>
+          <li>ParcelId '{{ parcel.id }}' with area {{ parcel.area | round(3) }} (ha)</li>
+        </ul>
+      {% endfor %}
+    {% endfor %}
+    </p>
+    <!-- <p class="govuk-body">{{ landcover | dump }}</p> -->
   </div>
   <div>
 
