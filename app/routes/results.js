@@ -1,23 +1,39 @@
 const Joi = require('@hapi/joi')
 const Wreck = require('@hapi/wreck')
 
+const outputFields = [
+  'area_ha', 'description', 'land_cover_class_code', 'parcel_id'
+]
+
 function processLandCover (data) {
   // for each feature, group by land_cover_class_code
-  const viewModel = {}
+  const viewModel = {
+    landtypes: {},
+    totalArea: 0
+  }
 
   data.features.forEach((feature) => {
-    console.log(feature)
-    console.log(feature.properties)
-    const { area_ha, description, land_cover_class_code: lccc } = feature.properties
-    console.log(lccc)
-    if (viewModel[lccc]) {
-      viewModel[lccc].areas.push(area_ha)
+    const { area_ha: area, description, land_cover_class_code: lccc, parcel_id: parcelId } = feature.properties
+
+    viewModel.totalArea += area
+
+    if (viewModel.landtypes[lccc]) {
+      const parcel = {
+        area,
+        id: parcelId
+      }
+      viewModel.landtypes[lccc].parcels.push(parcel)
+      viewModel.landtypes[lccc].totalArea += area
     } else {
-      viewModel[lccc] = { areas: [area_ha], description }
+      const parcels = [{
+        area,
+        id: parcelId
+      }]
+      viewModel.landtypes[lccc] = { description, parcels, totalArea: area }
     }
   })
   console.log(viewModel)
-  return data
+  return viewModel
 }
 
 module.exports = {
@@ -28,8 +44,7 @@ module.exports = {
     console.log(request.payload)
     const { sbi } = request.payload
     // only request response to include data that is used
-    const outputFields = 'area_ha,description,land_cover_class_code'
-    const { payload } = await Wreck.get(`LandCovers/MapServer/0/query?where=SBI=${sbi}&outFields=${outputFields}&f=geojson&returngeometry=false`,
+    const { payload } = await Wreck.get(`LandCovers/MapServer/0/query?where=SBI=${sbi}&outFields=${outputFields.join(',')}&f=geojson&returngeometry=false`,
       {
         baseUrl: 'https://environment.data.gov.uk/arcgis/rest/services/RPA/',
         json: true
