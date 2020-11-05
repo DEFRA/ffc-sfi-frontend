@@ -30,11 +30,11 @@ function processLandCover (data) {
       viewModel.landtypes[lccc] = { description, parcels, totalArea: area }
     }
   })
-  console.log(viewModel)
   return viewModel
 }
 
 async function getSBIData (sbi) {
+  console.log(`Requesting data for SBI ${sbi}`)
   const { payload } = await Wreck.get(`LandCovers/MapServer/0/query?where=SBI=${sbi}&outFields=${outputFields.join(',')}&f=geojson&returngeometry=false`,
     {
       baseUrl: 'https://environment.data.gov.uk/arcgis/rest/services/RPA/',
