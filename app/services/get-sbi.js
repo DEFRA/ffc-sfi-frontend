@@ -34,7 +34,7 @@ function processLandCover (data) {
   return viewModel
 }
 
-async function getSBI (sbi) {
+async function getSBIData (sbi) {
   const { payload } = await Wreck.get(`LandCovers/MapServer/0/query?where=SBI=${sbi}&outFields=${outputFields.join(',')}&f=geojson&returngeometry=false`,
     {
       baseUrl: 'https://environment.data.gov.uk/arcgis/rest/services/RPA/',
@@ -43,4 +43,4 @@ async function getSBI (sbi) {
   return processLandCover(payload)
 }
 
-module.exports = getSBI
+module.exports = getSBIData
