@@ -6,6 +6,7 @@ function results (server) {
     path: '/results',
     handler: async (request, h) => {
       const { sbi } = request.payload
+      console.log(`Handling '/results' for SBI ${sbi}`)
       const landcover = await server.methods.getSBIData(sbi)
       return h.view('results', { sbi, landcover })
     },
