@@ -4,6 +4,7 @@ const inert = require('@hapi/inert')
 const Hapi = require('@hapi/hapi')
 const nunjucks = require('nunjucks')
 const vision = require('@hapi/vision')
+const catboxMemory = require('@hapi/catbox-memory')
 
 const routes = [
   require('./routes/assets'),
@@ -16,6 +17,12 @@ const routes = [
 
 async function createServer () {
   const server = Hapi.server({
+    cache: {
+      name: 'in-memory',
+      provider: {
+        constructor: catboxMemory
+      }
+    },
     port: process.env.PORT
   })
 
