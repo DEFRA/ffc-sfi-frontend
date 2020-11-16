@@ -1,10 +1,10 @@
 version: '3.8'
 
 services:
-  ffc-sfi-rules:
+  ffc-sfi-frontend:
     build:
       context: .
       target: production
-    image: ffc-sfi-rules
-    container_name: ffc-sfi-rules
+    image: ffc-sfi-rfrontend
+    container_name: ffc-sfi-frontend
     environment: {}
