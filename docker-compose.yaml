@@ -5,6 +5,6 @@ services:
     build:
       context: .
       target: production
-    image: ffc-sfi-rfrontend
+    image: ffc-sfi-frontend
     container_name: ffc-sfi-frontend
     environment: {}
