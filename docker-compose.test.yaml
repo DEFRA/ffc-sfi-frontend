@@ -4,11 +4,11 @@ version: '3.8'
 # that test output is saved to the host
 
 services:
-  ffc-sfi-rules:
+  ffc-sfi-frontend:
     build:
       target: development
-    image: ffc-sfi-rules-development
-    container_name: ffc-sfi-rules-test
+    image: ffc-sfi-frontend-development
+    container_name: ffc-sfi-frontend-test
     command: npm run test
     volumes:
       - ./test-output/:/home/node/test-output/

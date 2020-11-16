@@ -1,13 +1,13 @@
 environment: development
-name: ffc-sfi-rules
+name: ffc-sfi-frontend
 namespace: ffc-sfi
 workstream: ffc-sfi
-image: ffc-sfi-rules
+image: ffc-sfi-frontend
 
 labels: {}
 
 containerConfigMap:
-  name: ffc-sfi-rules-config-map
+  name: ffc-sfi-frontend-config-map
 
 deployment:
   restartPolicy: Always
@@ -47,5 +47,5 @@ service:
 
 ingress:
   class: nginx
-  endpoint: ffc-sfi-rules
+  endpoint: ffc-sfi-frontend
   server: replaced.by.config.com

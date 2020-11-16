@@ -1,4 +1,4 @@
-# FFC SFI Rules
+# FFC SFI Frontend
 
 > For prototyping and spiking
 

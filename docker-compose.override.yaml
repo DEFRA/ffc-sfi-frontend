@@ -4,11 +4,11 @@ version: '3.8'
 # to provide dependencies and expose ports for local testing
 
 services:
-  ffc-sfi-rules:
+  ffc-sfi-frontend:
     build:
       target: development
-    image: ffc-sfi-rules-development
-    container_name: ffc-sfi-rules-development
+    image: ffc-sfi-frontend-development
+    container_name: ffc-sfi-frontend-development
     ports:
       - "3000:3000"
       - "9229:9229"
