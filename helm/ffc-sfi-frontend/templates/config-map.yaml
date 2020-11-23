@@ -1,6 +1,9 @@
 {{- include "ffc-helm-library.container-config-map" (list . "ffc-sfi-frontend.config-map") -}}
 {{- define "ffc-sfi-frontend.config-map" -}}
 data:
+  AGREEMENT_QUEUE_ADDRESS: {{ quote .Values.container.agreementQueueAddress }}
+  ELIGIBILITY_QUEUE_ADDRESS: {{ quote .Values.container.eligibilityQueueAddress }}
+  MESSAGE_QUEUE_HOST: {{ quote .Values.container.messageQueueHost }}
   NODE_ENV: {{ quote .Values.environment }}
   PORT: {{ quote .Values.container.port }}
   {{- if .Values.pr }}
