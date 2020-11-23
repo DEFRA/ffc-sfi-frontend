@@ -32,8 +32,8 @@ container:
   allowPrivilegeEscalation: false
   port: 3000
   messageQueueHost: dummy
-  agreementQueueAddress: agreement
-  eligibilityQueueAddress: eligibility
+  updateAgreementQueueAddress: agreement
+  updateEligibilityQueueAddress: eligibility
 
 livenessProbe:
   path: /healthz
