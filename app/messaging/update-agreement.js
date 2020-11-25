@@ -10,7 +10,7 @@ const createMessage = agreementData => ({
 })
 
 async function stop () {
-  await agreementSender.closeConnections()
+  await agreementSender.closeConnection()
 }
 
 process.on('SIGTERM', async () => {
