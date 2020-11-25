@@ -23,7 +23,7 @@ async function sendMessage (sender, messageData, messageType) {
   await sender.connect()
   const message = {
     body: messageData,
-    type: `${messagingConfig.messageTypePrefix}.${messageType}`,
+    type: messageType,
     source: messagingConfig.messageSource
   }
   await sender.sendMessage(message)
@@ -33,10 +33,10 @@ async function sendMessage (sender, messageData, messageType) {
 module.exports = {
   updateAgreement: async function (agreementData) {
     agreementSender = new MessageSender(messagingConfig.updateAgreementQueue)
-    await sendMessage(agreementSender, agreementData, 'agreement.update')
+    await sendMessage(agreementSender, agreementData, messagingConfig.updateAgreementMessageType)
   },
   updateEligibility: async function (eligibilityData) {
     eligibilitySender = new MessageSender(messagingConfig.updateEligibilityQueue)
-    await sendMessage(eligibilitySender, eligibilityData, 'eligibility.update')
+    await sendMessage(eligibilitySender, eligibilityData, messagingConfig.updateEligibilityMessageType)
   }
 }
