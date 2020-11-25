@@ -7,7 +7,6 @@ const createMessage = eligibilityData => ({
   body: eligibilityData,
   type: `${messagingConfig.messageTypePrefix}.eligibility.update`,
   source: messagingConfig.messageSource
-
 })
 
 async function stop () {
@@ -25,7 +24,7 @@ process.on('SIGINT', async () => {
 })
 
 module.exports = {
-  publishUpdateEligibility: async function (eligibilityData) {
+  publish: async function (eligibilityData) {
     eligibilitySender = new MessageSender(messagingConfig.updateEligibilityQueue)
     await eligibilitySender.connect()
     const message = createMessage(eligibilityData)

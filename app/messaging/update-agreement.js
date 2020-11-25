@@ -23,12 +23,12 @@ process.on('SIGINT', async () => {
   process.exit(0)
 })
 
-async function publishUpdateAgreement (agreementData) {
-  agreementSender = new MessageSender(messagingConfig.updateAgreementQueue)
-  await agreementSender.connect()
-  const message = createMessage(agreementData)
-  await agreementSender.sendMessage(message)
-  await agreementSender.closeConnection()
+module.exports = {
+  publish: async function (agreementData) {
+    agreementSender = new MessageSender(messagingConfig.updateAgreementQueue)
+    await agreementSender.connect()
+    const message = createMessage(agreementData)
+    await agreementSender.sendMessage(message)
+    await agreementSender.closeConnection()
+  }
 }
-
-module.exports = publishUpdateAgreement

@@ -5,9 +5,6 @@ const init = async () => {
 
   await server.start()
   console.log(`Server running on ${server.info.uri}`)
-
-  require('./messaging/update-agreement')({ test: 'agreement test' })
-  require('./messaging/update-eligibility').publishUpdateEligibility({ test: 'eligibility test' })
 }
 
 process.on('unhandledRejection', (err) => {
