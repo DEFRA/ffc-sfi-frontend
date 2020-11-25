@@ -33,10 +33,10 @@ async function sendMessage (sender, messageData, messageType) {
 module.exports = {
   updateAgreement: async function (agreementData) {
     agreementSender = new MessageSender(messagingConfig.updateAgreementQueue)
-    sendMessage(agreementSender, agreementData, 'agreement.update')
+    await sendMessage(agreementSender, agreementData, 'agreement.update')
   },
   updateEligibility: async function (eligibilityData) {
     eligibilitySender = new MessageSender(messagingConfig.updateEligibilityQueue)
-    sendMessage(eligibilitySender, eligibilityData, 'eligibility.update')
+    await sendMessage(eligibilitySender, eligibilityData, 'eligibility.update')
   }
 }
