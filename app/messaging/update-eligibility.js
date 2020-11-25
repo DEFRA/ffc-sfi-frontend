@@ -10,7 +10,7 @@ const createMessage = eligibilityData => ({
 })
 
 async function stop () {
-  await eligibilitySender.closeConnections()
+  await eligibilitySender.closeConnection()
 }
 
 process.on('SIGTERM', async () => {
