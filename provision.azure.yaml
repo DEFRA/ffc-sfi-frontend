@@ -1,4 +1,4 @@
 resources:
   queues:
-    - name: update-eligibility
-    - name: update-agreement
+    - name: updateEligibility
+    - name: updateAgreement
