@@ -7,4 +7,9 @@ services:
       target: production
     image: ffc-sfi-frontend
     container_name: ffc-sfi-frontend
-    environment: {}
+    environment:
+      MESSAGE_QUEUE_HOST: ${MESSAGE_QUEUE_HOST:-notset}
+      MESSAGE_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD:-notset}
+      MESSAGE_QUEUE_USER: ${MESSAGE_QUEUE_USER:-notset}
+      UPDATE_ELIGIBILITY_QUEUE_ADDRESS: ${UPDATE_ELIGIBILITY_QUEUE_ADDRESS:-notset}
+      UPDATE_AGREEMENT_QUEUE_ADDRESS: ${UPDATE_AGREEMENT_QUEUE_ADDRESS:-notset}

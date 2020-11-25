@@ -1,0 +1,3 @@
+{{- include "ffc-helm-library.azure-identity" (list . "ffc-sfi-frontend.azure-identity") -}}
+{{- define "ffc-sfi-frontend.azure-identity" -}}
+{{- end -}}

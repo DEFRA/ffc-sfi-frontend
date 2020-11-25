@@ -5,3 +5,4 @@ helm/**/*.lock
 .vscode
 dist/
 layout.njk
+.env
