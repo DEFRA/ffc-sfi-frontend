@@ -1,7 +1,7 @@
 const sharedConfig = {
-  host: process.env.MESSAGE_QUEUE_HOST,
-  password: process.env.MESSAGE_QUEUE_PASSWORD,
-  username: process.env.MESSAGE_QUEUE_USER,
+  host: process.env.SERVICE_BUS_HOST,
+  password: process.env.SERVICE_BUS_PASSWORD,
+  username: process.env.SERVICE_BUS_USER,
   type: 'queue',
   usePodIdentity: process.env.NODE_ENV === 'production'
 }
