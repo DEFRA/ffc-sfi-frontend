@@ -1,7 +1,7 @@
 {{- include "ffc-helm-library.container-config-map" (list . "ffc-sfi-frontend.config-map") -}}
 {{- define "ffc-sfi-frontend.config-map" -}}
 data:
-  MESSAGE_QUEUE_HOST: {{ quote .Values.container.messageQueueHost }}
+  SERVICE_BUS_HOST: {{ quote .Values.container.messageQueueHost }}
   NODE_ENV: {{ quote .Values.environment }}
   PORT: {{ quote .Values.container.port }}
   {{- if .Values.pr }}
