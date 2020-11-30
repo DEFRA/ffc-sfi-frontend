@@ -1,5 +1,7 @@
 const Joi = require('@hapi/joi')
 
+const getSBIData = require('../services/get-sbi')
+
 function results (server) {
   server.route({
     method: 'POST',
@@ -17,6 +19,14 @@ function results (server) {
         }),
         failAction: (request, h) => h.view('sbi', { errors: [{ text: 'Please enter an SBI', href: '#sbi' }] }).takeover()
       }
+    }
+  })
+
+  server.method('getSBIData', getSBIData, {
+    cache: {
+      cache: 'in-memory',
+      expiresIn: 24 * 3600 * 1000,
+      generateTimeout: 20 * 1000
     }
   })
 }
