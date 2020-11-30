@@ -10,9 +10,11 @@ const resultsRoute = require('./routes/results')
 
 const routes = [
   require('./routes/assets'),
+  require('./routes/enter-value'),
   require('./routes/healthy'),
   require('./routes/healthz'),
   require('./routes/home'),
+  require('./routes/send-message'),
   require('./routes/sbi')
 ]
 
