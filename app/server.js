@@ -6,8 +6,6 @@ const nunjucks = require('nunjucks')
 const vision = require('@hapi/vision')
 const catboxMemory = require('@hapi/catbox-memory')
 
-const getSBIData = require('./services/get-sbi')
-
 const resultsRoute = require('./routes/results')
 
 const routes = [
@@ -34,13 +32,6 @@ async function createServer () {
 
   server.route(routes)
   resultsRoute(server)
-  server.method('getSBIData', getSBIData, {
-    cache: {
-      cache: 'in-memory',
-      expiresIn: 24 * 3600 * 1000,
-      generateTimeout: 20 * 1000
-    }
-  })
 
   server.views({
     engines: {
