@@ -11,9 +11,10 @@
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch",
+    "lint": "npx standard",
     "start:nodemon": "nodemon --inspect=0.0.0.0 --ext js,njk --legacy-watch app/index.js",
     "start:watch": "npm-run-all --parallel build:watch start:nodemon",
-    "test": "jest --runInBand"
+    "test": "npm run lint && jest --runInBand"
   },
   "author": "Defra",
   "contributors": [
