@@ -11,10 +11,7 @@ module.exports = {
     console.log('Sending message', msg)
     await updateAgreement(msg)
 
-    // wait for message to be received from agreement update
-    // until that topic exists, hook into the existing
-
     // return a page that will auto redirect to the page with the id generated
-    return h.view('message-sent')
+    return h.view('message-sent', { correlationId })
   }
 }
