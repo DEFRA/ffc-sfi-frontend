@@ -7,8 +7,7 @@ module.exports = {
   handler: async (request, h) => {
     const { value } = request.payload
     const correlationId = uuid()
-    const msg = { correlationId, value }
-    console.log('Sending message', msg)
+    const msg = { correlationId, body: { value } }
     await updateAgreement(msg)
 
     // return a page that will auto redirect to the page with the id generated
