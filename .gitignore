@@ -6,3 +6,4 @@ helm/**/*.lock
 dist/
 layout.njk
 .env
+.DS_STORE
