@@ -35,7 +35,7 @@ container:
   updateAgreementQueueAddress: agreement
   updateEligibilityQueueAddress: eligibility
   agreementServiceHost: ffc-sfi-agreement.ffc-sfi
-  agreementServicePort: 3001
+  agreementServicePort: 3000
 
 livenessProbe:
   path: /healthz
