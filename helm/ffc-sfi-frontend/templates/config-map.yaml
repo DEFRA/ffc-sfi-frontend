@@ -11,4 +11,6 @@ data:
   {{- end }}
   UPDATE_AGREEMENT_QUEUE_ADDRESS: {{ quote .Values.container.updateAgreementQueueAddress }}
   UPDATE_ELIGIBILITY_QUEUE_ADDRESS: {{ quote .Values.container.updateEligibilityQueueAddress }}
+  AGREEMENT_SERVICE_HOST: {{ quote .Values.container.agreementServiceHost }}
+  AGREEMENT_SERVICE_PORT: {{ quote .Values.container.agreementServicePort }}
 {{- end -}}

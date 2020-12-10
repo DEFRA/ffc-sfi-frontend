@@ -8,6 +8,8 @@ services:
     image: ffc-sfi-frontend
     container_name: ffc-sfi-frontend
     environment:
+      AGREEMENT_SERVICE_HOST: ${AGREEMENT_SERVICE_HOST:-host.docker.internal}
+      AGREEMENT_SERVICE_PORT: ${AGREEMENT_SERVICE_PORT:-3001}
       SERVICE_BUS_HOST: ${SERVICE_BUS_HOST:-notset}
       SERVICE_BUS_PASSWORD: ${SERVICE_BUS_PASSWORD:-notset}
       SERVICE_BUS_USER: ${SERVICE_BUS_USER:-notset}

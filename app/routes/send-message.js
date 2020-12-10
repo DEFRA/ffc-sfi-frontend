@@ -1,3 +1,4 @@
+const { v4: uuid } = require('uuid')
 const { updateAgreement } = require('../messaging/senders')
 
 module.exports = {
@@ -5,10 +6,11 @@ module.exports = {
   path: '/send-message',
   handler: async (request, h) => {
     const { value } = request.payload
-    const msg = { value }
-    console.log('Sending message', msg)
+    const correlationId = uuid()
+    const msg = { correlationId, body: { value } }
     await updateAgreement(msg)
 
-    return h.view('message-sent')
+    // return a page that will auto redirect to the page with the id generated
+    return h.view('message-sent', { correlationId })
   }
 }

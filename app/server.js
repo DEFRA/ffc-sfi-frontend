@@ -14,6 +14,7 @@ const routes = [
   require('./routes/healthy'),
   require('./routes/healthz'),
   require('./routes/home'),
+  require('./routes/retrieve-value'),
   require('./routes/send-message'),
   require('./routes/sbi')
 ]

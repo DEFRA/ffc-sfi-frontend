@@ -30,11 +30,8 @@
       iconFallbackText: "Warning"
     }) }}
 
-    This needs to redirect to the /retrieve-value endpoint with the correlationId: {{ correlationId }}
-
-    <script language="javascript" type="text/javascript">
-      window.setTimeout('location.replace("retrieve-value?correlationId={{ correlationId }}")',2000);
-    </script>
+    <p>The correlationId of this request is: {{ correlationId }}</p>
+    <p>The data is: {{ payload |dump }}</p>
   </div>
   <div>
 

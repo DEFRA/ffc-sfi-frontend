@@ -6,7 +6,7 @@ const sharedConfig = {
   usePodIdentity: process.env.NODE_ENV === 'production'
 }
 
-const messageTypePrefix = 'uk.gov.ffc.sfi'
+const msgTypePrefix = 'uk.gov.ffc.sfi'
 
 module.exports = {
   updateEligibilityQueue: {
@@ -17,7 +17,7 @@ module.exports = {
     address: process.env.UPDATE_AGREEMENT_QUEUE_ADDRESS,
     ...sharedConfig
   },
-  updateAgreementMessageType: `${messageTypePrefix}.agreement.update`,
-  updateEligibilityMessageType: `${messageTypePrefix}.eligibility.update`,
-  messageSource: 'ffc-sfi-frontend'
+  updateAgreementMsgType: `${msgTypePrefix}.agreement.update`,
+  updateEligibilityMsgType: `${msgTypePrefix}.eligibility.update`,
+  msgSrc: 'ffc-sfi-frontend'
 }
