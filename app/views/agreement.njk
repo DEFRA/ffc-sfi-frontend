@@ -23,7 +23,7 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Message has been sent!</h1>
+    <h1 class="govuk-heading-l">Message has been retrieved!</h1>
 
     {{ govukWarningText({
       text: "This is not a real service and is for demonstration purposes only.",
@@ -31,7 +31,8 @@
     }) }}
 
     <p>The correlationId of this request is: {{ correlationId }}</p>
-    <p>The data is: {{ payload |dump }}</p>
+    <p>The retrieved data is:</p>
+    <pre>{{ payload | dump(4) }}</pre>
   </div>
   <div>
 
