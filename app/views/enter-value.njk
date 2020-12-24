@@ -20,26 +20,27 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Testing POC</h1>
 
     {{ govukWarningText({
-      text: "This is not a real service and is for demonstration purposes only.",
-      iconFallbackText: "Warning"
+      text: 'This is not a real service and is for demonstration purposes only.',
+      iconFallbackText: 'Warning'
     }) }}
 
-    {% if errors %}
+    {% if errorList %}
     {{ govukErrorSummary({
-      titleText: 'Errors have been identified',
-      errorList: errors
+      titleText: 'There is a problem',
+      errorList: errorList
     }) }}
     {% endif %}
+
+    <h1 class="govuk-heading-l">Testing POC</h1>
 
     <form method="POST" action="/send-message">
       {% for name, standard in standards %}
         {{ govukInput({
           label: {
           text: standard.text,
-            classes: "govuk-label--l",
+            classes: 'govuk-label--l',
             isPageHeading: true
           },
           hint: {
@@ -47,14 +48,14 @@
           },
           id: standard.id,
           name: name,
-          suffix: {
-            text: standard.units.symbol
-          }
+          errorMessage: standard.errorMessage,
+          suffix: { text: standard.units.symbol },
+          value: standard.value
         }) }}
       {% endfor %}
 
       {{ govukButton({
-        text: "Send"
+        text: 'Send'
       }) }}
     </form>
   </div>
