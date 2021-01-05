@@ -20,12 +20,10 @@ module.exports = {
     },
     validationRules: [{
       operator: 'lessThanInclusive',
-      priority: 10,
       text: 'Area of arable land must be less than or equal to 999',
       value: 999
     }, {
       operator: 'greaterThan',
-      priority: 1,
       text: 'Area of arable land must be greater than 0',
       value: 0
     }]
@@ -51,12 +49,10 @@ module.exports = {
     },
     validationRules: [{
       operator: 'lessThanInclusive',
-      priority: 10,
       text: 'Area of grassland land must be less than or equal to 999',
       value: 999
     }, {
       operator: 'greaterThan',
-      priority: 1,
       text: 'Area of grassland land must be greater than 0',
       value: 0
     }]
@@ -82,12 +78,10 @@ module.exports = {
     },
     validationRules: [{
       operator: 'lessThanInclusive',
-      priority: 10,
       text: 'Length of hedgerow must be less than or equal to 500',
       value: 500
     }, {
       operator: 'greaterThan',
-      priority: 1,
       text: 'Length of hedgerow must be greater than 0',
       value: 0
     }]
