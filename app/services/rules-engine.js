@@ -4,10 +4,10 @@ const standards = require('./standards')
 // only create rules for standards that exist on the input
 // else the engine errors
 function createRules (input) {
-  return Object.keys(input).reduce((acc, key) => {
+  return Object.keys(input).reduce((rules, key) => {
     const standard = standards[key]
 
-    acc.push({
+    rules.push({
       conditions: {
         all: [{
           fact: key,
@@ -28,18 +28,18 @@ function createRules (input) {
         }
       }
     })
-    return acc
+    return rules
   }, [])
 }
 
 function createFacts (input) {
-  return Object.entries(input).reduce((acc, cur) => {
-    acc[cur[0]] = cur[1]
-    return acc
+  return Object.entries(input).reduce((facts, cur) => {
+    facts[cur[0]] = cur[1]
+    return facts
   }, {})
 }
 
-async function runValidation (input) {
+async function runRulesEngine (input) {
   const engine = new Engine()
   const rules = createRules(input)
   rules.forEach(r => engine.addRule(r))
@@ -49,5 +49,5 @@ async function runValidation (input) {
 }
 
 module.exports = {
-  runValidation
+  runRulesEngine
 }

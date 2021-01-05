@@ -1,7 +1,7 @@
 const { v4: uuid } = require('uuid')
 const { updateAgreement } = require('../messaging/senders')
 const rules = require('../services/get-rules')
-const { validate } = require('../services/validation')
+const { runValidation } = require('../services/validation')
 
 function addRules (input) {
   const msg = { ...rules }
@@ -16,10 +16,10 @@ module.exports = {
   path: '/send-message',
   handler: async (request, h) => {
     const body = { ...request.payload }
-    const { errorList, standards } = await validate(body)
+    const { errorList, standards } = await runValidation(body)
 
     if (errorList.length > 0) {
-      return h.view('enter-value', { standards, errorList })
+      return h.view('enter-value', { errorList, standards })
     } else {
       const partialMsg = addRules(body)
       const correlationId = uuid()

@@ -1,14 +1,14 @@
 const standardTemplate = require('./standards')
-const { runValidation } = require('./rule-engine')
+const { runRulesEngine } = require('./rules-engine')
 
 function collectErrors (results) {
-  return results.failureEvents.reduce((errorList, fe) => {
-    errorList.push(fe.params)
-    return errorList
+  return results.failureEvents.reduce((errors, fe) => {
+    errors.push(fe.params)
+    return errors
   }, [])
 }
 
-function createResponse (input, errorList) {
+function updateStandards (input, errorList) {
   const standards = JSON.parse(JSON.stringify(standardTemplate)) // 'deep' copy required
   errorList.forEach(e => {
     standards[e.id].errorMessage = { text: e.text }
@@ -19,14 +19,14 @@ function createResponse (input, errorList) {
   return standards
 }
 
-async function validate (input) {
-  const results = await runValidation(input)
+async function runValidation (input) {
+  const results = await runRulesEngine(input)
   const errorList = collectErrors(results)
-  const standards = createResponse(input, errorList)
+  const standards = updateStandards(input, errorList)
 
   return { errorList, standards }
 }
 
 module.exports = {
-  validate
+  runValidation
 }
