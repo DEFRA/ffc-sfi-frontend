@@ -1,12 +1,12 @@
 const { v4: uuid } = require('uuid')
 const { updateAgreement } = require('../messaging/senders')
-const rules = require('../services/get-rules')
+const standards = require('../services/standards')
 const { runValidation } = require('../services/validation')
 
 function addRules (input) {
-  const msg = { ...rules }
+  const msg = { ...standards }
   for (const [k, v] of Object.entries(input)) {
-    msg[k].totalArea = Number(v)
+    msg[k].userInput = Number(v)
   }
   return msg
 }
