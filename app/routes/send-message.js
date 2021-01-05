@@ -16,10 +16,10 @@ module.exports = {
   path: '/send-message',
   handler: async (request, h) => {
     const body = { ...request.payload }
-    const [errorList, standardsResponse] = validate(body)
+    const { errorList, standards } = await validate(body)
 
     if (errorList.length > 0) {
-      return h.view('enter-value', { standards: standardsResponse, errorList })
+      return h.view('enter-value', { standards, errorList })
     } else {
       const partialMsg = addRules(body)
       const correlationId = uuid()
