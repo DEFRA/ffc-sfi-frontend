@@ -3,7 +3,7 @@ module.exports = {
   path: '/question-page-example-character-count',
   handler: {
     'hapi-govuk-question-page': {
-      getData: async request => ({ 'my-field': 'Example text' }),
+      getData: async request => ({ 'my-field': 'Example' }),
       setData: async (request, data) => {
         console.log(data)
       },

@@ -3,7 +3,7 @@ module.exports = {
   path: '/question-page-example-yesno',
   handler: {
     'hapi-govuk-question-page': {
-      getData: async request => ({ 'my-yes-no': null }),
+      getData: async request => ({}),
       setData: async (request, data) => {
         console.log(data)
       },
