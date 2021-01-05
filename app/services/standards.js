@@ -11,13 +11,6 @@ module.exports = {
       name: 'hectares',
       symbol: 'ha'
     },
-    validation: {
-      bounds: {
-        lower: 0,
-        upper: 999
-      },
-      text: 'Area of arable land must be between 0 and 999'
-    },
     validationRules: [{
       operator: 'lessThanInclusive',
       text: 'Area of arable land must be less than or equal to 999',
@@ -40,13 +33,6 @@ module.exports = {
       name: 'hectares',
       symbol: 'ha'
     },
-    validation: {
-      bounds: {
-        lower: 0,
-        upper: 999
-      },
-      text: 'Area of grassland land must be between 0 and 999'
-    },
     validationRules: [{
       operator: 'lessThanInclusive',
       text: 'Area of grassland land must be less than or equal to 999',
@@ -68,13 +54,6 @@ module.exports = {
     units: {
       name: 'meters',
       symbol: 'm'
-    },
-    validation: {
-      bounds: {
-        lower: 0,
-        upper: 500
-      },
-      text: 'Length of hedgerow must be between 0 and 500'
     },
     validationRules: [{
       operator: 'lessThanInclusive',
