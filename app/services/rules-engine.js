@@ -7,27 +7,49 @@ function createRules (input) {
   return Object.keys(input).reduce((rules, key) => {
     const standard = standards[key]
 
-    rules.push({
-      conditions: {
-        all: [{
-          fact: key,
-          operator: 'greaterThan',
-          value: standard.validation.bounds.lower
-        }, {
-          fact: key,
-          operator: 'lessThanInclusive',
-          value: standard.validation.bounds.upper
-        }]
-      },
-      event: {
-        type: 'validate-bounds',
-        params: {
-          href: `#${standard.id}`,
-          id: standard.id,
-          text: standard.validation.text
+    // add validationRules
+    standard.validationRules.forEach(r => {
+      rules.push({
+        conditions: {
+          all: [{
+            fact: key,
+            operator: r.operator,
+            value: r.value
+          }]
+        },
+        event: {
+          type: 'validate-bounds',
+          params: {
+            href: `#${standard.id}`,
+            id: standard.id,
+            text: r.text
+          }
         }
-      }
+        // priority: r.priority
+      })
     })
+
+    // rules.push({
+    //   conditions: {
+    //     all: [{
+    //       fact: key,
+    //       operator: 'greaterThan',
+    //       value: standard.validation.bounds.lower
+    //     }, {
+    //       fact: key,
+    //       operator: 'lessThanInclusive',
+    //       value: standard.validation.bounds.upper
+    //     }]
+    //   },
+    //   event: {
+    //     type: 'validate-bounds',
+    //     params: {
+    //       href: `#${standard.id}`,
+    //       id: standard.id,
+    //       text: standard.validation.text
+    //     }
+    //   }
+    // })
     return rules
   }, [])
 }

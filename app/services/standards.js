@@ -16,8 +16,19 @@ module.exports = {
         lower: 0,
         upper: 999
       },
-      text: 'Please fix this generic error for the arable field'
-    }
+      text: 'Area of arable land must be between 0 and 999'
+    },
+    validationRules: [{
+      operator: 'lessThanInclusive',
+      priority: 10,
+      text: 'Area of arable land must be less than or equal to 999',
+      value: 999
+    }, {
+      operator: 'greaterThan',
+      priority: 1,
+      text: 'Area of arable land must be greater than 0',
+      value: 0
+    }]
   },
   grassland: {
     id: 'grassland',
@@ -36,8 +47,19 @@ module.exports = {
         lower: 0,
         upper: 999
       },
-      text: 'Please fix this generic error for the grassland field'
-    }
+      text: 'Area of grassland land must be between 0 and 999'
+    },
+    validationRules: [{
+      operator: 'lessThanInclusive',
+      priority: 10,
+      text: 'Area of grassland land must be less than or equal to 999',
+      value: 999
+    }, {
+      operator: 'greaterThan',
+      priority: 1,
+      text: 'Area of grassland land must be greater than 0',
+      value: 0
+    }]
   },
   hedgerow: {
     id: 'hedgerow',
@@ -54,9 +76,20 @@ module.exports = {
     validation: {
       bounds: {
         lower: 0,
-        upper: 999
+        upper: 500
       },
-      text: 'Please fix this error for the hedgerow field'
-    }
+      text: 'Length of hedgerow must be between 0 and 500'
+    },
+    validationRules: [{
+      operator: 'lessThanInclusive',
+      priority: 10,
+      text: 'Length of hedgerow must be less than or equal to 500',
+      value: 500
+    }, {
+      operator: 'greaterThan',
+      priority: 1,
+      text: 'Length of hedgerow must be greater than 0',
+      value: 0
+    }]
   }
 }

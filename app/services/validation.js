@@ -3,7 +3,9 @@ const { runRulesEngine } = require('./rules-engine')
 
 function collectErrors (results) {
   return results.failureEvents.reduce((errors, fe) => {
-    errors.push(fe.params)
+    if (!errors.some(e => e.id === fe.params.id)) {
+      errors.push(fe.params)
+    }
     return errors
   }, [])
 }
