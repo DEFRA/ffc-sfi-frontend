@@ -12,11 +12,11 @@ function createRules (input) {
         all: [{
           fact: key,
           operator: 'greaterThan',
-          value: standard.bounds.lower
+          value: standard.validation.bounds.lower
         }, {
           fact: key,
           operator: 'lessThanInclusive',
-          value: standard.bounds.upper
+          value: standard.validation.bounds.upper
         }]
       },
       event: {

@@ -39,12 +39,12 @@
       {% for name, standard in standards %}
         {{ govukInput({
           label: {
-          text: standard.text,
+          text: standard.ui.text,
             classes: 'govuk-label--l',
             isPageHeading: true
           },
           hint: {
-            text: standard.hint
+            text: standard.ui.hint
           },
           id: standard.id,
           name: name,
