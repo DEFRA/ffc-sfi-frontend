@@ -20,49 +20,42 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Testing POC</h1>
 
     {{ govukWarningText({
-      text: "This is not a real service and is for demonstration purposes only.",
-      iconFallbackText: "Warning"
+      text: 'This is not a real service and is for demonstration purposes only.',
+      iconFallbackText: 'Warning'
     }) }}
 
-    {% if errors %}
+    {% if errorList %}
     {{ govukErrorSummary({
-      titleText: 'Errors have been identified',
-      errorList: errors
+      titleText: 'There is a problem',
+      errorList: errorList
     }) }}
     {% endif %}
 
-    <form method="POST" action="/send-message">
-      {{ govukInput({
-        label: {
-          text: "Enter the amount of arable land you have (in hectares)",
-          classes: "govuk-label--l",
-          isPageHeading: true
-        },
-        hint: {
-          text: "A minimum of 5% of all arable land will need to be set aside. Payment rate is £123 per hectare of total arable land area."
-        },
-        id: "arable",
-        name: "arable"
-      }) }}
+    <h1 class="govuk-heading-l">Testing POC</h1>
 
-      {{ govukInput({
-        label: {
-          text: "Enter the amount of grassland you have (in hectares)",
-          classes: "govuk-label--l",
-          isPageHeading: true
-        },
-        hint: {
-          text: "A minimum of 5% of all grassland will need to be set aside. Payment rate is £456 per hectare of total grassland area."
-        },
-        id: "grassland",
-        name: "grassland"
-      }) }}
+    <form method="POST" action="/send-message">
+      {% for name, standard in standards %}
+        {{ govukInput({
+          label: {
+          text: standard.ui.text,
+            classes: 'govuk-label--l',
+            isPageHeading: true
+          },
+          hint: {
+            text: standard.ui.hint
+          },
+          id: standard.id,
+          name: name,
+          errorMessage: standard.errorMessage,
+          suffix: { text: standard.units.symbol },
+          value: standard.value
+        }) }}
+      {% endfor %}
 
       {{ govukButton({
-        text: "Send"
+        text: 'Send'
       }) }}
     </form>
   </div>
