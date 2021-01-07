@@ -1,5 +1,6 @@
 module.exports = {
   arable: {
+    expression: 'userInput * paymentRate',
     id: 'arable',
     paymentRate: 123,
     percentage: 5,
@@ -22,6 +23,7 @@ module.exports = {
     }]
   },
   grassland: {
+    expression: 'userInput * paymentRate',
     id: 'grassland',
     paymentRate: 456,
     percentage: 5,
@@ -44,6 +46,7 @@ module.exports = {
     }]
   },
   hedgerow: {
+    expression: 'userInput * paymentRate / 100 * percentage',
     id: 'hedgerow',
     paymentRate: 111,
     percentage: 5,
