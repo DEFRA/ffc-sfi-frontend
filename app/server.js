@@ -1,5 +1,3 @@
-const path = require('path')
-
 const inert = require('@hapi/inert')
 const Hapi = require('@hapi/hapi')
 const nunjucks = require('nunjucks')
@@ -16,7 +14,8 @@ const routes = [
   require('./routes/home'),
   require('./routes/retrieve-value'),
   require('./routes/send-message'),
-  require('./routes/sbi')
+  require('./routes/sbi'),
+  ...require('./routes/ready-reckoner/land-values')
 ]
 
 async function createServer () {
@@ -32,6 +31,12 @@ async function createServer () {
 
   await server.register(inert)
   await server.register(vision)
+  await server.register({
+    plugin: require('@envage/hapi-govuk-question-page'),
+    options: {
+      pageTemplateName: 'layouts/layout.njk'
+    }
+  })
 
   server.route(routes)
   resultsRoute(server)
@@ -42,18 +47,20 @@ async function createServer () {
         compile: (src, options) => {
           const template = nunjucks.compile(src, options.environment)
           return context => template.render(context)
+        },
+        prepare: (options, next) => {
+          options.compileOptions.environment = nunjucks.configure([
+            'node_modules/govuk-frontend',
+            ...options.path
+          ])
+          return next()
         }
       }
     },
-    relativeTo: __dirname,
-    compileOptions: {
-      environment: nunjucks.configure([
-        path.join(__dirname, 'views'),
-        path.join(__dirname, 'assets', 'dist'),
-        'node_modules/govuk-frontend/'
-      ])
-    },
-    path: './views/'
+    path: [
+      'app/views',
+      'node_modules/@envage/hapi-govuk-question-page'
+    ]
   })
 
   return server
