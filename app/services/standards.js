@@ -1,6 +1,12 @@
 module.exports = {
   arable: {
-    expression: 'userInput * paymentRate',
+    calculation: [{
+      condition: 'userInput <= 100',
+      expression: 'userInput * paymentRate'
+    }, {
+      condition: 'userInput > 100',
+      expression: '(userInput * paymentRate + 15000) / 3.5'
+    }],
     id: 'arable',
     paymentRate: 123,
     percentage: 5,
@@ -23,7 +29,13 @@ module.exports = {
     }]
   },
   grassland: {
-    expression: 'userInput * paymentRate',
+    calculation: [{
+      condition: 'userInput <= 100',
+      expression: 'userInput * paymentRate'
+    }, {
+      condition: 'userInput > 100',
+      expression: 'userInput * paymentRate + 25000'
+    }],
     id: 'grassland',
     paymentRate: 456,
     percentage: 5,
@@ -46,7 +58,13 @@ module.exports = {
     }]
   },
   hedgerow: {
-    expression: 'userInput * paymentRate / 100 * percentage',
+    calculation: [{
+      condition: 'userInput <= 100',
+      expression: 'userInput * paymentRate'
+    }, {
+      condition: 'userInput > 100',
+      expression: 'userInput * paymentRate + 5000'
+    }],
     id: 'hedgerow',
     paymentRate: 111,
     percentage: 5,
