@@ -1,6 +1,6 @@
 module.exports = {
   arable: {
-    calculation: [{
+    calculations: [{
       condition: 'userInput <= 100',
       expression: 'userInput * paymentRate'
     }, {
@@ -29,7 +29,7 @@ module.exports = {
     }]
   },
   grassland: {
-    calculation: [{
+    calculations: [{
       condition: 'userInput <= 100',
       expression: 'userInput * paymentRate'
     }, {
@@ -58,11 +58,7 @@ module.exports = {
     }]
   },
   hedgerow: {
-    calculation: [{
-      condition: 'userInput <= 100',
-      expression: 'userInput * paymentRate'
-    }, {
-      condition: 'userInput > 100',
+    calculations: [{
       expression: 'userInput * paymentRate + 5000'
     }],
     id: 'hedgerow',
