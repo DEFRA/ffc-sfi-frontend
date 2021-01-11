@@ -1,8 +1,7 @@
 module.exports = {
   method: 'GET',
-  path: '/',
+  path: '/loading',
   handler: (request, h) => {
-    request.yar.reset()
-    return h.view('home')
+    return h.view('loading')
   }
 }

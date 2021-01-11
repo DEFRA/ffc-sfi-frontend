@@ -1,53 +1,50 @@
 const standards = require('../../services/standards')
-// const { runValidation } = require('../../services/validation')
-// const toShow = ['arable', 'grassland', 'hedgerow']
 
-// FIXME: make this into a function that returns a pageDetails object
-// Pass into the function the value and error messages to add to the content
+const { v4: uuid } = require('uuid')
+const { updateAgreement } = require('../../messaging/senders')
+const { runValidation } = require('../../services/validation')
+
+const labelText = {
+  arable: 'Arable land',
+  grassland: 'Grassland',
+  hedgerow: 'Hedgerows'
+}
+
 const pageDetails = {
   path: '/land-values',
-  nextPath: '/select-standard',
-  template: 'land-values',
-  content: {
+  nextPath: '/loading',
+  template: 'land-values'
+}
+
+function getContentDetails (standards, values) {
+  console.log(standards)
+  return {
     title: 'What land and boundaries do you manage?',
     components: {
       details: {
         summaryText: 'Why are we asking this?',
         text: 'This will help us suggest options your land qualifies for.'
       },
-      inputs: [
-        // FIXME: the only difference here is the label text, define this elsewhere and map to standard id
-        // then these three can be generated via a loop-da-loop
-        {
-          id: standards.arable.id,
-          name: standards.arable.id,
-          suffix: { text: standards.arable.units.symbol },
-          label: { text: 'Arable land' },
-          classes: 'govuk-input--width-5',
-          value: null,
-          spellcheck: false
-        },
-        {
-          id: standards.grassland.id,
-          name: standards.grassland.id,
-          suffix: { text: standards.grassland.units.symbol },
-          label: { text: 'Grassland' },
-          classes: 'govuk-input--width-5',
-          value: null,
-          spellcheck: false
-        },
-        {
-          id: standards.hedgerow.id,
-          name: standards.hedgerow.id,
-          suffix: { text: standards.hedgerow.units.symbol },
-          label: { text: 'Hedgerows' },
-          classes: 'govuk-input--width-5',
-          value: null,
-          spellcheck: false
-        }
-      ]
+      inputs: Object.entries(standards).map(([key, standard]) => ({
+        id: standard.id,
+        name: standard.id,
+        suffix: { text: standard.units.symbol },
+        label: { text: labelText[key] },
+        classes: 'govuk-input--width-5',
+        value: values?.[key],
+        errorMessage: standard?.errorMessage,
+        spellcheck: false
+      }))
     }
   }
+}
+
+function addRules (input) {
+  const msg = { ...standards }
+  for (const [k, v] of Object.entries(input)) {
+    msg[k].userInput = Number(v)
+  }
+  return msg
 }
 
 module.exports = [
@@ -55,34 +52,31 @@ module.exports = [
     method: 'GET',
     path: pageDetails.path,
     handler: (request, h) => {
-      return h.view(pageDetails.template, pageDetails.content)
+      return h.view(pageDetails.template, getContentDetails(standards, request.yar.get('landValues')))
     }
   },
   {
     method: 'POST',
     path: pageDetails.path,
     handler: async (request, h) => {
-      console.log(request.payload)
-      // const body = { ...request.payload }
-      // const { errorList, standards } = await runValidation(body)
-      // console.log(errorList, standards)
+      const body = { ...request.payload }
+      const { errorList, standards: updatedStandards } = await runValidation(body)
 
-      // pageDetails.content.errorList = errorList
+      request.yar.set('landValues', body)
 
-      // if (errorList.length > 0) {
-      //   return h.view(pageDetails.template, pageDetails.content)
-      // }
-      // else {
-      //   const partialMsg = addRules(body)
-      //   const correlationId = uuid()
-      //   const msgToSend = { correlationId, body: partialMsg }
-      //   await updateAgreement(msgToSend)
+      if (errorList.length > 0) {
+        const pageContent = getContentDetails(updatedStandards, request.yar.get('landValues'))
+        pageContent.errorList = errorList
+        return h.view(pageDetails.template, pageContent)
+      } else {
+        const partialMsg = addRules(body)
+        const correlationId = uuid()
+        const msgToSend = { correlationId, body: partialMsg }
+        await updateAgreement(msgToSend)
 
-      //   // return a page that will auto redirect to the page with the id generated
-      //   return h.view('message-sent', { correlationId })
-      // }
-
-      return h.redirect(pageDetails.nextPath)
+        request.yar.set('correlationId', correlationId)
+        return h.redirect(pageDetails.nextPath)
+      }
     }
   }
 ]

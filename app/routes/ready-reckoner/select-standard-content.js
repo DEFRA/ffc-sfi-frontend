@@ -1,6 +1,7 @@
-const arable = `
-  <p class="govuk-body-m">Based on 100.0 hectares, you'll need to change how you manage at least 5% of the arable land area.</p>
-  <h2 class="govuk-heading-m">We’ll pay you a minimum of £130 a year</h2>
+function arable (hectares, payment) {
+  return `
+  <p class="govuk-body-m">Based on ${hectares} hectares, you'll need to change how you manage at least 5% of the arable land area.</p>
+  <h2 class="govuk-heading-m">We’ll pay you a minimum of £${payment.toFixed(2)} a year</h2>
   <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
   <h3 class="govuk-heading-m">
@@ -54,11 +55,14 @@ const arable = `
   </ul>
 
   <p class="govuk-body-m">Minimum entry requirements should cover ‘good agricultural and environmental conditions’ <a href="#">(GAEC) 4,5 and 6</a>. </p>
-  <br>`
+  <br>
+  `
+}
 
-const grassland = `
-  <p class="govuk-body-m">Based on 100.0 hectares, you'll need to change how you manage at least 5% of the grassland area.</p>
-  <h2 class="govuk-heading-m">We’ll pay you a minimum of £150 a year</h2>
+function grassland (hectares, payment) {
+  return `
+  <p class="govuk-body-m">Based on ${hectares} hectares, you'll need to change how you manage at least 5% of the grassland area.</p>
+  <h2 class="govuk-heading-m">We’ll pay you a minimum of £${payment.toFixed(2)} a year</h2>
   <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
   <h3 class="govuk-heading-m">
@@ -91,19 +95,19 @@ const grassland = `
   </ul>
 
   <p class="govuk-body-m">Minimum entry requirements should cover ‘good agricultural and environmental conditions’ <a href="#">(GAEC) 4,5 and 6</a>.</p>
-  <br>`
+  <br>
+  `
+}
 
-const hedgerow = `
-  <p class="govuk-body-m">Based on 100.0 kilometres</p>
-  <h2 class="govuk-heading-m">We’ll pay you a minimum of £16,000 a year</h2>
+function hedgerow (metres, payment) {
+  return `
+  <p class="govuk-body-m">Based on ${metres} metres</p>
+  <h2 class="govuk-heading-m">We’ll pay you a minimum of £${payment.toFixed(2)} a year</h2>
   <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
   <h3 class="govuk-heading-m">
     What you need to provide
   </h3>
-  <!--<p class="govuk-body-m govuk-!-margin-top-4">
-    You'll need to maintain at least <strong>62,062.0 kilometres</strong> of hedgerows across your land.
-  </p>-->
 
   <p class="govuk-body-m govuk-!-margin-top-4">Hedgerows must be:</p>
 
@@ -127,7 +131,7 @@ const hedgerow = `
     <li>protect and restore traditional banks and walls using traditional techniques and materials</li>
   </ul>
 
-  <h3 class="govuk-heading-s">Maintain at least 250 trees within the hedgerows</h3>
+  <h3 class="govuk-heading-s">Maintain at least ${Math.ceil(metres / 400)} trees within the hedgerows</h3>
 
   <ul class="govuk-list govuk-list--bullet">
     <li>hedgerows must have an average density of 1 tree for every 400 metres</li>
@@ -147,6 +151,8 @@ const hedgerow = `
     </li>
   </ul>
   <p class="govuk-body-m">Minimum entry requirements should cover ‘good agricultural and environmental conditions’ <a href="#">(GAEC) 4,5 and 6</a>.</p>
-  <br>`
+  <br>
+  `
+}
 
 module.exports = { arable, grassland, hedgerow }

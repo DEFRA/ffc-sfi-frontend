@@ -1,4 +1,5 @@
 const inert = require('@hapi/inert')
+const yar = require('@hapi/yar')
 const Hapi = require('@hapi/hapi')
 const nunjucks = require('nunjucks')
 const vision = require('@hapi/vision')
@@ -15,6 +16,7 @@ const routes = [
   require('./routes/retrieve-value'),
   require('./routes/send-message'),
   require('./routes/sbi'),
+  require('./routes/ready-reckoner/loading'),
   ...require('./routes/ready-reckoner/land-values'),
   ...require('./routes/ready-reckoner/select-standard'),
   ...require('./routes/ready-reckoner/selected-summary')
@@ -31,14 +33,21 @@ async function createServer () {
     port: process.env.PORT
   })
 
+  await server.register(
+    {
+      plugin: yar,
+      options: {
+        storeBlank: true,
+        cookieOptions: {
+          password: 'this is just a test, this is just a test',
+          isSecure: false
+        }
+      }
+    }
+  )
+
   await server.register(inert)
   await server.register(vision)
-  await server.register({
-    plugin: require('@envage/hapi-govuk-question-page'),
-    options: {
-      pageTemplateName: 'layouts/layout.njk'
-    }
-  })
 
   server.route(routes)
   resultsRoute(server)
@@ -60,8 +69,7 @@ async function createServer () {
       }
     },
     path: [
-      'app/views',
-      'node_modules/@envage/hapi-govuk-question-page'
+      'app/views'
     ]
   })
 

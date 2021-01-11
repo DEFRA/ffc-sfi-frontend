@@ -29,73 +29,14 @@
     }) }}
     {% endif %}
 
-    <h1 class="govuk-heading-l">{{pageTitle}}</h1>
+    <h1 class="govuk-heading-l">{{ title }}</h1>
 
-    {{ govukInsetText({
-      text: "Based on your information and options, you would receive at least £BLAH a year, paid in 12 monthly installments of £BLAH."
-    }) }}
+    {{ govukInsetText(components.insetText) }}
 
-    {{ govukSummaryList({
-      rows: [
-        {
-          key: {
-            text: "Land and boundaries"
-          },
-          value: {
-            html: "# ha - Arable land<br># ha - Grassland<br># km - Hedgrows"
-          },
-          actions: {
-            items: [
-              {
-                href: "/land-values",
-                text: "Change",
-                visuallyHiddenText: "land and boundaries"
-              }
-            ]
-          }
-        },
-        {
-          key: {
-            text: "Options"
-          },
-          value: {
-            html: "Arable land<br>Hedgrows"
-          },
-          actions: {
-            items: [
-              {
-                href: "/select-standard",
-                text: "Change",
-                visuallyHiddenText: "options"
-              }
-            ]
-          }
-        }
-      ]
-    }) }}
+    {{ govukSummaryList(components.summaryList) }}
 
     <form method="POST" autocomplete="off" novalidate >
-      {{ govukRadios({
-        classes: "govuk-radios--inline",
-        idPrefix: "changed-name",
-        name: "changed-name",
-        fieldset: {
-          legend: {
-            text: "Are you ready to start your application?",
-            classes: "govuk-fieldset__legend--m"
-          }
-        },
-        items: [
-          {
-            value: "yes",
-            text: "Yes"
-          },
-          {
-            value: "no",
-            text: "No"
-          }
-        ]
-      }) }}
+      {{ govukRadios(components.radios) }}
 
       {{ govukButton({
         text: 'Continue'
