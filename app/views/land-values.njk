@@ -1,10 +1,10 @@
 {% extends './layouts/layout.njk' %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({
@@ -23,34 +23,22 @@
 
     {% if errorList %}
     {{ govukErrorSummary({
-      titleText: 'There is a problem',
+      titleText: "There is a problem",
       errorList: errorList
     }) }}
     {% endif %}
 
-    <h1 class="govuk-heading-l">What land and boundaries do you manage?</h1>
+    <h1 class="govuk-heading-l">{{title}}</h1>
 
     <form method="POST" autocomplete="off" novalidate >
-      {% for name, standard in standards %}
-        {{ govukInput({
-          label: {
-            text: standard.ui.text
-          },
-          hint: {
-            text: standard.ui.hint
-          },
-          id: standard.id,
-          name: name,
-          errorMessage: standard.errorMessage,
-          suffix: { text: standard.units.symbol },
-          classes: 'govuk-input--width-5',
-          value: standard.value,
-          spellcheck: false
-        }) }}
+      {% for standard in components.inputs %}
+        {{ govukInput(standard) }}
       {% endfor %}
 
+      {{ govukDetails(components.details) }}
+
       {{ govukButton({
-        text: 'Send'
+        text: 'Continue'
       }) }}
     </form>
   </div>
