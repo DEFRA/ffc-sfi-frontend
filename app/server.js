@@ -15,7 +15,9 @@ const routes = [
   require('./routes/retrieve-value'),
   require('./routes/send-message'),
   require('./routes/sbi'),
-  ...require('./routes/ready-reckoner/land-values')
+  ...require('./routes/ready-reckoner/land-values'),
+  ...require('./routes/ready-reckoner/select-standard'),
+  ...require('./routes/ready-reckoner/selected-summary')
 ]
 
 async function createServer () {
