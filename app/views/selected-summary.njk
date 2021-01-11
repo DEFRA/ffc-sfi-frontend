@@ -1,0 +1,108 @@
+{% extends './layouts/layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: "/"
+      }
+    ]
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorList %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errorList
+    }) }}
+    {% endif %}
+
+    <h1 class="govuk-heading-l">{{pageTitle}}</h1>
+
+    {{ govukInsetText({
+      text: "Based on your information and options, you would receive at least £BLAH a year, paid in 12 monthly installments of £BLAH."
+    }) }}
+
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: {
+            text: "Land and boundaries"
+          },
+          value: {
+            html: "# ha - Arable land<br># ha - Grassland<br># km - Hedgrows"
+          },
+          actions: {
+            items: [
+              {
+                href: "/land-values",
+                text: "Change",
+                visuallyHiddenText: "land and boundaries"
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "Options"
+          },
+          value: {
+            html: "Arable land<br>Hedgrows"
+          },
+          actions: {
+            items: [
+              {
+                href: "/select-standard",
+                text: "Change",
+                visuallyHiddenText: "options"
+              }
+            ]
+          }
+        }
+      ]
+    }) }}
+
+    <form method="POST" autocomplete="off" novalidate >
+      {{ govukRadios({
+        classes: "govuk-radios--inline",
+        idPrefix: "changed-name",
+        name: "changed-name",
+        fieldset: {
+          legend: {
+            text: "Are you ready to start your application?",
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        items: [
+          {
+            value: "yes",
+            text: "Yes"
+          },
+          {
+            value: "no",
+            text: "No"
+          }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: 'Continue'
+      }) }}
+    </form>
+  </div>
+  <div>
+
+</div>
+{% endblock %}
