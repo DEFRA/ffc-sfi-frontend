@@ -54,7 +54,7 @@ module.exports = [
     method: 'GET',
     path: pageDetails.path,
     handler: (request, h) => {
-      return h.view(pageDetails.template, getContentDetails(standards, getLandValues(request.yar)))
+      return h.view(pageDetails.template, getContentDetails(standards, getLandValues(request)))
     }
   },
   {
@@ -64,7 +64,7 @@ module.exports = [
       const body = { ...request.payload }
       const { errorList, standards: updatedStandards } = await runValidation(body)
 
-      setLandValues(request.yar, body)
+      setLandValues(request, body)
 
       if (errorList.length > 0) {
         const pageContent = getContentDetails(updatedStandards, body, errorList)
@@ -75,7 +75,7 @@ module.exports = [
         const msgToSend = { correlationId, body: partialMsg }
         await updateAgreement(msgToSend)
 
-        setCorrelationId(request.yar, correlationId)
+        setCorrelationId(request, correlationId)
         return h.redirect(pageDetails.nextPath)
       }
     }

@@ -1,10 +1,10 @@
 module.exports = {
-  setCalculationResult: (yar, value) => yar.set('calculationResult', value),
-  getCalculationResult: yar => yar.get('calculationResult'),
-  setCorrelationId: (yar, value) => yar.set('correlationId', value),
-  getCorrelationId: yar => yar.get('correlationId'),
-  setLandValues: (yar, value) => yar.set('landValues', value),
-  getLandValues: yar => yar.get('landValues'),
-  setSelectedStandards: (yar, value) => yar.set('selectedStandards', value),
-  getSelectedStandards: yar => yar.get('selectedStandards')
+  setCalculationResult: (request, value) => request.yar.set('calculationResult', value),
+  getCalculationResult: request => request.yar.get('calculationResult'),
+  setCorrelationId: (request, value) => request.yar.set('correlationId', value),
+  getCorrelationId: request => request.yar.get('correlationId'),
+  setLandValues: (request, value) => request.yar.set('landValues', value),
+  getLandValues: request => request.yar.get('landValues'),
+  setSelectedStandards: (request, value) => request.yar.set('selectedStandards', value),
+  getSelectedStandards: request => request.yar.get('selectedStandards')
 }

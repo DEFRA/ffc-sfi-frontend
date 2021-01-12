@@ -58,27 +58,27 @@ module.exports = [
     method: 'GET',
     path: pageDetails.path,
     handler: async (request, h) => {
-      const correlationId = getCorrelationId(request.yar)
+      const correlationId = getCorrelationId(request)
       const url = `${agreementServiceBaseUrl}/value?correlationId=${correlationId}`
       const { payload } = await Wreck.get(url, { json: true })
 
-      setCalculationResult(request.yar, payload.body)
+      setCalculationResult(request, payload.body)
 
-      return h.view(pageDetails.template, getContentDetails(payload.body, getSelectedStandards(request.yar)))
+      return h.view(pageDetails.template, getContentDetails(payload.body, getSelectedStandards(request)))
     }
   },
   {
     method: 'POST',
     path: pageDetails.path,
     handler: (request, h) => {
-      setSelectedStandards(request.yar, request.payload.standards)
+      setSelectedStandards(request, request.payload.standards)
 
       if (!request.payload.standards) {
         return h.view(
           pageDetails.template,
           getContentDetails(
-            getCalculationResult(request.yar),
-            getSelectedStandards(request.yar),
+            getCalculationResult(request),
+            getSelectedStandards(request),
             { text: 'Select at least one option.' }
           )
         )

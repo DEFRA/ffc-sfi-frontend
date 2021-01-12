@@ -95,8 +95,8 @@ module.exports = [
     method: 'GET',
     path: pageDetails.path,
     handler: (request, h) => {
-      const calculation = getCalculationResult(request.yar)
-      const selectedStandards = [getSelectedStandards(request.yar)].flat()
+      const calculation = getCalculationResult(request)
+      const selectedStandards = [getSelectedStandards(request)].flat()
 
       return h.view(pageDetails.template, getContentDetails(calculation, selectedStandards))
     }
