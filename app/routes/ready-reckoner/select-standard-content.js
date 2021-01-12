@@ -100,6 +100,8 @@ function grassland (hectares, payment) {
 }
 
 function hedgerow (metres, payment) {
+  const numTrees = Math.ceil(metres / 400)
+
   return `
   <p class="govuk-body-m">Based on ${metres} metres</p>
   <h2 class="govuk-heading-m">We’ll pay you a minimum of £${payment.toFixed(2)} a year</h2>
@@ -131,7 +133,7 @@ function hedgerow (metres, payment) {
     <li>protect and restore traditional banks and walls using traditional techniques and materials</li>
   </ul>
 
-  <h3 class="govuk-heading-s">Maintain at least ${Math.ceil(metres / 400)} trees within the hedgerows</h3>
+  <h3 class="govuk-heading-s">Maintain at least ${numTrees} tree${numTrees !== 1 ? 's' : ''} within the hedgerows</h3>
 
   <ul class="govuk-list govuk-list--bullet">
     <li>hedgerows must have an average density of 1 tree for every 400 metres</li>

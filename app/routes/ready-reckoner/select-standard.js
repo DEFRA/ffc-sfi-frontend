@@ -1,4 +1,3 @@
-const standards = require('../../services/standards')
 const htmlContent = require('./select-standard-content')
 
 const Wreck = require('@hapi/wreck')
@@ -11,6 +10,7 @@ const pageDetails = {
 }
 
 function getContentDetails (payload, selected, errorText = null) {
+  console.log(payload)
   return {
     title: 'Funding options you qualify for',
     components: {
@@ -23,7 +23,7 @@ function getContentDetails (payload, selected, errorText = null) {
         items: [
           {
             value: 'arable',
-            text: `Arable land, £${standards.arable.paymentRate} a hectare, plus £13 per tree`,
+            text: `Arable land, £${payload.arable.paymentRate} a hectare, plus £13 per tree`,
             checked: selected ? selected.includes('arable') : false,
             conditional: {
               html: htmlContent.arable(payload.arable.userInput, payload.arable.payment)
@@ -31,7 +31,7 @@ function getContentDetails (payload, selected, errorText = null) {
           },
           {
             value: 'grassland',
-            text: `Grassland, £${standards.grassland.paymentRate} a hectare, plus £3 per tree`,
+            text: `Grassland, £${payload.grassland.paymentRate} a hectare, plus £3 per tree`,
             checked: selected ? selected.includes('grassland') : false,
             conditional: {
               html: htmlContent.grassland(payload.grassland.userInput, payload.grassland.payment)
@@ -39,7 +39,7 @@ function getContentDetails (payload, selected, errorText = null) {
           },
           {
             value: 'hedgerow',
-            text: `Hedgrows, £${standards.hedgerow.paymentRate} for every 100 meters`,
+            text: `Hedgrows, £${payload.hedgerow.paymentRate} for every 100 meters`,
             checked: selected ? selected.includes('hedgerow') : false,
             conditional: {
               html: htmlContent.hedgerow(payload.hedgerow.userInput, payload.hedgerow.payment)

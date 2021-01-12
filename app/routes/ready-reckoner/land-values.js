@@ -65,7 +65,7 @@ module.exports = [
       request.yar.set('landValues', body)
 
       if (errorList.length > 0) {
-        const pageContent = getContentDetails(updatedStandards, request.yar.get('landValues'), errorList)
+        const pageContent = getContentDetails(updatedStandards, body, errorList)
         return h.view(pageDetails.template, pageContent)
       } else {
         const partialMsg = addRules(body)
