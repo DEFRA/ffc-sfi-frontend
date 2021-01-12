@@ -1,3 +1,5 @@
+const { setLandValues, setCorrelationId, getLandValues } = require('./session-handler')
+
 const standards = require('../../services/standards')
 
 const { v4: uuid } = require('uuid')
@@ -52,7 +54,7 @@ module.exports = [
     method: 'GET',
     path: pageDetails.path,
     handler: (request, h) => {
-      return h.view(pageDetails.template, getContentDetails(standards, request.yar.get('landValues')))
+      return h.view(pageDetails.template, getContentDetails(standards, getLandValues(request.yar)))
     }
   },
   {
@@ -62,7 +64,7 @@ module.exports = [
       const body = { ...request.payload }
       const { errorList, standards: updatedStandards } = await runValidation(body)
 
-      request.yar.set('landValues', body)
+      setLandValues(request.yar, body)
 
       if (errorList.length > 0) {
         const pageContent = getContentDetails(updatedStandards, body, errorList)
@@ -73,7 +75,7 @@ module.exports = [
         const msgToSend = { correlationId, body: partialMsg }
         await updateAgreement(msgToSend)
 
-        request.yar.set('correlationId', correlationId)
+        setCorrelationId(request.yar, correlationId)
         return h.redirect(pageDetails.nextPath)
       }
     }

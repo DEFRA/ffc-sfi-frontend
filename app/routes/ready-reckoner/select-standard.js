@@ -1,5 +1,5 @@
+const { setSelectedStandards, getCalculationResult, getCorrelationId, getSelectedStandards, setCalculationResult } = require('./session-handler')
 const htmlContent = require('./select-standard-content')
-
 const Wreck = require('@hapi/wreck')
 const { agreementServiceBaseUrl } = require('../../config/general')
 
@@ -58,29 +58,27 @@ module.exports = [
     method: 'GET',
     path: pageDetails.path,
     handler: async (request, h) => {
-      const correlationId = request.yar.get('correlationId')
+      const correlationId = getCorrelationId(request.yar)
       const url = `${agreementServiceBaseUrl}/value?correlationId=${correlationId}`
       const { payload } = await Wreck.get(url, { json: true })
 
-      request.yar.set('calculationResult', payload.body)
+      setCalculationResult(request.yar, payload.body)
 
-      return h.view(pageDetails.template, getContentDetails(payload.body, request.yar.get('selectedStandards')))
+      return h.view(pageDetails.template, getContentDetails(payload.body, getSelectedStandards(request.yar)))
     }
   },
   {
     method: 'POST',
     path: pageDetails.path,
     handler: (request, h) => {
-      console.log('SELECTED:')
-      console.log(request.payload.standards)
-      request.yar.set('selectedStandards', request.payload.standards)
+      setSelectedStandards(request.yar, request.payload.standards)
 
       if (!request.payload.standards) {
         return h.view(
           pageDetails.template,
           getContentDetails(
-            request.yar.get('calculationResult'),
-            request.yar.get('selectedStandards'),
+            getCalculationResult(request.yar),
+            getSelectedStandards(request.yar),
             { text: 'Select at least one option.' }
           )
         )
