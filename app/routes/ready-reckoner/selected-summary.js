@@ -10,10 +10,7 @@ const textMapping = {
   hedgerow: 'Hedgerows'
 }
 
-function getContentDetails (request) {
-  const calculation = request.yar.get('calculationResult')
-  const selectedStandards = [request.yar.get('selectedStandards')].flat()
-
+function getContentDetails (calculation, selectedStandards) {
   let totalPayment = 0
   let optionHtml = ''
 
@@ -96,7 +93,10 @@ module.exports = [
     method: 'GET',
     path: pageDetails.path,
     handler: (request, h) => {
-      return h.view(pageDetails.template, getContentDetails(request))
+      const calculation = request.yar.get('calculationResult')
+      const selectedStandards = [request.yar.get('selectedStandards')].flat()
+
+      return h.view(pageDetails.template, getContentDetails(calculation, selectedStandards))
     }
   },
   {

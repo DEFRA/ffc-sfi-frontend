@@ -16,10 +16,10 @@ const pageDetails = {
   template: 'land-values'
 }
 
-function getContentDetails (standards, values) {
-  console.log(standards)
+function getContentDetails (standards, values, errorList) {
   return {
     title: 'What land and boundaries do you manage?',
+    errorList,
     components: {
       details: {
         summaryText: 'Why are we asking this?',
@@ -65,8 +65,7 @@ module.exports = [
       request.yar.set('landValues', body)
 
       if (errorList.length > 0) {
-        const pageContent = getContentDetails(updatedStandards, request.yar.get('landValues'))
-        pageContent.errorList = errorList
+        const pageContent = getContentDetails(updatedStandards, request.yar.get('landValues'), errorList)
         return h.view(pageDetails.template, pageContent)
       } else {
         const partialMsg = addRules(body)
