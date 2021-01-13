@@ -1,14 +1,14 @@
 module.exports = {
   arable: {
     calculations: [{
-      condition: 'userInput <= 100',
-      expression: 'userInput * paymentRate'
+      condition: 'userInput <= 1000',
+      expression: 'userInput * paymentRate * percentage / 100.0'
     }, {
-      condition: 'userInput > 100',
-      expression: '(userInput * paymentRate + 15000) / 3.5'
+      condition: 'userInput > 1000',
+      expression: '1000 * paymentRate * percentage / 100.0'
     }],
     id: 'arable',
-    paymentRate: 123,
+    paymentRate: 26,
     percentage: 5,
     ui: {
       hint: 'A minimum of 5% of all arable land will need to be set aside. Payment rate is £123 per hectare of total arable land area.',
@@ -20,24 +20,24 @@ module.exports = {
     },
     validationRules: [{
       operator: 'lessThanInclusive',
-      text: 'Area of arable land must be less than or equal to 999',
-      value: 999
+      text: 'Area of arable land must be less than or equal to 9999',
+      value: 9999
     }, {
-      operator: 'greaterThan',
-      text: 'Area of arable land must be greater than 0',
+      operator: 'greaterThanInclusive',
+      text: 'Area of arable land must not be less than 0',
       value: 0
     }]
   },
   grassland: {
     calculations: [{
-      condition: 'userInput <= 100',
-      expression: 'userInput * paymentRate'
+      condition: 'userInput <= 1000',
+      expression: 'userInput * paymentRate * percentage / 100.0'
     }, {
-      condition: 'userInput > 100',
-      expression: 'userInput * paymentRate + 25000'
+      condition: 'userInput > 1000',
+      expression: '1000 * paymentRate * percentage / 100.0'
     }],
     id: 'grassland',
-    paymentRate: 456,
+    paymentRate: 30,
     percentage: 5,
     ui: {
       hint: 'A minimum of 5% of all grassland will need to be set aside. Payment rate is £456 per hectare of total grassland area.',
@@ -49,20 +49,20 @@ module.exports = {
     },
     validationRules: [{
       operator: 'lessThanInclusive',
-      text: 'Area of grassland land must be less than or equal to 999',
-      value: 999
+      text: 'Area of grassland land must be less than or equal to 9999',
+      value: 9999
     }, {
-      operator: 'greaterThan',
-      text: 'Area of grassland land must be greater than 0',
+      operator: 'greaterThanInclusive',
+      text: 'Area of grassland land must not be less than 0',
       value: 0
     }]
   },
   hedgerow: {
     calculations: [{
-      expression: 'userInput * paymentRate + 5000'
+      expression: 'userInput * paymentRate / 100.0'
     }],
     id: 'hedgerow',
-    paymentRate: 111,
+    paymentRate: 16,
     percentage: 5,
     ui: {
       hint: 'Need to think about this for hedgerows. Payment rate is £111 per meter of hedgerow.',
@@ -74,11 +74,11 @@ module.exports = {
     },
     validationRules: [{
       operator: 'lessThanInclusive',
-      text: 'Length of hedgerow must be less than or equal to 500',
-      value: 500
+      text: 'Length of hedgerow must be less than or equal to 99999',
+      value: 99999
     }, {
-      operator: 'greaterThan',
-      text: 'Length of hedgerow must be greater than 0',
+      operator: 'greaterThanInclusive',
+      text: 'Length of hedgerow must not be less than 0',
       value: 0
     }]
   }

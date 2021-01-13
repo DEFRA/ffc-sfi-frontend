@@ -1,0 +1,48 @@
+{% extends './layouts/layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: "/"
+      }
+    ]
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if errorList %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errorList
+    }) }}
+    {% endif %}
+
+    <h1 class="govuk-heading-l">{{title}}</h1>
+
+    <form method="POST" autocomplete="off" novalidate >
+      {% for standard in components.inputs %}
+        {{ govukInput(standard) }}
+      {% endfor %}
+
+      {{ govukDetails(components.details) }}
+
+      {{ govukButton({
+        text: 'Continue'
+      }) }}
+    </form>
+  </div>
+  <div>
+
+</div>
+{% endblock %}

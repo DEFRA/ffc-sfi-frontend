@@ -1,6 +1,5 @@
-const path = require('path')
-
 const inert = require('@hapi/inert')
+const yar = require('@hapi/yar')
 const Hapi = require('@hapi/hapi')
 const nunjucks = require('nunjucks')
 const vision = require('@hapi/vision')
@@ -16,7 +15,11 @@ const routes = [
   require('./routes/home'),
   require('./routes/retrieve-value'),
   require('./routes/send-message'),
-  require('./routes/sbi')
+  require('./routes/sbi'),
+  require('./routes/ready-reckoner/loading'),
+  ...require('./routes/ready-reckoner/land-values'),
+  ...require('./routes/ready-reckoner/select-standard'),
+  ...require('./routes/ready-reckoner/selected-summary')
 ]
 
 async function createServer () {
@@ -30,6 +33,19 @@ async function createServer () {
     port: process.env.PORT
   })
 
+  await server.register(
+    {
+      plugin: yar,
+      options: {
+        storeBlank: true,
+        cookieOptions: {
+          password: 'this is just a test, this is just a test',
+          isSecure: false
+        }
+      }
+    }
+  )
+
   await server.register(inert)
   await server.register(vision)
 
@@ -42,18 +58,19 @@ async function createServer () {
         compile: (src, options) => {
           const template = nunjucks.compile(src, options.environment)
           return context => template.render(context)
+        },
+        prepare: (options, next) => {
+          options.compileOptions.environment = nunjucks.configure([
+            'node_modules/govuk-frontend',
+            ...options.path
+          ])
+          return next()
         }
       }
     },
-    relativeTo: __dirname,
-    compileOptions: {
-      environment: nunjucks.configure([
-        path.join(__dirname, 'views'),
-        path.join(__dirname, 'assets', 'dist'),
-        'node_modules/govuk-frontend/'
-      ])
-    },
-    path: './views/'
+    path: [
+      'app/views'
+    ]
   })
 
   return server
