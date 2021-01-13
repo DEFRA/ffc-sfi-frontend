@@ -1,4 +1,4 @@
-const { setSelectedStandards, getCalculationResult, getCorrelationId, getSelectedStandards, setCalculationResult } = require('./session-handler')
+const session = require('./session-handler')
 const htmlContent = require('./select-standard-content')
 const Wreck = require('@hapi/wreck')
 const { agreementServiceBaseUrl } = require('../../config/general')
@@ -10,7 +10,6 @@ const pageDetails = {
 }
 
 function getContentDetails (payload, selected, errorText = null) {
-  console.log(payload)
   return {
     title: 'Funding options you qualify for',
     components: {
@@ -58,27 +57,27 @@ module.exports = [
     method: 'GET',
     path: pageDetails.path,
     handler: async (request, h) => {
-      const correlationId = getCorrelationId(request)
+      const correlationId = session.getCorrelationId(request)
       const url = `${agreementServiceBaseUrl}/value?correlationId=${correlationId}`
       const { payload } = await Wreck.get(url, { json: true })
 
-      setCalculationResult(request, payload.body)
+      session.setCalculationResult(request, payload.body)
 
-      return h.view(pageDetails.template, getContentDetails(payload.body, getSelectedStandards(request)))
+      return h.view(pageDetails.template, getContentDetails(payload.body, session.getSelectedStandards(request)))
     }
   },
   {
     method: 'POST',
     path: pageDetails.path,
     handler: (request, h) => {
-      setSelectedStandards(request, request.payload.standards)
+      session.setSelectedStandards(request, request.payload.standards)
 
       if (!request.payload.standards) {
         return h.view(
           pageDetails.template,
           getContentDetails(
-            getCalculationResult(request),
-            getSelectedStandards(request),
+            session.getCalculationResult(request),
+            session.getSelectedStandards(request),
             { text: 'Select at least one option.' }
           )
         )

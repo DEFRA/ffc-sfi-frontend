@@ -1,4 +1,4 @@
-const { getCalculationResult, getSelectedStandards } = require('./session-handler')
+const session = require('./session-handler')
 
 const pageDetails = {
   path: '/selected-summary',
@@ -95,8 +95,8 @@ module.exports = [
     method: 'GET',
     path: pageDetails.path,
     handler: (request, h) => {
-      const calculation = getCalculationResult(request)
-      const selectedStandards = [getSelectedStandards(request)].flat()
+      const calculation = session.getCalculationResult(request)
+      const selectedStandards = [session.getSelectedStandards(request)].flat()
 
       return h.view(pageDetails.template, getContentDetails(calculation, selectedStandards))
     }

@@ -1,7 +1,5 @@
-const { setLandValues, setCorrelationId, getLandValues } = require('./session-handler')
-
+const session = require('./session-handler')
 const standards = require('../../services/standards')
-
 const { v4: uuid } = require('uuid')
 const { updateAgreement } = require('../../messaging/senders')
 const { runValidation } = require('../../services/validation')
@@ -54,7 +52,7 @@ module.exports = [
     method: 'GET',
     path: pageDetails.path,
     handler: (request, h) => {
-      return h.view(pageDetails.template, getContentDetails(standards, getLandValues(request)))
+      return h.view(pageDetails.template, getContentDetails(standards, session.getLandValues(request)))
     }
   },
   {
@@ -64,7 +62,7 @@ module.exports = [
       const body = { ...request.payload }
       const { errorList, standards: updatedStandards } = await runValidation(body)
 
-      setLandValues(request, body)
+      session.setLandValues(request, body)
 
       if (errorList.length > 0) {
         const pageContent = getContentDetails(updatedStandards, body, errorList)
@@ -75,7 +73,7 @@ module.exports = [
         const msgToSend = { correlationId, body: partialMsg }
         await updateAgreement(msgToSend)
 
-        setCorrelationId(request, correlationId)
+        session.setCorrelationId(request, correlationId)
         return h.redirect(pageDetails.nextPath)
       }
     }
