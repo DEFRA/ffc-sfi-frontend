@@ -1,4 +1,4 @@
-const standardTemplate = require('./standards')
+const standardsTemplate = require('./standards-arr')
 const { runRulesEngine } = require('./rules-engine')
 
 function collectErrors (results) {
@@ -11,12 +11,14 @@ function collectErrors (results) {
 }
 
 function updateStandards (input, errorList) {
-  const standards = JSON.parse(JSON.stringify(standardTemplate)) // 'deep' copy required
+  const standards = JSON.parse(JSON.stringify(standardsTemplate)) // 'deep' copy required
   errorList.forEach(e => {
-    standards[e.id].errorMessage = { text: e.text }
+    const standard = standards.find(s => s.id === e.id)
+    standard.errorMessage = { text: e.text }
   })
   for (const [k, v] of Object.entries(input)) {
-    standards[k].value = v // make available for next page view
+    const standard = standards.find(s => s.id === k)
+    standard.value = v // make available for next page view
   }
   return standards
 }
