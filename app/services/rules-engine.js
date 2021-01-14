@@ -1,9 +1,9 @@
 const { Engine } = require('json-rules-engine')
-const standards = require('./standards')
+const standards = require('./standards-arr')
 
 function createRules (input) {
   return Object.keys(input).reduce((rules, key) => {
-    const standard = standards[key]
+    const standard = standards.find(s => s.id === key)
 
     standard.validationRules.forEach(r => {
       rules.push({
