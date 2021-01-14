@@ -1,8 +1,8 @@
+const { v4: uuid } = require('uuid')
 const session = require('./session-handler')
 const standardsTemplate = require('../../services/standards')
-const { v4: uuid } = require('uuid')
-const { updateAgreement } = require('../../messaging/senders')
 const { runValidation } = require('../../services/validation')
+const { updateAgreement } = require('../../messaging/senders')
 
 const labelText = {
   arable: 'Arable land',
@@ -25,14 +25,14 @@ function getContentDetails (standards, values, errorList) {
         summaryText: 'Why are we asking this?',
         text: 'This will help us suggest options your land qualifies for.'
       },
-      inputs: standards.map(standard => ({
-        id: standard.id,
-        name: standard.id,
-        suffix: { text: standard.units.symbol },
-        label: { text: labelText[standard.id] },
+      inputs: standards.map(s => ({
+        id: s.id,
+        name: s.id,
+        suffix: { text: s.units.symbol },
+        label: { text: labelText[s.id] },
         classes: 'govuk-input--width-5',
-        value: values?.[standard.id],
-        errorMessage: standard?.errorMessage,
+        value: values?.[s.id],
+        errorMessage: s?.errorMessage,
         spellcheck: false
       }))
     }
@@ -81,8 +81,8 @@ module.exports = [
       } else {
         const body = addState(payload)
         const correlationId = uuid()
-        const msgToSend = { correlationId, body }
-        await updateAgreement(msgToSend)
+        const msg = { correlationId, body }
+        await updateAgreement(msg)
 
         session.setCorrelationId(request, correlationId)
         return h.redirect(pageDetails.nextPath)
