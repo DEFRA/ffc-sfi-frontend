@@ -3,7 +3,7 @@ const standards = require('./standards')
 
 function createRules (input) {
   return Object.keys(input).reduce((rules, key) => {
-    const standard = standards[key]
+    const standard = standards.find(s => s.id === key)
 
     standard.validationRules.forEach(r => {
       rules.push({

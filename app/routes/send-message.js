@@ -1,14 +1,16 @@
 const { v4: uuid } = require('uuid')
 const { updateAgreement } = require('../messaging/senders')
-const standards = require('../services/standards')
+const standardsTemplate = require('../services/standards')
 const { runValidation } = require('../services/validation')
 
-function addRules (input) {
-  const msg = { ...standards }
-  for (const [k, v] of Object.entries(input)) {
-    msg[k].userInput = Number(v)
-  }
-  return msg
+function addState (input) {
+  return Object.entries(input).reduce((acc, cur) => {
+    const [k, v] = cur
+    const standard = standardsTemplate.find(s => s.id === k)
+    standard.userInput = Number(v)
+    acc[k] = standard
+    return acc
+  }, {})
 }
 
 module.exports = {
@@ -21,7 +23,7 @@ module.exports = {
     if (errorList.length > 0) {
       return h.view('enter-value', { errorList, standards })
     } else {
-      const partialMsg = addRules(body)
+      const partialMsg = addState(body)
       const correlationId = uuid()
       const msgToSend = { correlationId, body: partialMsg }
       await updateAgreement(msgToSend)
