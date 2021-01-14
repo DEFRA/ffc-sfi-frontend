@@ -47,15 +47,6 @@ function addState (input) {
     acc[k] = standard
     return acc
   }, {})
-
-  // leaving here for discussion
-  // const msg = {}
-  // for (const [k, v] of Object.entries(input)) {
-  //   const standard = standardsTemplate.find(s => s.id === k)
-  //   standard.userInput = Number(v)
-  //   msg[k] = standard
-  // }
-  // return msg
 }
 
 module.exports = [
