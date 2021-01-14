@@ -36,7 +36,7 @@
     <h1 class="govuk-heading-l">Testing POC</h1>
 
     <form method="POST" action="/send-message">
-      {% for name, standard in standards %}
+      {% for standard in standards %}
         {{ govukInput({
           label: {
           text: standard.ui.text,
@@ -47,7 +47,7 @@
             text: standard.ui.hint
           },
           id: standard.id,
-          name: name,
+          name: standard.id,
           errorMessage: standard.errorMessage,
           suffix: { text: standard.units.symbol },
           value: standard.value
