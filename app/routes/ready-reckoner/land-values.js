@@ -1,5 +1,5 @@
 const session = require('./session-handler')
-const standardsTemplate = require('../../services/standards-arr')
+const standardsTemplate = require('../../services/standards')
 const { v4: uuid } = require('uuid')
 const { updateAgreement } = require('../../messaging/senders')
 const { runValidation } = require('../../services/validation')

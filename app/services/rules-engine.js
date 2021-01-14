@@ -1,5 +1,5 @@
 const { Engine } = require('json-rules-engine')
-const standards = require('./standards-arr')
+const standards = require('./standards')
 
 function createRules (input) {
   return Object.keys(input).reduce((rules, key) => {

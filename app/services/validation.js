@@ -1,4 +1,4 @@
-const standardsTemplate = require('./standards-arr')
+const standardsTemplate = require('./standards')
 const { runRulesEngine } = require('./rules-engine')
 
 function collectErrors (results) {

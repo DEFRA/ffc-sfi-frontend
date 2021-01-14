@@ -1,4 +1,4 @@
-const standards = require('../services/standards-arr')
+const standards = require('../services/standards')
 
 module.exports = {
   method: 'GET',
