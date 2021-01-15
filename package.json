@@ -31,11 +31,14 @@
     "@hapi/vision": "^6.0.1",
     "@hapi/wreck": "^17.1.0",
     "@hapi/yar": "^10.1.1",
+    "bunyan": "^1.8.15",
     "ffc-messaging": "^1.0.7",
     "govuk-frontend": "^3.10.2",
     "json-rules-engine": "^6.0.0",
     "nunjucks": "^3.2.2",
-    "uuid": "^8.3.2"
+    "pino": "^6.10.0",
+    "uuid": "^8.3.2",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",
