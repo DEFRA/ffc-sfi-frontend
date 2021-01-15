@@ -1,15 +1,13 @@
-const bunyan = require('bunyan').createLogger({ name: 'ffc-sfi' })
-const pino = require('pino')()
-const winston = require('winston')
+const logger = require('bunyan').createLogger({ name: 'ffc-sfi' })
+
+function log (msg, ctx) {
+  if (ctx) {
+    logger.info({ ctx }, msg)
+  } else {
+    logger.info(msg)
+  }
+}
 
 module.exports = {
-  bunyan,
-  pino,
-  winston: winston.createLogger({
-    // format: winston.format.combine(
-    //   winston.format.label({ name: 'ffc-sfi' }),
-    //   winston.format.timestamp()
-    // ),
-    transports: [new winston.transports.Console()]
-  })
+  log
 }

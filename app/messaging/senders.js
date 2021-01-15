@@ -1,4 +1,4 @@
-const log = require('../services/loggers')
+const { log } = require('../services/loggers')
 const msgCfg = require('../config/messaging')
 const { MessageSender } = require('ffc-messaging')
 
@@ -27,22 +27,8 @@ async function sendMsg (sender, msgData, msgType) {
     source: msgCfg.msgSrc
   }
   const msg = { ...msgBase, ...msgData }
-  console.log('sending message', msg)
 
-  console.log('bunyan logging-------------------v')
-  log.bunyan.info('this is just a string')
-  log.bunyan.info(msg, 'msg as object, chance of over writing')
-  log.bunyan.info({ unique: msg }, 'msg as property')
-
-  console.log('pino logging-------------------v')
-  log.pino.info('pino string')
-  log.pino.info({ msg })
-  log.pino.info(msg)
-
-  console.log('winston logging-------------------v')
-  log.winston.log({ level: 'info', message: 'winston message goes here', msg })
-  log.winston.log('info', 'winston message goes here', msg)
-  log.winston.info('winston message goes here', msg)
+  log('sending message', msg)
 
   await sender.sendMessage(msg)
   await sender.closeConnection()
