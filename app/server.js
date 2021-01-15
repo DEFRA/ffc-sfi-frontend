@@ -9,12 +9,9 @@ const resultsRoute = require('./routes/results')
 
 const routes = [
   require('./routes/assets'),
-  require('./routes/enter-value'),
   require('./routes/healthy'),
   require('./routes/healthz'),
   require('./routes/home'),
-  require('./routes/retrieve-value'),
-  require('./routes/send-message'),
   require('./routes/sbi'),
   require('./routes/ready-reckoner/loading'),
   ...require('./routes/ready-reckoner/land-values'),
