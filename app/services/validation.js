@@ -11,7 +11,7 @@ function collectErrors (results) {
 }
 
 function updateStandards (input, errorList) {
-  const standards = [...standardsTemplate]
+  const standards = JSON.parse(JSON.stringify(standardsTemplate))
   errorList.forEach(e => {
     const standard = standards.find(s => s.id === e.id)
     standard.errorMessage = { text: e.text }
