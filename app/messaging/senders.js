@@ -1,3 +1,4 @@
+const { log } = require('../services/loggers')
 const msgCfg = require('../config/messaging')
 const { MessageSender } = require('ffc-messaging')
 
@@ -26,7 +27,9 @@ async function sendMsg (sender, msgData, msgType) {
     source: msgCfg.msgSrc
   }
   const msg = { ...msgBase, ...msgData }
-  console.log('sending message', msg)
+
+  log('sending message', msg)
+
   await sender.sendMessage(msg)
   await sender.closeConnection()
 }

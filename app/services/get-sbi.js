@@ -1,5 +1,7 @@
 const Wreck = require('@hapi/wreck')
 
+const { log } = require('./loggers')
+
 const outputFields = [
   'area_ha', 'description', 'land_cover_class_code', 'parcel_id'
 ]
@@ -34,7 +36,7 @@ function processLandCover (data) {
 }
 
 async function getSBIData (sbi) {
-  console.log(`Requesting data for SBI ${sbi}`)
+  log(`Requesting data for SBI ${sbi}`)
   const { payload } = await Wreck.get(`LandCovers/MapServer/0/query?where=SBI=${sbi}&outFields=${outputFields.join(',')}&f=geojson&returngeometry=false`,
     {
       baseUrl: 'https://environment.data.gov.uk/arcgis/rest/services/RPA/',
