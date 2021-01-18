@@ -64,16 +64,16 @@ module.exports = [
       const payload = { ...request.payload }
       session.setLandValues(request, payload)
 
-      if (Object.values(payload).filter(value => Number(value) !== 0).length === 0) {
-        const errorMsg = 'Enter at least one postive land value'
-        const pageContent = getContentDetails(standardsTemplate, payload, [{ text: errorMsg }])
-        return h.view(pageDetails.template, pageContent)
-      }
-
       const { errorList, standards: updatedStandards } = await runValidation(payload)
 
       if (errorList.length > 0) {
         const pageContent = getContentDetails(updatedStandards, payload, errorList)
+        return h.view(pageDetails.template, pageContent)
+      }
+
+      if (Object.values(payload).filter(value => Number(value) > 0).length === 0) {
+        const errorMsg = 'Enter at least one positive value'
+        const pageContent = getContentDetails(standardsTemplate, payload, [{ text: errorMsg }])
         return h.view(pageDetails.template, pageContent)
       }
 
