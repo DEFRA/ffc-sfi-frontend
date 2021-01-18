@@ -62,22 +62,28 @@ module.exports = [
     path: pageDetails.path,
     handler: async (request, h) => {
       const payload = { ...request.payload }
-      const { errorList, standards: updatedStandards } = await runValidation(payload)
-
       session.setLandValues(request, payload)
+
+      if (Object.values(payload).filter(value => Number(value) !== 0).length === 0) {
+        const errorMsg = 'Enter at least one postive land value'
+        const pageContent = getContentDetails(standardsTemplate, payload, [{ text: errorMsg }])
+        return h.view(pageDetails.template, pageContent)
+      }
+
+      const { errorList, standards: updatedStandards } = await runValidation(payload)
 
       if (errorList.length > 0) {
         const pageContent = getContentDetails(updatedStandards, payload, errorList)
         return h.view(pageDetails.template, pageContent)
-      } else {
-        const body = addState(payload)
-        const correlationId = uuid()
-        const msg = { correlationId, body }
-        await updateAgreement(msg)
-
-        session.setCorrelationId(request, correlationId)
-        return h.redirect(pageDetails.nextPath)
       }
+
+      const body = addState(payload)
+      const correlationId = uuid()
+      const msg = { correlationId, body }
+      await updateAgreement(msg)
+
+      session.setCorrelationId(request, correlationId)
+      return h.redirect(pageDetails.nextPath)
     }
   }
 ]
