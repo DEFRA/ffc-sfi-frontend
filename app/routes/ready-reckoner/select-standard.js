@@ -16,14 +16,14 @@ const pageDetails = {
 }
 
 function getContentDetails (payload, selected, errorText = null) {
-  const items = Object.entries(payload).reduce((acc, [k, v]) => {
+  const standardsToShow = Object.entries(payload).reduce((acc, [k, v]) => {
     if (v?.userInput > 0) {
       acc.push({
-        value: v.id,
-        text: itemText[v.id](v.paymentRate),
-        checked: selected ? selected.includes(v.id) : false,
+        value: k,
+        text: itemText[k](v.paymentRate),
+        checked: selected ? selected.includes(k) : false,
         conditional: {
-          html: htmlContent[v.id](v.userInput, v.payment)
+          html: htmlContent[k](v.userInput, v.payment)
         }
       })
     }
@@ -39,7 +39,7 @@ function getContentDetails (payload, selected, errorText = null) {
         hint: {
           text: "Choose the options you want funding for. We'll pay you in monthly instalments so that work can begin without delay."
         },
-        items,
+        items: standardsToShow,
         errorMessage: errorText
       },
       message: 'If you take part in another environmental scheme, for example Countryside Stewardship, you cannot apply for the same activity through SFI.'
