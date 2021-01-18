@@ -1,5 +1,5 @@
 const createServer = require('./server')
-const { log } = require('./services/logger')
+const { log, logError } = require('./services/logger')
 
 const init = async () => {
   const server = await createServer()
@@ -9,7 +9,7 @@ const init = async () => {
 }
 
 process.on('unhandledRejection', (err) => {
-  log(err)
+  logError(err)
   process.exit(1)
 })
 
