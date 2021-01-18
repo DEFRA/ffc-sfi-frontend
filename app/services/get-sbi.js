@@ -1,6 +1,6 @@
 const Wreck = require('@hapi/wreck')
 
-const { log } = require('./loggers')
+const { log } = require('./logger')
 
 const outputFields = [
   'area_ha', 'description', 'land_cover_class_code', 'parcel_id'

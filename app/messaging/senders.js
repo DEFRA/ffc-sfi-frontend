@@ -1,4 +1,4 @@
-const { log } = require('../services/loggers')
+const { log } = require('../services/logger')
 const msgCfg = require('../config/messaging')
 const { MessageSender } = require('ffc-messaging')
 

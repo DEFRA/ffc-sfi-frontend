@@ -1,5 +1,5 @@
 const createServer = require('./server')
-const { log } = require('./services/loggers')
+const { log } = require('./services/logger')
 
 const init = async () => {
   const server = await createServer()
