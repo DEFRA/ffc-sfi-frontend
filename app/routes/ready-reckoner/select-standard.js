@@ -12,6 +12,7 @@ const itemText = {
 const pageDetails = {
   path: '/select-standard',
   nextPath: '/selected-summary',
+  backPath: '/land-values',
   template: 'select-standard'
 }
 
@@ -32,6 +33,7 @@ function getContentDetails (payload, selected, errorText = null) {
 
   return {
     title: 'Funding options you qualify for',
+    backPath: pageDetails.backPath,
     components: {
       standards: {
         idPrefix: 'standards',

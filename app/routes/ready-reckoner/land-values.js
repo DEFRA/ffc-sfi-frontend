@@ -13,6 +13,7 @@ const labelText = {
 const pageDetails = {
   path: '/land-values',
   nextPath: '/loading',
+  backPath: '/',
   template: 'land-values'
 }
 
@@ -20,6 +21,7 @@ function getContentDetails (standards, values, errorList) {
   return {
     title: 'What land and boundaries do you manage?',
     errorList,
+    backPath: pageDetails.backPath,
     components: {
       details: {
         summaryText: 'Why are we asking this?',
