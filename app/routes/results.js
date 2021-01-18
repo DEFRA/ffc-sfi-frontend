@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi')
 
-const { log } = require('../services/loggers')
+const { log } = require('../services/logger')
 const getSBIData = require('../services/get-sbi')
 
 function results (server) {

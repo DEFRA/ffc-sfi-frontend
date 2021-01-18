@@ -1,6 +1,6 @@
 {
   "name": "ffc-sfi-frontend",
-  "version": "1.17.0",
+  "version": "1.17.1",
   "description": "Frontend microservice SFI",
   "homepage": "https://github.com/DEFRA/ffc-sfi-frontend",
   "main": "app/index.js",
@@ -54,7 +54,7 @@
     "sass-loader": "^10.1.1",
     "standard": "^16.0.3",
     "style-loader": "^2.0.0",
-    "webpack": "^5.14.0",
+    "webpack": "^5.15.0",
     "webpack-cli": "^4.3.1"
   },
   "standard": {
