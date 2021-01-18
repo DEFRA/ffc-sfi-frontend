@@ -5,6 +5,9 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
+
 
 {% block beforeContent %}
   {{ govukBackLink({
@@ -24,21 +27,33 @@
     }) }}
     {% endif %}
 
-    <h1 class="govuk-heading-l">{{ title }}</h1>
+
 
     <form method="POST" autocomplete="off" novalidate >
-      {% for standard in components.inputs %}
-        {{ govukInput(standard) }}
-      {% endfor %}
+      {% if errorText %}
+      <div class="govuk-form-group govuk-form-group--error">
+      {% else %}
+      <div class="govuk-form-group">
+      {% endif %}
+        <h1 class="govuk-heading-l">{{ title }}</h1>
 
-      {{ govukDetails(components.details) }}
+        {% if errorText %}
+        {{ govukErrorMessage({
+          text: errorText
+        }) }}
+        {% endif %}
+
+        {% for standard in components.inputs %}
+          {{ govukInput(standard) }}
+        {% endfor %}
+
+        {{ govukDetails(components.details) }}
+      </div>
 
       {{ govukButton({
         text: 'Continue'
       }) }}
     </form>
   </div>
-  <div>
-
 </div>
 {% endblock %}

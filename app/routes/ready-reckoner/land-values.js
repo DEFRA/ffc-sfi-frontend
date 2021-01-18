@@ -17,15 +17,17 @@ const pageDetails = {
   template: 'land-values'
 }
 
-function getContentDetails (standards, values, errorList) {
+function getContentDetails (standards, values, errorList, errorText = null) {
   return {
     title: 'What land and boundaries do you manage?',
     errorList,
+    errorText,
     backPath: pageDetails.backPath,
     components: {
       details: {
         summaryText: 'Why are we asking this?',
-        text: 'This will help us suggest options your land qualifies for.'
+        text: 'This will help us suggest options your land qualifies for.',
+        classes: 'govuk-!-margin-top-6'
       },
       inputs: standards.map(s => ({
         id: s.id,
@@ -75,7 +77,7 @@ module.exports = [
 
       if (Object.values(payload).filter(value => Number(value) > 0).length === 0) {
         const errorMsg = 'Enter at least one positive value'
-        const pageContent = getContentDetails(standardsTemplate, payload, [{ text: errorMsg }])
+        const pageContent = getContentDetails(standardsTemplate, payload, [{ text: errorMsg }], errorMsg)
         return h.view(pageDetails.template, pageContent)
       }
 
