@@ -22,6 +22,13 @@ function getContentDetails (calculation, selectedStandards) {
     optionHtml += textMapping[s] + '<br> '
   })
 
+  const landHtml = Object.entries(calculation).reduce((acc, [k, v]) => {
+    if (Object.prototype.hasOwnProperty.call(textMapping, k)) {
+      acc += `${v.userInput} ${v.units.symbol} - ${textMapping[k]}<br>`
+    }
+    return acc
+  }, '')
+
   return {
     title: 'Summary',
     backPath: pageDetails.backPath,
@@ -36,7 +43,7 @@ function getContentDetails (calculation, selectedStandards) {
               text: 'Land and boundaries'
             },
             value: {
-              html: `${calculation.arable.userInput} ha - Arable land<br>${calculation.grassland.userInput} ha - Grassland<br>${calculation.hedgerow.userInput} m - Hedgrows`
+              html: landHtml.substring(0, landHtml.length - 4)
             },
             actions: {
               items: [

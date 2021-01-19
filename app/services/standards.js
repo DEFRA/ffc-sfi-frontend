@@ -1,4 +1,10 @@
-module.exports = [{
+const enabled = {
+  arable: false,
+  grassland: true,
+  hedgerow: true
+}
+
+const allStandards = [{
   calculations: [{
     condition: 'userInput <= 1000',
     expression: 'userInput * paymentRate * percentage / 100.0'
@@ -81,3 +87,5 @@ module.exports = [{
     value: 0
   }]
 }]
+
+module.exports = (() => allStandards.filter(s => enabled[s.id]))()
