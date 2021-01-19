@@ -1,4 +1,4 @@
-const standardsTemplate = require('./standards')
+const standardsService = require('./standards')
 const { runRulesEngine } = require('./rules-engine')
 
 function collectErrors (results) {
@@ -11,7 +11,7 @@ function collectErrors (results) {
 }
 
 function updateStandards (input, errorList) {
-  const standards = JSON.parse(JSON.stringify(standardsTemplate))
+  const standards = JSON.parse(JSON.stringify(standardsService.enabledStandards()))
   errorList.forEach(e => {
     const standard = standards.find(s => s.id === e.id)
     standard.errorMessage = { text: e.text }

@@ -1,16 +1,9 @@
 const { v4: uuid } = require('uuid')
 const session = require('./session-handler')
-const standardsTemplate = require('../../services/standards')
+const standards = require('../../services/standards')
 const { runValidation } = require('../../services/validation')
 const { updateAgreement } = require('../../messaging/senders')
-
 const content = require('./standards-content')
-
-// const labelText = {
-//   arable: 'Arable land',
-//   grassland: 'Grassland',
-//   hedgerow: 'Hedgerows'
-// }
 
 const pageDetails = {
   path: '/land-values',
@@ -48,7 +41,7 @@ function getContentDetails (standards, values, errorList, errorText = null) {
 function addState (input) {
   return Object.entries(input).reduce((acc, cur) => {
     const [k, v] = cur
-    const standard = standardsTemplate.find(s => s.id === k)
+    const standard = standards.enabledStandards().find(s => s.id === k)
     standard.userInput = Number(v)
     acc[k] = standard
     return acc
@@ -60,7 +53,7 @@ module.exports = [
     method: 'GET',
     path: pageDetails.path,
     handler: (request, h) => {
-      return h.view(pageDetails.template, getContentDetails(standardsTemplate, session.getLandValues(request)))
+      return h.view(pageDetails.template, getContentDetails(standards.enabledStandards(), session.getLandValues(request)))
     }
   },
   {
@@ -79,7 +72,7 @@ module.exports = [
 
       if (Object.values(payload).filter(value => Number(value) > 0).length === 0) {
         const errorMsg = 'Enter at least one positive value'
-        const pageContent = getContentDetails(standardsTemplate, payload, [{ text: errorMsg }], errorMsg)
+        const pageContent = getContentDetails(standards.enabledStandards(), payload, [{ text: errorMsg }], errorMsg)
         return h.view(pageDetails.template, pageContent)
       }
 

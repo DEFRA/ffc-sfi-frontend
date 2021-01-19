@@ -1,7 +1,8 @@
 const { Engine } = require('json-rules-engine')
-const standards = require('./standards')
+const standardsService = require('./standards')
 
 function createRules (input) {
+  const standards = standardsService.enabledStandards()
   return Object.keys(input).reduce((rules, key) => {
     const standard = standards.find(s => s.id === key)
 

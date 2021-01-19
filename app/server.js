@@ -14,6 +14,7 @@ const routes = [
   require('./routes/home'),
   require('./routes/sbi'),
   require('./routes/ready-reckoner/loading'),
+  ...require('./routes/ready-reckoner/enable-standards'),
   ...require('./routes/ready-reckoner/land-values'),
   ...require('./routes/ready-reckoner/select-standard'),
   ...require('./routes/ready-reckoner/selected-summary')

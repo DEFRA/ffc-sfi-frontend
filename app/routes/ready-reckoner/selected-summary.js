@@ -1,4 +1,5 @@
 const session = require('./session-handler')
+const content = require('./standards-content')
 
 const pageDetails = {
   path: '/selected-summary',
@@ -7,15 +8,13 @@ const pageDetails = {
   template: 'selected-summary'
 }
 
-const content = require('./standards-content')
-
 function getContentDetails (calculation, selectedStandards) {
   let totalPayment = 0
   let optionHtml = ''
 
   selectedStandards.forEach(s => {
     totalPayment += calculation[s].payment
-    optionHtml += content[s].label + '<br> '
+    optionHtml += content[s].label + '<br>'
   })
 
   const landHtml = Object.entries(calculation).reduce((acc, [k, v]) => {
@@ -39,7 +38,7 @@ function getContentDetails (calculation, selectedStandards) {
               text: 'Land and boundaries'
             },
             value: {
-              html: landHtml.substring(0, landHtml.length - 4)
+              html: landHtml
             },
             actions: {
               items: [
@@ -56,7 +55,7 @@ function getContentDetails (calculation, selectedStandards) {
               text: 'Options'
             },
             value: {
-              html: optionHtml.substring(0, optionHtml.length - 5)
+              html: optionHtml
             },
             actions: {
               items: [

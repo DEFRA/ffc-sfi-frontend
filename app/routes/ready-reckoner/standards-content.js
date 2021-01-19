@@ -1,7 +1,6 @@
-const enabledStandards = require('../../services/standards')
 const selectStandardHints = require('./select-standard-hint-content')
 
-const content = {
+module.exports = {
   arable: {
     label: 'Arable land',
     selectStandard: {
@@ -31,8 +30,3 @@ const content = {
     }
   }
 }
-
-module.exports = (() => enabledStandards.reduce((acc, cur) => {
-  acc[cur.id] = { ...content[cur.id] }
-  return acc
-}, {}))()

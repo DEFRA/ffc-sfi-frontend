@@ -1,0 +1,28 @@
+{% extends './layouts/layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: backPath
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">{{title}}</h1>
+
+    <form method="POST" autocomplete="off" novalidate >
+      {{ govukCheckboxes(components.standards) }}
+
+      {{ govukButton({
+        text: 'Save'
+      }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}
