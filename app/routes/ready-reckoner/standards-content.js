@@ -17,10 +17,9 @@ const content = {
     }
   },
   hedgerow: {
-    id: 'hedgerow',
-    label: 'Hedegrows',
+    label: 'Hedgerows',
     selectStandard: {
-      checkboxItemText: (paymentRate) => `Hedgrows, £${paymentRate} for every 100 meters`,
+      checkboxItemText: (paymentRate) => `Hedgerows, £${paymentRate} for every 100 meters`,
       hintText: (amount, payment) => selectStandardHints.hedgerow(amount, payment)
     }
   },
