@@ -1,13 +1,15 @@
 const session = require('./session-handler')
-const htmlContent = require('./select-standard-content')
+// const htmlContent = require('./select-standard-content')
 const Wreck = require('@hapi/wreck')
 const { agreementServiceBaseUrl } = require('../../config/general')
 
-const itemText = {
-  arable: (paymentRate) => `Arable land, £${paymentRate} a hectare, plus £13 per tree`,
-  grassland: (paymentRate) => `Grassland, £${paymentRate} a hectare, plus £3 per tree`,
-  hedgerow: (paymentRate) => `Hedgrows, £${paymentRate} for every 100 meters`
-}
+const content = require('./standards-content')
+
+// const itemText = {
+//   arable: (paymentRate) => `Arable land, £${paymentRate} a hectare, plus £13 per tree`,
+//   grassland: (paymentRate) => `Grassland, £${paymentRate} a hectare, plus £3 per tree`,
+//   hedgerow: (paymentRate) => `Hedgrows, £${paymentRate} for every 100 meters`
+// }
 
 const pageDetails = {
   path: '/select-standard',
@@ -21,10 +23,10 @@ function getContentDetails (payload, selected, errorText = null) {
     if (v?.userInput > 0) {
       acc.push({
         value: k,
-        text: itemText[k](v.paymentRate),
+        text: content[k].selectStandard.checkboxItemText(v.paymentRate),
         checked: selected ? selected.includes(k) : false,
         conditional: {
-          html: htmlContent[k](v.userInput, v.payment)
+          html: content[k].selectStandard.hintText(v.userInput, v.payment)
         }
       })
     }

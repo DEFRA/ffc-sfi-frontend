@@ -7,11 +7,7 @@ const pageDetails = {
   template: 'selected-summary'
 }
 
-const textMapping = {
-  arable: 'Arable land',
-  grassland: 'Grassland',
-  hedgerow: 'Hedgerows'
-}
+const content = require('./standards-content')
 
 function getContentDetails (calculation, selectedStandards) {
   let totalPayment = 0
@@ -19,12 +15,12 @@ function getContentDetails (calculation, selectedStandards) {
 
   selectedStandards.forEach(s => {
     totalPayment += calculation[s].payment
-    optionHtml += textMapping[s] + '<br> '
+    optionHtml += content[s].label + '<br> '
   })
 
   const landHtml = Object.entries(calculation).reduce((acc, [k, v]) => {
-    if (Object.prototype.hasOwnProperty.call(textMapping, k)) {
-      acc += `${v.userInput} ${v.units.symbol} - ${textMapping[k]}<br>`
+    if (Object.prototype.hasOwnProperty.call(content, k)) {
+      acc += `${v.userInput} ${v.units.symbol} - ${content[k].label}<br>`
     }
     return acc
   }, '')

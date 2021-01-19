@@ -157,4 +157,12 @@ function hedgerow (metres, payment) {
   `
 }
 
-module.exports = { arable, grassland, hedgerow }
+function woodland (hectares, payment) {
+  return `
+  <p class="govuk-body-m">Based on ${hectares} metres</p>
+  <h2 class="govuk-heading-m">We’ll pay you a minimum of £${payment.toFixed(2)} a year</h2>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+  `
+}
+
+module.exports = { arable, grassland, hedgerow, woodland }

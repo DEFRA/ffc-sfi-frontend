@@ -4,11 +4,13 @@ const standardsTemplate = require('../../services/standards')
 const { runValidation } = require('../../services/validation')
 const { updateAgreement } = require('../../messaging/senders')
 
-const labelText = {
-  arable: 'Arable land',
-  grassland: 'Grassland',
-  hedgerow: 'Hedgerows'
-}
+const content = require('./standards-content')
+
+// const labelText = {
+//   arable: 'Arable land',
+//   grassland: 'Grassland',
+//   hedgerow: 'Hedgerows'
+// }
 
 const pageDetails = {
   path: '/land-values',
@@ -33,7 +35,7 @@ function getContentDetails (standards, values, errorList, errorText = null) {
         id: s.id,
         name: s.id,
         suffix: { text: s.units.symbol },
-        label: { text: labelText[s.id] },
+        label: { text: content[s.id].label },
         classes: 'govuk-input--width-5',
         value: values?.[s.id],
         errorMessage: s?.errorMessage,

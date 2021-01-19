@@ -1,10 +1,36 @@
 const enabled = {
-  arable: false,
+  arable: true,
   grassland: true,
-  hedgerow: true
+  hedgerow: true,
+  woodland: true
 }
 
 const allStandards = [{
+  calculations: [{
+    condition: 'userInput <= 1000',
+    expression: 'userInput * paymentRate * percentage / 100.0'
+  }, {
+    condition: 'userInput > 1000',
+    expression: '1000 * paymentRate * percentage / 100.0'
+  }],
+  id: 'woodland',
+  paymentRate: 100,
+  percentage: 5,
+  units: {
+    name: 'hectares',
+    symbol: 'ha'
+  },
+  validationRules: [{
+    operator: 'lessThanInclusive',
+    text: 'Area of woodland must be less than or equal to 9999',
+    value: 9999
+  }, {
+    operator: 'greaterThanInclusive',
+    text: 'Area of woodland must not be less than 0',
+    value: 0
+  }]
+},
+{
   calculations: [{
     condition: 'userInput <= 1000',
     expression: 'userInput * paymentRate * percentage / 100.0'
