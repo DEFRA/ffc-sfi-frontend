@@ -27,14 +27,8 @@
     }) }}
     {% endif %}
 
-
-
     <form method="POST" autocomplete="off" novalidate >
-      {% if errorText %}
-      <div class="govuk-form-group govuk-form-group--error">
-      {% else %}
-      <div class="govuk-form-group">
-      {% endif %}
+      <div class="govuk-form-group {{ "govuk-form-group--error" if errorText }}">
         <h1 class="govuk-heading-l">{{ title }}</h1>
 
         {% if errorText %}
