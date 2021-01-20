@@ -1,18 +1,14 @@
 {% extends './layouts/layout.njk' %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% block beforeContent %}
-  {{ govukBreadcrumbs({
-    items: [
-      {
-        text: "Home",
-        href: "/"
-      }
-    ]
+  {{ govukBackLink({
+    text: "Back",
+    href: backPath
   }) }}
 {% endblock %}
 

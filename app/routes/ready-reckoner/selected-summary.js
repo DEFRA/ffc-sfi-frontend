@@ -3,6 +3,7 @@ const session = require('./session-handler')
 const pageDetails = {
   path: '/selected-summary',
   nextPath: '/',
+  backPath: '/select-standard',
   template: 'selected-summary'
 }
 
@@ -23,6 +24,7 @@ function getContentDetails (calculation, selectedStandards) {
 
   return {
     title: 'Summary',
+    backPath: pageDetails.backPath,
     components: {
       insetText: {
         text: `Based on your information and options, you would receive at least £${totalPayment.toFixed(2)} a year, paid in 12 monthly installments of £${(totalPayment / 12.0).toFixed(2)}.`

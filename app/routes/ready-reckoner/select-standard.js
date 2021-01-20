@@ -3,15 +3,37 @@ const htmlContent = require('./select-standard-content')
 const Wreck = require('@hapi/wreck')
 const { agreementServiceBaseUrl } = require('../../config/general')
 
+const itemText = {
+  arable: (paymentRate) => `Arable land, £${paymentRate} a hectare, plus £13 per tree`,
+  grassland: (paymentRate) => `Grassland, £${paymentRate} a hectare, plus £3 per tree`,
+  hedgerow: (paymentRate) => `Hedgrows, £${paymentRate} for every 100 meters`
+}
+
 const pageDetails = {
   path: '/select-standard',
   nextPath: '/selected-summary',
+  backPath: '/land-values',
   template: 'select-standard'
 }
 
 function getContentDetails (payload, selected, errorText = null) {
+  const standardsToShow = Object.entries(payload).reduce((acc, [k, v]) => {
+    if (v?.userInput > 0) {
+      acc.push({
+        value: k,
+        text: itemText[k](v.paymentRate),
+        checked: selected ? selected.includes(k) : false,
+        conditional: {
+          html: htmlContent[k](v.userInput, v.payment)
+        }
+      })
+    }
+    return acc
+  }, [])
+
   return {
     title: 'Funding options you qualify for',
+    backPath: pageDetails.backPath,
     components: {
       standards: {
         idPrefix: 'standards',
@@ -19,32 +41,7 @@ function getContentDetails (payload, selected, errorText = null) {
         hint: {
           text: "Choose the options you want funding for. We'll pay you in monthly instalments so that work can begin without delay."
         },
-        items: [
-          {
-            value: 'arable',
-            text: `Arable land, £${payload.arable.paymentRate} a hectare, plus £13 per tree`,
-            checked: selected ? selected.includes('arable') : false,
-            conditional: {
-              html: htmlContent.arable(payload.arable.userInput, payload.arable.payment)
-            }
-          },
-          {
-            value: 'grassland',
-            text: `Grassland, £${payload.grassland.paymentRate} a hectare, plus £3 per tree`,
-            checked: selected ? selected.includes('grassland') : false,
-            conditional: {
-              html: htmlContent.grassland(payload.grassland.userInput, payload.grassland.payment)
-            }
-          },
-          {
-            value: 'hedgerow',
-            text: `Hedgrows, £${payload.hedgerow.paymentRate} for every 100 meters`,
-            checked: selected ? selected.includes('hedgerow') : false,
-            conditional: {
-              html: htmlContent.hedgerow(payload.hedgerow.userInput, payload.hedgerow.payment)
-            }
-          }
-        ],
+        items: standardsToShow,
         errorMessage: errorText
       },
       message: 'If you take part in another environmental scheme, for example Countryside Stewardship, you cannot apply for the same activity through SFI.'
