@@ -68,6 +68,7 @@ module.exports = [
     path: pageDetails.path,
     handler: (request, h) => {
       session.setSelectedStandards(request, request.payload.standards)
+      console.log(request.payload)
 
       if (!request.payload.standards) {
         return h.view(
