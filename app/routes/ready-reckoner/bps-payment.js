@@ -32,6 +32,7 @@ function pageContent (errorText = null, defaultValue = null) {
         value: defaultValue,
         errorMessage: errorText ? { text: errorText } : null,
         spellcheck: false
+      },
       insetText: {
         html: insetTextHtml
       },
