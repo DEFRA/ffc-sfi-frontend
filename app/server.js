@@ -17,7 +17,10 @@ const routes = [
   ...require('./routes/ready-reckoner/land-values'),
   ...require('./routes/ready-reckoner/select-standard'),
   ...require('./routes/ready-reckoner/selected-summary'),
-  ...require('./routes/ready-reckoner/bps-payment')
+  ...require('./routes/ready-reckoner/bps-payment'),
+  ...require('./routes/ready-reckoner/land-calc'),
+  ...require('./routes/ready-reckoner/select-std'),
+  ...require('./routes/ready-reckoner/extra-actions')
 ]
 
 async function createServer () {
