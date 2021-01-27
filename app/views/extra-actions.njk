@@ -4,7 +4,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
-{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% block beforeContent %}
   {{ govukBackLink({
@@ -22,7 +22,7 @@
         {% call govukFieldset({
           legend: {
             text: title,
-            classes: "govuk-fieldset__legend--l",
+            classes: "govuk-fieldset__legend--xl",
             isPageHeading: true
           }
         }) %}
@@ -38,8 +38,11 @@
           {% for standard in components.standards %}
             <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
             <h2 class="govuk-heading-l govuk-!-margin-top-7">{{ standard.title }}</h2>
-            {{ standard.htmlBlurb | safe }}
-            {{ govukCheckboxes(standard.checkbox) }}
+            <div class="govuk-hint">{{ standard.hint }}</div>
+            {% for action in standard.actions %}
+              {{ action.preHtml | safe }}
+              {{ govukInput(action.input) }}
+            {% endfor %}
           {% endfor %}
 
         {% endcall %}
