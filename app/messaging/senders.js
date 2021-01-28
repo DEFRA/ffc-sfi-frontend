@@ -21,7 +21,6 @@ process.on('SIGINT', async () => {
 })
 
 async function sendMsg (sender, msgData, msgType) {
-  await sender.connect()
   const msgBase = {
     type: msgType,
     source: msgCfg.msgSrc
