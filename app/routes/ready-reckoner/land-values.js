@@ -98,6 +98,7 @@ module.exports = [
 
       const standardsSet = {
         calculations: standardsSetCalculations,
+        id: 'standardsSet',
         standards: hydrateStandards(payload)
       }
       const correlationId = uuid()
