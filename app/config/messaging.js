@@ -3,7 +3,7 @@ const sharedConfig = {
   password: process.env.SERVICE_BUS_PASSWORD,
   username: process.env.SERVICE_BUS_USER,
   type: 'queue',
-  usePodIdentity: process.env.NODE_ENV === 'production'
+  useCredentialChain: process.env.NODE_ENV === 'production'
 }
 
 const msgTypePrefix = 'uk.gov.ffc.sfi'
