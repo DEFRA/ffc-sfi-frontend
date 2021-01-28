@@ -37,7 +37,7 @@ async function sendMsg (sender, msgData, msgType) {
 module.exports = {
   updateAgreement: async function (agreementData) {
     const cred = new DefaultAzureCredential()
-    const token = await cred.getToken()
+    const token = await cred.getToken('https://servicebus.azure.net/.default')
     console.log(token)
 
     agreementSender = new MessageSender(msgCfg.updateAgreementQueue)
