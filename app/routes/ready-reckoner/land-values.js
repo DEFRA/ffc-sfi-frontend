@@ -53,6 +53,21 @@ function hydrateStandards (input) {
   }, {})
 }
 
+const standardsSetCalculations = [
+  {
+    condition: 'standards.arable.userInput > 100',
+    expression: '99999'
+  },
+  {
+    condition: '(standards.arable.payment + standards.grassland.payment + standards.hedgerow.payment) < 300',
+    expression: '(standards.arable.payment + standards.grassland.payment + standards.hedgerow.payment) * 10'
+  },
+  {
+    condition: 'standards.arable.userInput <= 100',
+    expression: 'standards.arable.userInput + standards.grassland.userInput + standards.hedgerow.userInput'
+  }
+]
+
 module.exports = [
   {
     method: 'GET',
@@ -81,11 +96,12 @@ module.exports = [
         return h.view(pageDetails.template, pageContent)
       }
 
-      const body = {
+      const standardsSet = {
+        calculations: standardsSetCalculations,
         standards: hydrateStandards(payload)
       }
       const correlationId = uuid()
-      const msg = { correlationId, body }
+      const msg = { body: standardsSet, correlationId }
       await updateAgreement(msg)
 
       session.setCorrelationId(request, correlationId)
