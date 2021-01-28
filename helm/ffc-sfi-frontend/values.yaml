@@ -28,7 +28,7 @@ container:
   requestCpu: 120m
   limitMemory: 120Mi
   limitCpu: 120m
-  readOnlyRootFilesystem: true
+  readOnlyRootFilesystem: false
   allowPrivilegeEscalation: false
   port: 3000
   messageQueueHost: dummy
