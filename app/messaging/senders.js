@@ -1,6 +1,7 @@
 const { log } = require('../services/logger')
 const msgCfg = require('../config/messaging')
 const { MessageSender } = require('ffc-messaging')
+const { DefaultAzureCredential } = require('@azure/identity')
 
 let agreementSender
 let eligibilitySender
@@ -35,6 +36,10 @@ async function sendMsg (sender, msgData, msgType) {
 
 module.exports = {
   updateAgreement: async function (agreementData) {
+    const cred = new DefaultAzureCredential()
+    const token = await cred.getToken()
+    console.log(token)
+
     agreementSender = new MessageSender(msgCfg.updateAgreementQueue)
     await sendMsg(agreementSender, agreementData, msgCfg.updateAgreementMsgType)
   },
