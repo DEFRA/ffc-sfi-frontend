@@ -43,7 +43,7 @@ function getContentDetails (standards, values, errorList, errorText = null) {
   }
 }
 
-function addState (input) {
+function hydrateStandards (input) {
   return Object.entries(input).reduce((acc, cur) => {
     const [k, v] = cur
     const standard = standardsTemplate.find(s => s.id === k)
@@ -81,7 +81,9 @@ module.exports = [
         return h.view(pageDetails.template, pageContent)
       }
 
-      const body = addState(payload)
+      const body = {
+        standards: hydrateStandards(payload)
+      }
       const correlationId = uuid()
       const msg = { correlationId, body }
       await updateAgreement(msg)

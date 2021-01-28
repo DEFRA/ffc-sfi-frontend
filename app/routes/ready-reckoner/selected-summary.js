@@ -98,9 +98,9 @@ module.exports = [
     path: pageDetails.path,
     handler: (request, h) => {
       const calculation = session.getCalculationResult(request)
-      const selectedStandards = [session.getSelectedStandards(request)].flat()
+      const selectedStandards = [session.getSelectedStandards(request).standards].flat()
 
-      return h.view(pageDetails.template, getContentDetails(calculation, selectedStandards))
+      return h.view(pageDetails.template, getContentDetails(calculation.standards, selectedStandards))
     }
   },
   {

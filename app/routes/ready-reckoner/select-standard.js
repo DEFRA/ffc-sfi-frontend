@@ -60,21 +60,21 @@ module.exports = [
 
       session.setCalculationResult(request, payload.body)
 
-      return h.view(pageDetails.template, getContentDetails(payload.body, session.getSelectedStandards(request)))
+      return h.view(pageDetails.template, getContentDetails(payload.body.standards, session.getSelectedStandards(request)?.standards))
     }
   },
   {
     method: 'POST',
     path: pageDetails.path,
     handler: (request, h) => {
-      session.setSelectedStandards(request, request.payload.standards)
+      session.setSelectedStandards(request, request.payload)
 
       if (!request.payload.standards) {
         return h.view(
           pageDetails.template,
           getContentDetails(
-            session.getCalculationResult(request),
-            session.getSelectedStandards(request),
+            session.getCalculationResult(request).standards,
+            session.getSelectedStandards(request).standards,
             { text: 'Select at least one option.' }
           )
         )
