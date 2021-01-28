@@ -43,6 +43,7 @@ module.exports = {
       const token = await cred.getToken('https://servicebus.azure.net/.default')
       console.log(token)
     } catch (e) {
+      console.log('Failed to get token')
       console.log(e)
     }
 
