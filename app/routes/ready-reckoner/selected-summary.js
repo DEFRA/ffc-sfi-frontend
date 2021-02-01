@@ -15,11 +15,12 @@ const textMapping = {
 
 function getContentDetails (standardsSet, selectedStandards) {
   const calculation = standardsSet.standards
-  const totalPayment = standardsSet.totalPayment
+  let totalPayment = 0
   let optionHtml = ''
 
   selectedStandards.forEach(s => {
     optionHtml += textMapping[s] + '<br> '
+    totalPayment += standardsSet.standards[s].payment
   })
 
   return {
