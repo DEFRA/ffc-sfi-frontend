@@ -43,7 +43,7 @@ function getContentDetails (standards, values, errorList, errorText = null) {
   }
 }
 
-function addState (input) {
+function hydrateStandards (input) {
   return Object.entries(input).reduce((acc, cur) => {
     const [k, v] = cur
     const standard = standardsTemplate.find(s => s.id === k)
@@ -52,6 +52,21 @@ function addState (input) {
     return acc
   }, {})
 }
+
+const standardsSetCalculations = [
+  {
+    condition: 'standards.arable.userInput > 100',
+    expression: '99999'
+  },
+  {
+    condition: '(standards.arable.payment + standards.grassland.payment + standards.hedgerow.payment) < 300',
+    expression: '(standards.arable.payment + standards.grassland.payment + standards.hedgerow.payment) * 10'
+  },
+  {
+    condition: 'standards.arable.userInput <= 100',
+    expression: 'standards.arable.userInput + standards.grassland.userInput + standards.hedgerow.userInput'
+  }
+]
 
 module.exports = [
   {
@@ -81,9 +96,13 @@ module.exports = [
         return h.view(pageDetails.template, pageContent)
       }
 
-      const body = addState(payload)
+      const standardsSet = {
+        calculations: standardsSetCalculations,
+        id: 'standardsSet',
+        standards: hydrateStandards(payload)
+      }
       const correlationId = uuid()
-      const msg = { correlationId, body }
+      const msg = { body: standardsSet, correlationId }
       await updateAgreement(msg)
 
       session.setCorrelationId(request, correlationId)

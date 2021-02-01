@@ -13,13 +13,14 @@ const textMapping = {
   hedgerow: 'Hedgerows'
 }
 
-function getContentDetails (calculation, selectedStandards) {
+function getContentDetails (standardsSet, selectedStandards) {
+  const calculation = standardsSet.standards
   let totalPayment = 0
   let optionHtml = ''
 
   selectedStandards.forEach(s => {
-    totalPayment += calculation[s].payment
     optionHtml += textMapping[s] + '<br> '
+    totalPayment += standardsSet.standards[s].payment
   })
 
   return {
@@ -97,10 +98,10 @@ module.exports = [
     method: 'GET',
     path: pageDetails.path,
     handler: (request, h) => {
-      const calculation = session.getCalculationResult(request)
-      const selectedStandards = [session.getSelectedStandards(request)].flat()
+      const standardsSet = session.getCalculationResult(request)
+      const selectedStandards = [session.getSelectedStandards(request).standards].flat()
 
-      return h.view(pageDetails.template, getContentDetails(calculation, selectedStandards))
+      return h.view(pageDetails.template, getContentDetails(standardsSet, selectedStandards))
     }
   },
   {
