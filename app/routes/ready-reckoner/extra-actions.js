@@ -2,33 +2,12 @@ const standardRates = {
   arable: [13],
   'arable-soils': [114],
   'improved-grassland': [3],
-  'improved-grassland-soils': [88, 224],
-  waterbody: ['3.50']
+  'improved-grassland-soils': [88, 56],
+  waterbody: ['0.05'],
+  woodland: [200]
 }
 
 const standards = [
-  {
-    id: 'arable',
-    title: 'Arable land',
-    hint: 'Add the number of trees on your arable land you want to maintain a 10 metre radius buffer around. You can leave this blank if you don\'t know.',
-    actions: [{
-      id: 'arable',
-      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardRates.arable[0]} for each tree you maintain a buffer around</strong>.</p>`,
-      label: 'Number of trees',
-      unit: 'trees'
-    }]
-  },
-  {
-    id: 'arable-soils',
-    title: 'Arable and horticultural soils',
-    hint: 'Add the number of hectares of arable land at risk of surface runoff, soil erosion or flooding you want to establish green cover on. You can leave this blank if you don\'t know.',
-    actions: [{
-      id: 'arable-soils',
-      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardRates['arable-soils'][0]} a hectare</strong> to establish green cover.</p>`,
-      label: 'Number of hectares',
-      unit: 'ha'
-    }]
-  },
   {
     id: 'improved-grassland',
     title: 'Improved grassland',
@@ -58,6 +37,28 @@ const standards = [
     }]
   },
   {
+    id: 'arable',
+    title: 'Arable land',
+    hint: 'Add the number of trees on your arable land you want to maintain a 10 metre radius buffer around. You can leave this blank if you don\'t know.',
+    actions: [{
+      id: 'arable',
+      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardRates.arable[0]} for each tree you maintain a buffer around</strong>.</p>`,
+      label: 'Number of trees',
+      unit: 'trees'
+    }]
+  },
+  {
+    id: 'arable-soils',
+    title: 'Arable and horticultural soils',
+    hint: 'Add the number of hectares of arable land at risk of surface runoff, soil erosion or flooding you want to establish green cover on. You can leave this blank if you don\'t know.',
+    actions: [{
+      id: 'arable-soils',
+      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardRates['arable-soils'][0]} a hectare</strong> to establish green cover.</p>`,
+      label: 'Number of hectares',
+      unit: 'ha'
+    }]
+  },
+  {
     id: 'waterbody',
     title: 'Waterbody buffering',
     hint: 'Add the number of square meters of cultivated land you want to establish in-field grass strips or blocks on to intercept runoff water. You can leave this blank if you don\'t know.',
@@ -67,12 +68,23 @@ const standards = [
       label: 'Number of square meters',
       unit: 'm<sup>2</sup>'
     }]
+  },
+  {
+    id: 'woodland',
+    title: 'Farm woodland',
+    hint: 'Add the number of square meters of newly planted woodland under 15 years old you want to maintain. You can leave this blank if you don\'t know.',
+    actions: [{
+      id: 'woodland',
+      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardRates.woodland[0]} a hectare</strong> to maintain newly planted woodland.</p>`,
+      label: 'Number of square meters',
+      unit: 'm<sup>2</sup>'
+    }]
   }
 ]
 
 const pageDetails = {
   path: '/extra-actions',
-  nextPath: '/',
+  nextPath: '/sfi-summary',
   backPath: '/select-std',
   template: 'extra-actions'
 }

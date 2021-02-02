@@ -27,7 +27,7 @@
           }
         }) %}
 
-          <div class="govuk-hint">{{ hint }}</div>
+          <div class="govuk-hint">{{ hint | safe }}</div>
 
           {% if errorText %}
           {{ govukErrorMessage({
@@ -46,7 +46,8 @@
       </div>
 
       {{ govukButton({
-        text: 'Continue'
+        text: 'Continue',
+        classes: 'govuk-!-margin-top-6'
       }) }}
     </form>
   </div>

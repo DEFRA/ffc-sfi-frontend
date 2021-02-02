@@ -1,16 +1,6 @@
 // FIXME: these aren't STANDARDS and ACTIONS. They are categorised land features.
 const standards = [
   {
-    title: 'Arable and cropland',
-    actions: [
-      {
-        label: 'Arable land',
-        name: 'arable',
-        unit: 'ha'
-      }
-    ]
-  },
-  {
     title: 'Grassland',
     actions: [
       {
@@ -26,37 +16,37 @@ const standards = [
     ]
   },
   {
-    title: 'On farm woodland',
+    title: 'Arable/horticultural land',
     actions: [
       {
-        label: 'Farm woodland <strong>over</strong> 15 years old',
-        name: 'mature-woodland',
-        unit: 'ha'
-      },
-      {
-        label: 'Farm woodland <strong>under</strong> 15 years old',
-        name: 'new-woodland',
+        label: 'Arable and horticultural land',
+        name: 'arable',
         unit: 'ha'
       }
     ]
   },
   {
-    title: 'Hedgerows and boundaries',
+    title: 'Boundary features',
     actions: [
       {
         label: 'Hedgerows',
         name: 'hedgerows',
-        unit: 'm'
+        unit: 'ha'
+      },
+      {
+        label: 'Waterbody buffers',
+        name: 'waterbody',
+        unit: 'ha'
       }
     ]
   },
   {
-    title: 'Water bodies',
+    title: 'On farm woodland',
     actions: [
       {
-        label: 'Waterbody buffers',
-        name: 'waterbody',
-        unit: 'm'
+        label: 'Farm woodland over 15 years old',
+        name: 'woodland',
+        unit: 'ha'
       }
     ]
   }
@@ -71,8 +61,8 @@ const pageDetails = {
 
 function pageContent (errorText = null) {
   return {
-    title: 'Add your total land and boundaries',
-    hint: 'Fill in as many fields as you want to check the funding you could get.',
+    title: 'Add your land and boundaries',
+    hint: 'Enter amounts.',
     errorText,
     backPath: pageDetails.backPath,
     components: {
