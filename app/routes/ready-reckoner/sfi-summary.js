@@ -134,7 +134,7 @@ function pageContent (errorText = null) {
         html: getInsetText(70000.123456, 6000.9999, 8000.3292, 78000.11111)
       },
       summaryTitle: 'Funding breakdown',
-      summaryList: Object.entries(summaryCategories).map(([_, details]) => ({
+      summaryList: Object.values(summaryCategories).map(details => ({
         label: details.label,
         htmlBlurb: details.htmlBlurb,
         standardsTable: {

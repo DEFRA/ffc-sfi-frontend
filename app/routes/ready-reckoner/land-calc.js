@@ -1,56 +1,4 @@
-// FIXME: these aren't STANDARDS and ACTIONS. They are categorised land features.
-const standards = [
-  {
-    title: 'Grassland',
-    actions: [
-      {
-        label: 'Improved grassland',
-        name: 'improved-grassland',
-        unit: 'ha'
-      },
-      {
-        label: 'Semi-improved and unimproved grassland',
-        name: 'unimproved-grassland',
-        unit: 'ha'
-      }
-    ]
-  },
-  {
-    title: 'Arable/horticultural land',
-    actions: [
-      {
-        label: 'Arable and horticultural land',
-        name: 'arable',
-        unit: 'ha'
-      }
-    ]
-  },
-  {
-    title: 'Boundary features',
-    actions: [
-      {
-        label: 'Hedgerows',
-        name: 'hedgerows',
-        unit: 'ha'
-      },
-      {
-        label: 'Waterbody buffers',
-        name: 'waterbody',
-        unit: 'ha'
-      }
-    ]
-  },
-  {
-    title: 'On farm woodland',
-    actions: [
-      {
-        label: 'Farm woodland over 15 years old',
-        name: 'woodland',
-        unit: 'ha'
-      }
-    ]
-  }
-]
+const content = require('./content-scratch')
 
 const pageDetails = {
   path: '/land-calc',
@@ -71,13 +19,13 @@ function pageContent (errorText = null) {
         text: 'This will help us suggest options your land qualifies for.',
         classes: 'govuk-!-margin-top-8'
       },
-      standards: standards.map(standard => ({
-        title: standard.title,
-        inputs: standard.actions.map(action => ({
-          id: action.name,
-          name: action.name,
-          suffix: { text: action.unit },
-          label: { html: action.label },
+      standards: content.getLandFeatureCategories().map(category => ({
+        title: category.label,
+        inputs: category.features.map(feature => ({
+          id: feature.name,
+          name: feature.name,
+          suffix: { text: feature.unit },
+          label: { html: feature.label },
           classes: 'govuk-input--width-5',
           spellcheck: false
         }))
