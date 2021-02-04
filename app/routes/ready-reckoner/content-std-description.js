@@ -119,7 +119,7 @@ function woodland (rates) {
     <p class="govuk-body govuk-!-margin-top-6 govuk-!-margin-bottom-6">Find out more about the <a href="" target="_blank">farm woodland standard (opens in a new tab)</a></p>`
 }
 
-module.exports = function (standardId, rates) {
+module.exports = (standardId, rates) => {
   switch (standardId) {
     case 'arable':
       return arableLand(rates)

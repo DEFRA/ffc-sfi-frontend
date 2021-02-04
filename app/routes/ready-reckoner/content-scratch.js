@@ -1,29 +1,36 @@
 const stdDescription = require('./content-std-description')
+const fundingSummary = require('./content-funding-summary')
 
 const landFeatures = {
   'improved-grassland': {
     label: 'Improved grassland',
-    unit: 'ha'
+    unit: 'ha',
+    standards: ['improved-grassland', 'improved-grassland-soils']
   },
   'unimproved-grassland': {
     label: 'Semi-improved and unimproved grassland',
-    unit: 'ha'
+    unit: 'ha',
+    standards: ['unimproved-grassland']
   },
   arable: {
     label: 'Arable and horticultural land',
-    unit: 'ha'
+    unit: 'ha',
+    standards: ['arable', 'arable-soils']
   },
   hedgerows: {
     label: 'Hedgerows',
-    unit: 'ha'
+    unit: 'ha',
+    standards: ['hedgerows']
   },
   'waterbody-buffers': {
     label: 'Waterbody buffers',
-    unit: 'ha'
+    unit: 'ha',
+    standards: ['waterbody-buffers']
   },
   woodland: {
     label: 'Farm woodland over 15 years old',
-    unit: 'ha'
+    unit: 'ha',
+    standards: ['woodland']
   }
 }
 
@@ -48,37 +55,82 @@ const landFeatureCategories = {
 
 const standardsRates = {
   'improved-grassland': {
-    base: 27,
-    additional: [3]
+    mandatory: 27,
+    optional: [3]
   },
   'improved-grassland-soils': {
-    base: 6,
-    additional: [88, 56]
+    mandatory: 6,
+    optional: [88, 56]
   },
   'unimproved-grassland': {
-    base: 22,
-    additional: []
+    mandatory: 22,
+    optional: []
   },
   arable: {
-    base: 28,
-    additional: [13]
+    mandatory: 28,
+    optional: [13]
   },
   'arable-soils': {
-    base: 30,
-    additional: [114]
+    mandatory: 30,
+    optional: [114]
   },
   hedgerows: {
-    base: 200,
-    additional: []
+    mandatory: 200,
+    optional: []
   },
-  waterbody: {
-    base: 200,
-    additional: [0.05]
+  'waterbody-buffers': {
+    mandatory: 200,
+    optional: [0.05]
   },
   woodland: {
-    base: 49,
-    additional: [200, 25, 100]
+    mandatory: 49,
+    optional: [200, 25, 100]
   }
+}
+
+const standards = {
+  'improved-grassland': {
+    title: 'Improved grassland',
+    optionalActions: ['improved-grassland0']
+  },
+  'improved-grassland-soils': {
+    title: 'Improved grassland soils',
+    optionalActions: ['improved-grassland-soils0', 'improved-grassland-soils1']
+  },
+  'unimproved-grassland': {
+    title: 'Semi-improved and unimproved grassland',
+    optionalActions: []
+  },
+  arable: {
+    title: 'Arable and horticultural land',
+    optionalActions: ['arable0']
+  },
+  'arable-soils': {
+    title: 'Arable and horticultural soils',
+    optionalActions: ['arable-soils0']
+  },
+  hedgerows: {
+    title: 'Hedgerows',
+    optionalActions: []
+  },
+  'waterbody-buffers': {
+    title: 'Waterbody buffering',
+    optionalActions: ['waterbody-buffers0']
+  },
+  woodland: {
+    title: 'Farm woodland',
+    optionalActions: ['woodland0']
+  }
+}
+
+const optionalActions = {
+  'improved-grassland0': {},
+  'improved-grassland-soils0': {},
+  'improved-grassland-soils1': {},
+  arable0: {},
+  'arable-soils0': {},
+  'waterbody-buffers0': {},
+  woodland0: {}
 }
 
 const standardsContent = {
@@ -106,7 +158,7 @@ const standardsContent = {
     title: 'Hedgerows',
     checkboxLabel: 'Add the hedgerows standard to my calculation'
   },
-  waterbody: {
+  'waterbody-buffers': {
     title: 'Waterbody buffering',
     checkboxLabel: 'Add the waterbody buffering standard to my calculation'
   },
@@ -121,7 +173,7 @@ const extraActions = {
     hint: 'Add the number of trees on your improved grassland you want to maintain a 10 metre radius buffer around. You can leave this blank if you don\'t know.',
     actions: [{
       id: 'improved-grassland',
-      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates['improved-grassland'].additional[0]} for each tree you maintain a buffer around</strong>.</p>`,
+      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates['improved-grassland'].optional[0]} for each tree you maintain a buffer around</strong>.</p>`,
       label: 'Number of trees',
       unit: 'trees'
     }]
@@ -130,13 +182,13 @@ const extraActions = {
     hint: 'Add how many hectares you want to use for each action. You can leave fields blank if you don\'t know.',
     actions: [{
       id: 'improved-grassland-soils1',
-      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates['improved-grassland-soils'].additional[0]} a hectare</strong> to reduce stocking density or remove livestock from wet soils.</p>`,
+      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates['improved-grassland-soils'].optional[0]} a hectare</strong> to reduce stocking density or remove livestock from wet soils.</p>`,
       label: 'Number of hectares',
       unit: 'ha'
     },
     {
       id: 'improved-grassland-soils2',
-      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates['improved-grassland-soils'].additional[1]} a hectare</strong> to maintain permanent grassland that you only re-seed by direct drilling or over-sowing.</p>`,
+      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates['improved-grassland-soils'].optional[1]} a hectare</strong> to maintain permanent grassland that you only re-seed by direct drilling or over-sowing.</p>`,
       label: 'Number of hectares',
       unit: 'ha'
     }]
@@ -145,7 +197,7 @@ const extraActions = {
     hint: 'Add the number of trees on your arable land you want to maintain a 10 metre radius buffer around. You can leave this blank if you don\'t know.',
     actions: [{
       id: 'arable',
-      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates.arable.additional[0]} for each tree you maintain a buffer around</strong>.</p>`,
+      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates.arable.optional[0]} for each tree you maintain a buffer around</strong>.</p>`,
       label: 'Number of trees',
       unit: 'trees'
     }]
@@ -154,16 +206,16 @@ const extraActions = {
     hint: 'Add the number of hectares of arable land at risk of surface runoff, soil erosion or flooding you want to establish green cover on. You can leave this blank if you don\'t know.',
     actions: [{
       id: 'arable-soils',
-      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates['arable-soils'].additional[0]} a hectare</strong> to establish green cover.</p>`,
+      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates['arable-soils'].optional[0]} a hectare</strong> to establish green cover.</p>`,
       label: 'Number of hectares',
       unit: 'ha'
     }]
   },
-  waterbody: {
+  'waterbody-buffers': {
     hint: 'Add the number of square meters of cultivated land you want to establish in-field grass strips or blocks on to intercept runoff water. You can leave this blank if you don\'t know.',
     actions: [{
       id: 'waterbody',
-      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates.waterbody.additional[0]} a square meter</strong> to establish in-field grass strips or blocks.</p>`,
+      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates['waterbody-buffers'].optional[0]} a square meter</strong> to establish in-field grass strips or blocks.</p>`,
       label: 'Number of square meters',
       unit: 'm<sup>2</sup>'
     }]
@@ -172,12 +224,49 @@ const extraActions = {
     hint: 'Add the number of square meters of newly planted woodland under 15 years old you want to maintain. You can leave this blank if you don\'t know.',
     actions: [{
       id: 'woodland',
-      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates.woodland.additional[0]} a hectare</strong> to maintain newly planted woodland.</p>`,
+      preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates.woodland.optional[0]} a hectare</strong> to maintain newly planted woodland.</p>`,
       label: 'Number of square meters',
       unit: 'm<sup>2</sup>'
     }]
   }
 }
+
+// const standards = {
+//   arable: {
+//     title: 'Arable land'
+//   },
+//   'arable-soils': {
+//     title: 'Arable and horticultural soils'
+//   },
+//   'improved-grassland': {
+//     title: 'Improved grassland'
+//   },
+//   'improved-grassland-soils': {
+//     title: 'Improved grassland soils'
+//   },
+//   'unimproved-grassland': {
+//     title: 'Semi-improved and unimproved grassland'
+//   },
+//   woodland: {
+//     title: 'Farm woodland'
+//   },
+//   hedgerows: {
+//     title: 'Hedgerows'
+//   },
+//   waterbody: {
+//     title: 'Waterbody buffering'
+//   }
+// }
+
+// const extraActions = {
+//   'improved-grassland': { label: (amount) => `${amount} trees with a buffer around` },
+//   'improved-grassland-soils1': { label: (amount) => `${amount} hectares with reduced or removed livestock` },
+//   'improved-grassland-soils2': { label: (amount) => `${amount} hectares of permanent grassland` },
+//   arable: { label: (amount) => `${amount} trees with a buffer around` },
+//   'arable-soils': { label: (amount) => `${amount} hectares of green cover` },
+//   woodland: { label: (amount) => `${amount} square metres of newly planted woodland` },
+//   waterbody: { label: (amount) => `${amount} square metres of in-field grass strips or blocks` }
+// }
 
 module.exports = {
   // Used by land-calc.js
@@ -192,7 +281,7 @@ module.exports = {
   // Used by select-std.js
   getStandards: () => Object.entries(standardsContent).map(([id, standard]) => ({
     id,
-    descriptionHtml: stdDescription(id, [standardsRates[id].base, standardsRates[id].additional].flat()),
+    descriptionHtml: stdDescription(id, [standardsRates[id].mandatory, standardsRates[id].optional].flat()),
     ...standard
   })),
   // Used by extra-actions.js
@@ -200,5 +289,16 @@ module.exports = {
     id,
     title: standardsContent[id].title,
     ...standard
+  })),
+  // Used by sfi-summary.js
+  getTotalFunding: fundingSummary.getTotalFunding,
+  // Used by sfi-summary.js
+  // FIXME: rename properties below
+  getFundingBreakdown: () => Object.entries(landFeatureCategories).map(([id, category]) => ({
+    id,
+    label: category.label,
+    htmlBlurb: (values) => fundingSummary.getFundingBreakdown(id, values),
+    standards: category.features.map(feature => landFeatures[feature].standards).flat(),
+    extraActions: category.features.map(f => landFeatures[f].standards.map(s => standards[s].optionalActions)).flat(2)
   }))
 }
