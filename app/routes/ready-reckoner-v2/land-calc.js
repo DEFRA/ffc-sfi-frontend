@@ -9,8 +9,9 @@ const pageDetails = {
   template: 'land-calc'
 }
 
-function pageContent (defaultValues, errorText = null) {
-  console.log(defaultValues)
+const validationMsg = 'Enter the land area or boundary length for at least one option'
+
+function pageContent (defaultValue, errorText = null) {
   return {
     title: 'Add your land and boundaries',
     hint: 'Enter amounts.',
@@ -30,19 +31,9 @@ function pageContent (defaultValues, errorText = null) {
           label: { html: feature.label },
           classes: 'govuk-input--width-5',
           spellcheck: false,
-          value: defaultValues?.[feature.id].toString()
+          value: defaultValue?.[feature.id].toString()
         }))
       }))
-      // standards.map(s => ({
-      //   id: s.id,
-      //   name: s.id,
-      //   suffix: { text: s.units.symbol },
-      //   label: { text: labelText[s.id] },
-      //   classes: 'govuk-input--width-5',
-      //   value: values?.[s.id],
-      //   errorMessage: s?.errorMessage,
-      //   spellcheck: false
-      // }))
     }
   }
 }
@@ -70,7 +61,7 @@ module.exports = [
           [Joi.number().positive().allow(0), Joi.string().max(0).empty('').default(0)]
         ),
         failAction: async (request, h, error) => {
-          return h.view(pageDetails.template, pageContent(request.payload)).takeover()
+          return h.view(pageDetails.template, pageContent(request.payload, validationMsg)).takeover()
         }
       }
     }
