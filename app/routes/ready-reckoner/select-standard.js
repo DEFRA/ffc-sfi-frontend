@@ -1,4 +1,4 @@
-const session = require('./session-handler')
+const session = require('../ready-reckoner-v2/session-handler')
 const htmlContent = require('./select-standard-content')
 const Wreck = require('@hapi/wreck')
 const { agreementServiceBaseUrl } = require('../../config/general')
