@@ -1,46 +1,7 @@
 const content = require('./content-scratch')
 
 function tableRowContent (col1Text, col2Text, linkAddress) {
-  return [
-    { text: col1Text }, { text: col2Text }, { html: `<a href="${linkAddress}">Change</a>`, format: 'numeric' }
-  ]
-}
-
-const standards = {
-  arable: {
-    title: 'Arable land'
-  },
-  'arable-soils': {
-    title: 'Arable and horticultural soils'
-  },
-  'improved-grassland': {
-    title: 'Improved grassland'
-  },
-  'improved-grassland-soils': {
-    title: 'Improved grassland soils'
-  },
-  'unimproved-grassland': {
-    title: 'Semi-improved and unimproved grassland'
-  },
-  woodland: {
-    title: 'Farm woodland'
-  },
-  hedgerows: {
-    title: 'Hedgerows'
-  },
-  'waterbody-buffers': {
-    title: 'Waterbody buffering'
-  }
-}
-
-const extraActions = {
-  'improved-grassland0': { label: (amount) => `${amount} trees with a buffer around` },
-  'improved-grassland-soils0': { label: (amount) => `${amount} hectares with reduced or removed livestock` },
-  'improved-grassland-soils1': { label: (amount) => `${amount} hectares of permanent grassland` },
-  arable0: { label: (amount) => `${amount} trees with a buffer around` },
-  'arable-soils0': { label: (amount) => `${amount} hectares of green cover` },
-  woodland0: { label: (amount) => `${amount} square metres of newly planted woodland` },
-  'waterbody-buffers0': { label: (amount) => `${amount} square metres of in-field grass strips or blocks` }
+  return [{ text: col1Text }, { text: col2Text }, { html: `<a href="${linkAddress}">Change</a>`, format: 'numeric' }]
 }
 
 const pageDetails = {
@@ -48,6 +9,73 @@ const pageDetails = {
   nextPath: '/',
   backPath: '/extra-actions',
   template: 'sfi-summary'
+}
+
+const standardAmounts = {
+  'improved-grassland': 999,
+  'improved-grassland-soils': 888,
+  'unimproved-grassland': 777,
+  arable: 666,
+  'arable-soils': 555,
+  hedgerows: 444,
+  'waterbody-buffers': 333,
+  woodland: 222
+}
+
+const actionAmounts = {
+  'improved-grassland0': {
+    amount: 98,
+    payment: 700
+  },
+  'improved-grassland-soils0': {
+    amount: 87,
+    payment: 600
+  },
+  'improved-grassland-soils1': {
+    amount: 76,
+    payment: 500
+  },
+  arable0: {
+    amount: 65,
+    payment: 400
+  },
+  'arable-soils0': {
+    amount: 54,
+    payment: 300
+  },
+  woodland0: {
+    amount: 43,
+    payment: 200
+  },
+  'waterbody-buffers0': {
+    amount: 32,
+    payment: 100
+  }
+}
+
+const categoryAmounts = {
+  grassland: {
+    amountImproved: 111,
+    amountUnimproved: 222,
+    payment: 321,
+    paymentOptional: 432
+  },
+  arable: {
+    amount: 333,
+    payment: 543,
+    paymentOptional: 654
+  },
+  boundary: {
+    amountHedgerows: 444,
+    amountWaterbody: 555,
+    payment: 765,
+    paymentOptional: 876
+  },
+  woodland: {
+    amount: 666,
+    payment: 987,
+    paymentOptional: 789
+  }
 }
 
 function pageContent (errorText = null) {
@@ -63,13 +91,13 @@ function pageContent (errorText = null) {
       summaryTitle: 'Funding breakdown',
       summaryList: content.getFundingBreakdown().map(details => ({
         label: details.label,
-        htmlBlurb: details.htmlBlurb({ amountImproved: 999, amountUnimproved: 666, payment: 777, paymentOptional: 333, amount: 222 }),
+        htmlBlurb: details.descriptionHtml(categoryAmounts[details.id]),
         standardsTable: {
           exists: details.standards.length > 0,
           noTableMsg: '<p class="govuk-body">No standards selected. <a href="/select-std">Change</a></p>',
           head: [{ text: 'Standard', classes: 'govuk-!-width-three-quarters' }, { text: 'Payment' }, { text: '' }],
           rows: details.standards.map(standard =>
-            tableRowContent(standards[standard].title, '£100', '/select-std')
+            tableRowContent(standard.title, standardAmounts[standard.id], '/select-std')
           )
         },
         actionsTable: {
@@ -77,7 +105,7 @@ function pageContent (errorText = null) {
           noTableMsg: '<p class="govuk-body">No extra actions selected. <a href="/extra-actions">Change</a></p>',
           head: [{ text: 'Extra action', classes: 'govuk-!-width-three-quarters' }, { text: 'Payment' }, { text: '' }],
           rows: details.extraActions.map(action =>
-            tableRowContent(extraActions[action].label('999'), '£100', '/extra-actions')
+            tableRowContent(action.label(actionAmounts[action.id].amount), actionAmounts[action.id].payment, '/extra-actions')
           )
         }
       })),

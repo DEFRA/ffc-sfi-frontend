@@ -19,12 +19,17 @@ function arable (values) {
 
 function boundary (values) {
   return `
-  `
+    <p class="govuk-body">Based on your <strong><a href="/land-calc">${toDisplay(values.amountHedgerows)} hectares</a></strong>
+    of hedgerows and <strong><a href="/land-calc">${toDisplay(values.amountWaterbody)} hectares</a></strong> of waterbody buffering,
+    you would recieve <strong>£${toDisplay(values.payment)} per year</strong>, including
+    <strong>£${toDisplay(values.paymentOptional)}</strong> in extra payments.</p>`
 }
 
 function woodland (values) {
   return `
-  `
+    <p class="govuk-body">Based on your <strong><a href="/land-calc">${toDisplay(values.amount)} hectares</a></strong>
+    of farm woodland, you would recieve <strong>£${toDisplay(values.payment)} per year</strong>, including
+    <strong>£${toDisplay(values.paymentOptional)}</strong> in extra payments.</p>`
 }
 
 module.exports = {
