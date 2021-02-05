@@ -8,7 +8,7 @@ const pageDetails = {
   template: 'bps-payment'
 }
 
-const validationMsg = 'Enter a value greater than or equal to 0, or leave blank'
+const validationMsg = 'Enter a number, in pounds, for the total amount of BPS funding you qualified for in 2020'
 
 const insetTextHtml = `
 <ul class="govuk-list">

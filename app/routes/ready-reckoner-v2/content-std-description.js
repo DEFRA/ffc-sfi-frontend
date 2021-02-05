@@ -125,7 +125,7 @@ module.exports = (standardId, rates) => {
       return arableLand(rates)
     case 'arable-soils':
       return arableSoils(rates)
-    case 'hedgerow':
+    case 'hedgerows':
       return hedgerows(rates)
     case 'improved-grassland':
       return improvedGrassland(rates)
@@ -133,7 +133,7 @@ module.exports = (standardId, rates) => {
       return improvedGrasslandSoils(rates)
     case 'unimproved-grassland':
       return unimprovedGrassland(rates)
-    case 'waterbody':
+    case 'waterbody-buffers':
       return waterbody(rates)
     case 'woodland':
       return woodland(rates)
