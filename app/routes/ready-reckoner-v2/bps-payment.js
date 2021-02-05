@@ -1,9 +1,14 @@
+const Joi = require('joi')
+const session = require('./session-handler')
+
 const pageDetails = {
   path: '/bps-payment',
   nextPath: '/land-calc',
   backPath: '/',
   template: 'bps-payment'
 }
+
+const validationMsg = 'Enter a value greater than or equal to 0, or leave blank'
 
 const insetTextHtml = `
 <ul class="govuk-list">
@@ -14,13 +19,12 @@ const insetTextHtml = `
 </ul>
 `
 
-function pageContent (errorText = null, defaultValue = null) {
+function pageContent (defaultValue, errorText = null) {
   return {
     backPath: pageDetails.backPath,
     components: {
       input: {
-        id: 'test',
-        name: 'test',
+        name: 'bps-payment',
         prefix: { text: '£' },
         label: {
           text: 'How much Basic Payment Scheme (BPS) funding did you qualify for in 2020?',
@@ -49,21 +53,27 @@ module.exports = [
     method: 'GET',
     path: pageDetails.path,
     handler: (request, h) => {
-      return h.view(pageDetails.template, pageContent())
+      return h.view(pageDetails.template, pageContent(session.getValue(request, session.keys.bpsPayment)))
     }
   },
   {
     method: 'POST',
     path: pageDetails.path,
     handler: async (request, h) => {
-      const payload = { ...request.payload }
-      const bpsPayment = Number(payload.test)
-
-      if (bpsPayment < 0 || isNaN(bpsPayment)) {
-        return h.view(pageDetails.template, pageContent('Give me postive number yar', payload.test))
-      }
-
+      session.setValue(request, session.keys.bpsPayment, request.payload['bps-payment'])
+      console.log(session.getValue(request, session.keys.bpsPayment))
       return h.redirect(pageDetails.nextPath)
+    },
+    options: {
+      validate: {
+        payload: Joi.object({
+          // Check for either a positive number (allowing 0), or if left blank (empty string), set to 0
+          'bps-payment': [Joi.number().positive().allow(0), Joi.string().max(0).allow('').default(0)]
+        }),
+        failAction: async (request, h, error) => {
+          return h.view(pageDetails.template, pageContent(request.payload['bps-payment'], validationMsg)).takeover()
+        }
+      }
     }
   }
 ]
