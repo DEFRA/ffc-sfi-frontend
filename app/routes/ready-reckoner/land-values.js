@@ -1,5 +1,5 @@
 const { v4: uuid } = require('uuid')
-const session = require('./session-handler')
+const session = require('../ready-reckoner-v2/session-handler')
 const standardsTemplate = require('../../services/standards')
 const { runValidation } = require('../../services/validation')
 const { updateAgreement } = require('../../messaging/senders')
