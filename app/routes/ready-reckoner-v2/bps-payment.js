@@ -33,7 +33,7 @@ function pageContent (defaultValue, errorText = null) {
         },
         hint: { html: 'This includes any late payments you received after 31 December 2020.<br/>You can leave this blank if you’re not sure.' },
         classes: 'govuk-input--width-5',
-        value: defaultValue,
+        value: defaultValue?.toString(),
         errorMessage: errorText ? { text: errorText } : null,
         spellcheck: false
       },
@@ -61,16 +61,17 @@ module.exports = [
     path: pageDetails.path,
     handler: async (request, h) => {
       session.setValue(request, session.keys.bpsPayment, request.payload['bps-payment'])
-      console.log(session.getValue(request, session.keys.bpsPayment))
       return h.redirect(pageDetails.nextPath)
     },
     options: {
       validate: {
         payload: Joi.object({
           // Check for either a positive number (allowing 0), or if left blank (empty string), set to 0
-          'bps-payment': [Joi.number().positive().allow(0), Joi.string().max(0).allow('').default(0)]
+          'bps-payment': [Joi.number().positive().allow(0), Joi.string().max(0).empty('').default(0)]
         }),
         failAction: async (request, h, error) => {
+          console.log('FAIL')
+          console.log(request.payload['bps-payment'])
           return h.view(pageDetails.template, pageContent(request.payload['bps-payment'], validationMsg)).takeover()
         }
       }
