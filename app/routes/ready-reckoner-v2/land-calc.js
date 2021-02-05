@@ -1,3 +1,5 @@
+const Joi = require('joi')
+const session = require('./session-handler')
 const content = require('./content-scratch')
 
 const pageDetails = {
@@ -7,7 +9,8 @@ const pageDetails = {
   template: 'land-calc'
 }
 
-function pageContent (errorText = null) {
+function pageContent (defaultValues, errorText = null) {
+  console.log(defaultValues)
   return {
     title: 'Add your land and boundaries',
     hint: 'Enter amounts.',
@@ -22,12 +25,12 @@ function pageContent (errorText = null) {
       standards: content.getLandFeatureCategories().map(category => ({
         title: category.label,
         inputs: category.features.map(feature => ({
-          id: feature.name,
-          name: feature.name,
+          name: feature.id,
           suffix: { text: feature.unit },
           label: { html: feature.label },
           classes: 'govuk-input--width-5',
-          spellcheck: false
+          spellcheck: false,
+          value: defaultValues?.[feature.id].toString()
         }))
       }))
       // standards.map(s => ({
@@ -49,21 +52,27 @@ module.exports = [
     method: 'GET',
     path: pageDetails.path,
     handler: (request, h) => {
-      return h.view(pageDetails.template, pageContent())
+      return h.view(pageDetails.template, pageContent(session.getValue(request, session.keys.landValues)))
     }
   },
   {
     method: 'POST',
     path: pageDetails.path,
     handler: async (request, h) => {
-      //      const payload = { ...request.payload }
-
-      // if (errorList.length > 0) {
-      //   const pageContent = pageContent(updatedStandards, payload, errorList)
-      //   return h.view(pageDetails.template, pageContent)
-      // }
-
+      session.setValue(request, session.keys.landValues, request.payload)
       return h.redirect(pageDetails.nextPath)
+    },
+    options: {
+      validate: {
+        // Check any property for either a positive number (allowing 0), or if left blank set to 0
+        payload: Joi.object().pattern(
+          Joi.string(),
+          [Joi.number().positive().allow(0), Joi.string().max(0).empty('').default(0)]
+        ),
+        failAction: async (request, h, error) => {
+          return h.view(pageDetails.template, pageContent(request.payload)).takeover()
+        }
+      }
     }
   }
 ]
