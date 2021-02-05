@@ -124,13 +124,27 @@ const standards = {
 }
 
 const optionalActions = {
-  'improved-grassland0': {},
-  'improved-grassland-soils0': {},
-  'improved-grassland-soils1': {},
-  arable0: {},
-  'arable-soils0': {},
-  'waterbody-buffers0': {},
-  woodland0: {}
+  'improved-grassland0': {
+    label: (amount) => `${amount} trees with a buffer around`
+  },
+  'improved-grassland-soils0': {
+    label: (amount) => `${amount} hectares with reduced or removed livestock`
+  },
+  'improved-grassland-soils1': {
+    label: (amount) => `${amount} hectares of permanent grassland`
+  },
+  arable0: {
+    label: (amount) => `${amount} trees with a buffer around`
+  },
+  'arable-soils0': {
+    label: (amount) => `${amount} hectares of green cover`
+  },
+  woodland0: {
+    label: (amount) => `${amount} square metres of newly planted woodland`
+  },
+  'waterbody-buffers0': {
+    label: (amount) => `${amount} square metres of in-field grass strips or blocks`
+  }
 }
 
 const standardsContent = {
@@ -231,43 +245,6 @@ const extraActions = {
   }
 }
 
-// const standards = {
-//   arable: {
-//     title: 'Arable land'
-//   },
-//   'arable-soils': {
-//     title: 'Arable and horticultural soils'
-//   },
-//   'improved-grassland': {
-//     title: 'Improved grassland'
-//   },
-//   'improved-grassland-soils': {
-//     title: 'Improved grassland soils'
-//   },
-//   'unimproved-grassland': {
-//     title: 'Semi-improved and unimproved grassland'
-//   },
-//   woodland: {
-//     title: 'Farm woodland'
-//   },
-//   hedgerows: {
-//     title: 'Hedgerows'
-//   },
-//   waterbody: {
-//     title: 'Waterbody buffering'
-//   }
-// }
-
-// const extraActions = {
-//   'improved-grassland': { label: (amount) => `${amount} trees with a buffer around` },
-//   'improved-grassland-soils1': { label: (amount) => `${amount} hectares with reduced or removed livestock` },
-//   'improved-grassland-soils2': { label: (amount) => `${amount} hectares of permanent grassland` },
-//   arable: { label: (amount) => `${amount} trees with a buffer around` },
-//   'arable-soils': { label: (amount) => `${amount} hectares of green cover` },
-//   woodland: { label: (amount) => `${amount} square metres of newly planted woodland` },
-//   waterbody: { label: (amount) => `${amount} square metres of in-field grass strips or blocks` }
-// }
-
 module.exports = {
   // Used by land-calc.js
   getLandFeatureCategories: () => Object.entries(landFeatureCategories).map(([id, category]) => ({
@@ -293,12 +270,17 @@ module.exports = {
   // Used by sfi-summary.js
   getTotalFunding: fundingSummary.getTotalFunding,
   // Used by sfi-summary.js
-  // FIXME: rename properties below
   getFundingBreakdown: () => Object.entries(landFeatureCategories).map(([id, category]) => ({
     id,
     label: category.label,
-    htmlBlurb: (values) => fundingSummary.getFundingBreakdown(id, values),
-    standards: category.features.map(feature => landFeatures[feature].standards).flat(),
-    extraActions: category.features.map(f => landFeatures[f].standards.map(s => standards[s].optionalActions)).flat(2)
+    descriptionHtml: (values) => fundingSummary.getFundingBreakdown(id, values),
+    standards: category.features.map(f => landFeatures[f].standards.map(s => ({
+      id: s,
+      ...standards[s]
+    }))).flat(),
+    extraActions: category.features.map(f => landFeatures[f].standards.map(s => standards[s].optionalActions.map(a => ({
+      id: a,
+      ...optionalActions[a]
+    })))).flat(2)
   }))
 }
