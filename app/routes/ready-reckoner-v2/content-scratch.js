@@ -259,6 +259,7 @@ module.exports = {
   getStandards: () => Object.entries(standardsContent).map(([id, standard]) => ({
     id,
     descriptionHtml: stdDescription(id, [standardsRates[id].mandatory, standardsRates[id].optional].flat()),
+    landFeature: Object.entries(landFeatures).find(([k, v]) => v.standards.includes(id))[0],
     ...standard
   })),
   // Used by extra-actions.js

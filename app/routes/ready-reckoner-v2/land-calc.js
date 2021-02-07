@@ -56,10 +56,13 @@ module.exports = [
     options: {
       validate: {
         // Check any property for either a positive number (allowing 0), or if left blank set to 0
+        // Adds custom function check to at least one land value is more than 0
         payload: Joi.object().pattern(
           Joi.string(),
           [Joi.number().positive().allow(0), Joi.string().max(0).empty('').default(0)]
-        ),
+        ).custom((value, helper) => {
+          return Object.values(value).find(v => v > 0) ? value : helpers.error('any.custom')
+        }),
         failAction: async (request, h, error) => {
           return h.view(pageDetails.template, pageContent(request.payload, validationMsg)).takeover()
         }
