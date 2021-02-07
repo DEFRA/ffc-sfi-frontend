@@ -11,7 +11,7 @@ const pageDetails = {
 
 const validationMsg = 'Select at least one option'
 
-function pageContent (defaultValue, errorText = null) {
+function pageContent (defaultValue, landValues, errorText = null) {
   return {
     title: 'Choose which standards you want to do',
     hint: 'Any actions you\'re already doing count towards these standards.<br/><br/>We\'ll pay you in monthly instalments so that work can begin without delay.',
@@ -19,6 +19,7 @@ function pageContent (defaultValue, errorText = null) {
     backPath: pageDetails.backPath,
     components: {
       standards: content.getStandards().map(standard => ({
+        visible: landValues[standard.landFeature] > 0,
         title: standard.title,
         descriptionHtml: standard.descriptionHtml,
         checkbox: {
@@ -40,7 +41,9 @@ module.exports = [
     method: 'GET',
     path: pageDetails.path,
     handler: (request, h) => {
-      return h.view(pageDetails.template, pageContent(session.getValue(request, session.keys.selectedStandards)))
+      const selectedStandards = session.getValue(request, session.keys.selectedStandards)
+      const landValues = session.getValue(request, session.keys.landValues)
+      return h.view(pageDetails.template, pageContent(selectedStandards, landValues))
     }
   },
   {
@@ -58,7 +61,9 @@ module.exports = [
           standards: Joi.alternatives().try(Joi.string(), Joi.array().items(Joi.string())).required()
         }),
         failAction: async (request, h, error) => {
-          return h.view(pageDetails.template, pageContent(request.payload.standards, validationMsg)).takeover()
+          const selectedStandards = request.payload.standards
+          const landValues = session.getValue(request, session.keys.landValues)
+          return h.view(pageDetails.template, pageContent(selectedStandards, landValues, validationMsg)).takeover()
         }
       }
     }
