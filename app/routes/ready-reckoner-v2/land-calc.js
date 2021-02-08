@@ -61,7 +61,7 @@ module.exports = [
           Joi.string(),
           [Joi.number().positive().allow(0), Joi.string().max(0).empty('').default(0)]
         ).custom((value, helper) => {
-          return Object.values(value).find(v => v > 0) ? value : helpers.error('any.custom')
+          return Object.values(value).find(v => v > 0) ? value : helper.error('any.custom')
         }),
         failAction: async (request, h, error) => {
           return h.view(pageDetails.template, pageContent(request.payload, validationMsg)).takeover()
