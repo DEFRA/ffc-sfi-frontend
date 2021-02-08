@@ -25,7 +25,8 @@ function pageContent (categoryAmounts, actionValues, paymentAmounts) {
           paymentAmounts.sfiTotal,
           paymentAmounts.sfiMonthly,
           paymentAmounts.bpsPayment,
-          paymentAmounts.grandTotal)
+          paymentAmounts.grandTotal
+        )
       },
       summaryTitle: 'Funding breakdown',
       summaryList: content.getFundingBreakdown().map(details => ({
@@ -33,7 +34,7 @@ function pageContent (categoryAmounts, actionValues, paymentAmounts) {
         label: details.label,
         htmlBlurb: details.descriptionHtml(categoryAmounts[details.id]),
         standardsTable: {
-          exists: details.standards.length > 0,
+          exists: categoryAmounts[details.id].payment > 0,
           noTableMsg: '<p class="govuk-body">No standards selected. <a href="/select-std">Change</a></p>',
           head: [{ text: 'Standard', classes: 'govuk-!-width-three-quarters' }, { text: 'Payment' }, { text: '' }],
           rows: details.standards.filter(standard => paymentAmounts[standard.id].base > 0).map(standard =>
@@ -41,7 +42,7 @@ function pageContent (categoryAmounts, actionValues, paymentAmounts) {
           )
         },
         actionsTable: {
-          exists: details.extraActions.length > 0,
+          exists: categoryAmounts[details.id].paymentOptional > 0,
           noTableMsg: '<p class="govuk-body">No extra actions selected. <a href="/extra-actions">Change</a></p>',
           head: [{ text: 'Extra action', classes: 'govuk-!-width-three-quarters' }, { text: 'Payment' }, { text: '' }],
           rows: details.extraActions.filter(action => paymentAmounts[action.standard].optional[action.id] > 0).map(
@@ -68,7 +69,7 @@ function pageContent (categoryAmounts, actionValues, paymentAmounts) {
   }
 }
 
-function doCalculations(landValues, actionValues, bpsPayment) {
+function doPaymentCalculations(landValues, actionValues, bpsPayment, selectedStandards) {
   const standardsRates = content.standardsRates
   const landFeatures = content.landFeatures
   const standards = content.standards
@@ -81,7 +82,7 @@ function doCalculations(landValues, actionValues, bpsPayment) {
   Object.entries(landFeatures).forEach(([featureId, feature]) => {
     feature.standards.forEach(standardId => {
       paymentTotals[standardId] = {
-        base: landValues[featureId] * standardsRates[standardId].mandatory,
+        base: (selectedStandards.includes(standardId) ? landValues[featureId] : 0) * standardsRates[standardId].mandatory,
         optional: {}
       }
 
@@ -118,9 +119,9 @@ module.exports = [
       const landValues = session.getValue(request, session.keys.landValues)
       const actionValues = session.getValue(request, session.keys.actionValues)
       const bpsPayment = session.getValue(request, session.keys.bpsPayment)
-      const paymentAmounts = doCalculations(landValues, actionValues, bpsPayment)
-
       const selectedStandards = session.getValue(request, session.keys.selectedStandards)
+      const paymentAmounts = doPaymentCalculations(landValues, actionValues, bpsPayment, selectedStandards)
+
       const landFeatures = content.landFeatures
       const landFeatureCategories = content.landFeatureCategories
       const categoryAmounts = {}
@@ -137,15 +138,19 @@ module.exports = [
           landFeatures[feature].standards.forEach(standard => {
             if (selectedStandards.includes(standard)) {
               categoryAmounts[id].visible = true
+              categoryAmounts[id].payment += paymentAmounts[standard].base
             }
 
-            categoryAmounts[id].payment += paymentAmounts[standard].base
             content.standards[standard].optionalActions.forEach(
               action => (categoryAmounts[id].paymentOptional += paymentAmounts[standard].optional[action])
             )
           })
         })
+
+        categoryAmounts[id].payment += categoryAmounts[id].paymentOptional
       })
+
+      console.log(paymentAmounts)
 
       return h.view(pageDetails.template, pageContent(categoryAmounts, actionValues, paymentAmounts))
     }
