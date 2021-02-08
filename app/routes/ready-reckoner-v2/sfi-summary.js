@@ -74,9 +74,26 @@ function doPaymentCalculations(landValues, actionValues, bpsPayment, selectedSta
   const landFeatures = content.landFeatures
   const standards = content.standards
 
+  let bps = 0
+  let bpsRemainder = bpsPayment
+
+  switch (true) {
+    case (bpsRemainder > 150000):
+      bps += (bpsRemainder - 150000) * 0.75 // 25% reduction over 150000
+      bpsRemainder = 150000
+    case (bpsRemainder > 50000):
+      bps += (bpsRemainder - 50000) * 0.8   // 20% reduction between 50000 and 150000
+      bpsRemainder = 50000
+    case (bpsRemainder > 30000):
+      bps += (bpsRemainder - 30000) * 0.9   // 10% reduction between 30000 and 50000
+      bpsRemainder = 30000
+    default:
+      bps += bpsRemainder * 0.95            // 5% reduction up to 30000
+  }
+
   const paymentTotals = {
     sfiTotal: 0,
-    bpsPayment: bpsPayment * 0.8 // FIXME
+    bpsPayment: bps
   }
 
   Object.entries(landFeatures).forEach(([featureId, feature]) => {
