@@ -293,5 +293,6 @@ module.exports = {
   })),
   landFeatures, // FIXME: this data structure shouldn't be in the content area
   landFeatureCategories,
-  standards
+  standards,
+  standardsRates
 }
