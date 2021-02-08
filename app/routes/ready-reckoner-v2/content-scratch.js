@@ -125,25 +125,32 @@ const standards = {
 
 const optionalActions = {
   'improved-grassland0': {
-    label: (amount) => `${amount} trees with a buffer around`
+    label: (amount) => `${amount} trees with a buffer around`,
+    standard: 'improved-grassland'
   },
   'improved-grassland-soils0': {
-    label: (amount) => `${amount} hectares with reduced or removed livestock`
+    label: (amount) => `${amount} hectares with reduced or removed livestock`,
+    standard: 'improved-grassland-soils'
   },
   'improved-grassland-soils1': {
-    label: (amount) => `${amount} hectares of permanent grassland`
+    label: (amount) => `${amount} hectares of permanent grassland`,
+    standard: 'improved-grassland-soils'
   },
   arable0: {
-    label: (amount) => `${amount} trees with a buffer around`
+    label: (amount) => `${amount} trees with a buffer around`,
+    standard: 'arable'
   },
   'arable-soils0': {
-    label: (amount) => `${amount} hectares of green cover`
+    label: (amount) => `${amount} hectares of green cover`,
+    standard: 'arable-soils'
   },
   woodland0: {
-    label: (amount) => `${amount} square metres of newly planted woodland`
+    label: (amount) => `${amount} square metres of newly planted woodland`,
+    standard: 'woodland'
   },
   'waterbody-buffers0': {
-    label: (amount) => `${amount} square metres of in-field grass strips or blocks`
+    label: (amount) => `${amount} square metres of in-field grass strips or blocks`,
+    standard: 'waterbody-buffers'
   }
 }
 
@@ -228,7 +235,7 @@ const extraActions = {
   'waterbody-buffers': {
     hint: 'Add the number of square meters of cultivated land you want to establish in-field grass strips or blocks on to intercept runoff water. You can leave this blank if you don\'t know.',
     actions: [{
-      id: 'waterbody0',
+      id: 'waterbody-buffers0',
       preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates['waterbody-buffers'].optional[0]} a square meter</strong> to establish in-field grass strips or blocks.</p>`,
       label: 'Number of square meters',
       unit: 'm<sup>2</sup>'
@@ -283,5 +290,8 @@ module.exports = {
       id: a,
       ...optionalActions[a]
     })))).flat(2)
-  }))
+  })),
+  landFeatures, // FIXME: this data structure shouldn't be in the content area
+  landFeatureCategories,
+  standards
 }
