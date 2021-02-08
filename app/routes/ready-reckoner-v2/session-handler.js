@@ -1,7 +1,8 @@
 const keys = {
   bpsPayment: 'bpsPayment',
   landValues: 'landValues',
-  selectedStandards: 'selectedStandards'
+  selectedStandards: 'selectedStandards',
+  actionValues: 'actionValues'
 }
 
 function setValue (request, key, value) {

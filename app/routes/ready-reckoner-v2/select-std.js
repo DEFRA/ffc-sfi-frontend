@@ -27,7 +27,6 @@ function pageContent (defaultValue, landValues, errorText = null) {
           items: [{
             text: standard.checkboxLabel,
             value: standard.id,
-            // defaultValue could be a string or array, but both have an includes() method that does what we want
             checked: defaultValue ? defaultValue.includes(standard.id) : false
           }]
         }
@@ -50,7 +49,9 @@ module.exports = [
     method: 'POST',
     path: pageDetails.path,
     handler: async (request, h) => {
-      session.setValue(request, session.keys.selectedStandards, request.payload.standards)
+      // request.payload.standards is a string if only a single standard is chosen, array otherwise
+      // so force it to be alway be an array to avoid potential errors elsewhere
+      session.setValue(request, session.keys.selectedStandards, [request.payload.standards].flat())
       return h.redirect(pageDetails.nextPath)
     },
     options: {
@@ -61,7 +62,7 @@ module.exports = [
           standards: Joi.alternatives().try(Joi.string(), Joi.array().items(Joi.string())).required()
         }),
         failAction: async (request, h, error) => {
-          const selectedStandards = request.payload.standards
+          const selectedStandards = [request.payload.standards].flat()
           const landValues = session.getValue(request, session.keys.landValues)
           return h.view(pageDetails.template, pageContent(selectedStandards, landValues, validationMsg)).takeover()
         }

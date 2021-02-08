@@ -1,4 +1,5 @@
 const content = require('./content-scratch')
+const session = require('./session-handler')
 
 function tableRowContent (col1Text, col2Text, linkAddress) {
   return [{ text: col1Text }, { text: col2Text }, { html: `<a href="${linkAddress}">Change</a>`, format: 'numeric' }]
@@ -7,7 +8,6 @@ function tableRowContent (col1Text, col2Text, linkAddress) {
 const pageDetails = {
   path: '/sfi-summary',
   nextPath: '/',
-  backPath: '/extra-actions',
   template: 'sfi-summary'
 }
 
@@ -130,6 +130,8 @@ module.exports = [
     method: 'GET',
     path: pageDetails.path,
     handler: (request, h) => {
+      // FIXME: is there a nicer way of doing this?
+      pageDetails.backPath = '/' + request.info.referrer.split('/').slice(-1)[0]
       return h.view(pageDetails.template, pageContent())
     }
   },

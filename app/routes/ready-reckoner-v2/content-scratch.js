@@ -186,7 +186,7 @@ const extraActions = {
   'improved-grassland': {
     hint: 'Add the number of trees on your improved grassland you want to maintain a 10 metre radius buffer around. You can leave this blank if you don\'t know.',
     actions: [{
-      id: 'improved-grassland',
+      id: 'improved-grassland0',
       preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates['improved-grassland'].optional[0]} for each tree you maintain a buffer around</strong>.</p>`,
       label: 'Number of trees',
       unit: 'trees'
@@ -195,13 +195,13 @@ const extraActions = {
   'improved-grassland-soils': {
     hint: 'Add how many hectares you want to use for each action. You can leave fields blank if you don\'t know.',
     actions: [{
-      id: 'improved-grassland-soils1',
+      id: 'improved-grassland-soils0',
       preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates['improved-grassland-soils'].optional[0]} a hectare</strong> to reduce stocking density or remove livestock from wet soils.</p>`,
       label: 'Number of hectares',
       unit: 'ha'
     },
     {
-      id: 'improved-grassland-soils2',
+      id: 'improved-grassland-soils1',
       preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates['improved-grassland-soils'].optional[1]} a hectare</strong> to maintain permanent grassland that you only re-seed by direct drilling or over-sowing.</p>`,
       label: 'Number of hectares',
       unit: 'ha'
@@ -210,7 +210,7 @@ const extraActions = {
   arable: {
     hint: 'Add the number of trees on your arable land you want to maintain a 10 metre radius buffer around. You can leave this blank if you don\'t know.',
     actions: [{
-      id: 'arable',
+      id: 'arable0',
       preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates.arable.optional[0]} for each tree you maintain a buffer around</strong>.</p>`,
       label: 'Number of trees',
       unit: 'trees'
@@ -219,7 +219,7 @@ const extraActions = {
   'arable-soils': {
     hint: 'Add the number of hectares of arable land at risk of surface runoff, soil erosion or flooding you want to establish green cover on. You can leave this blank if you don\'t know.',
     actions: [{
-      id: 'arable-soils',
+      id: 'arable-soils0',
       preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates['arable-soils'].optional[0]} a hectare</strong> to establish green cover.</p>`,
       label: 'Number of hectares',
       unit: 'ha'
@@ -228,7 +228,7 @@ const extraActions = {
   'waterbody-buffers': {
     hint: 'Add the number of square meters of cultivated land you want to establish in-field grass strips or blocks on to intercept runoff water. You can leave this blank if you don\'t know.',
     actions: [{
-      id: 'waterbody',
+      id: 'waterbody0',
       preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates['waterbody-buffers'].optional[0]} a square meter</strong> to establish in-field grass strips or blocks.</p>`,
       label: 'Number of square meters',
       unit: 'm<sup>2</sup>'
@@ -237,7 +237,7 @@ const extraActions = {
   woodland: {
     hint: 'Add the number of square meters of newly planted woodland under 15 years old you want to maintain. You can leave this blank if you don\'t know.',
     actions: [{
-      id: 'woodland',
+      id: 'woodland0',
       preHtml: `<p class="govuk-body govuk-!-margin-top-6">We’ll pay you <strong>£${standardsRates.woodland.optional[0]} a hectare</strong> to maintain newly planted woodland.</p>`,
       label: 'Number of square meters',
       unit: 'm<sup>2</sup>'

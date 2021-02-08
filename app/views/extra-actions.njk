@@ -36,13 +36,15 @@
           {% endif %}
 
           {% for standard in components.standards %}
-            <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-            <h2 class="govuk-heading-l govuk-!-margin-top-7">{{ standard.title }}</h2>
-            <div class="govuk-hint">{{ standard.hint }}</div>
-            {% for action in standard.actions %}
-              {{ action.preHtml | safe }}
-              {{ govukInput(action.input) }}
-            {% endfor %}
+            {% if standard.visible %}
+              <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+              <h2 class="govuk-heading-l govuk-!-margin-top-7">{{ standard.title }}</h2>
+              <div class="govuk-hint">{{ standard.hint }}</div>
+              {% for action in standard.actions %}
+                {{ action.preHtml | safe }}
+                {{ govukInput(action.input) }}
+              {% endfor %}
+            {% endif %}
           {% endfor %}
 
         {% endcall %}
