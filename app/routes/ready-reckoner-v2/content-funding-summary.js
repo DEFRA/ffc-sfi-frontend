@@ -1,33 +1,33 @@
 function toDisplay (value) {
-  return value.toLocaleString('en-GB', { maximumFractionDigits: 2 })
+  return value?.toLocaleString('en-GB', { maximumFractionDigits: 2 }) ?? 'QQQ'
 }
 
 function grassland (values) {
   return `
-    <p class="govuk-body">Based on your <strong><a href="/land-calc">${toDisplay(values.amountImproved)} hectares</a></strong>
-    of improved grassland and <strong><a href="/land-calc">${toDisplay(values.amountUnimproved)} hectares</a></strong>
+    <p class="govuk-body">Based on your <strong><a href="/land-calc">${toDisplay(values['improved-grassland'])} hectares</a></strong>
+    of improved grassland and <strong><a href="/land-calc">${toDisplay(values['unimproved-grassland'])} hectares</a></strong>
     of semi-improved or unimproved grassland, you would receive <strong>£${toDisplay(values.payment)} per year</strong>,
     including <strong>£${toDisplay(values.paymentOptional)}</strong> in extra payments.</p>`
 }
 
 function arable (values) {
   return `
-    <p class="govuk-body">Based on your <strong><a href="/land-calc">${toDisplay(values.amount)} hectares</a></strong>
+    <p class="govuk-body">Based on your <strong><a href="/land-calc">${toDisplay(values.arable)} hectares</a></strong>
     of arable land, you would recieve <strong>£${toDisplay(values.payment)} per year</strong>, including
     <strong>£${toDisplay(values.paymentOptional)}</strong> in extra payments.</p>`
 }
 
 function boundary (values) {
   return `
-    <p class="govuk-body">Based on your <strong><a href="/land-calc">${toDisplay(values.amountHedgerows)} hectares</a></strong>
-    of hedgerows and <strong><a href="/land-calc">${toDisplay(values.amountWaterbody)} hectares</a></strong> of waterbody buffering,
+    <p class="govuk-body">Based on your <strong><a href="/land-calc">${toDisplay(values.hedgerows)} hectares</a></strong>
+    of hedgerows and <strong><a href="/land-calc">${toDisplay(values['waterbody-buffers'])} hectares</a></strong> of waterbody buffering,
     you would recieve <strong>£${toDisplay(values.payment)} per year</strong>, including
     <strong>£${toDisplay(values.paymentOptional)}</strong> in extra payments.</p>`
 }
 
 function woodland (values) {
   return `
-    <p class="govuk-body">Based on your <strong><a href="/land-calc">${toDisplay(values.amount)} hectares</a></strong>
+    <p class="govuk-body">Based on your <strong><a href="/land-calc">${toDisplay(values.woodland)} hectares</a></strong>
     of farm woodland, you would recieve <strong>£${toDisplay(values.payment)} per year</strong>, including
     <strong>£${toDisplay(values.paymentOptional)}</strong> in extra payments.</p>`
 }
