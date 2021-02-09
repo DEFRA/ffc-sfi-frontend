@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi')
 
-const { log } = require('../services/logger')
+const { log, logError } = require('../services/logger')
 const getSBIData = require('../services/get-sbi')
 
 function results (server) {
@@ -18,7 +18,10 @@ function results (server) {
         payload: Joi.object({
           sbi: Joi.string().pattern(/^[0-9]{9}/).required()
         }),
-        failAction: (request, h) => h.view('sbi', { errors: [{ text: 'Please enter an SBI', href: '#sbi' }] }).takeover()
+        failAction: (request, h, error) => {
+          logError(error)
+          return h.view('sbi', { errors: [{ text: 'Please enter an SBI', href: '#sbi' }] }).takeover()
+        }
       }
     }
   })

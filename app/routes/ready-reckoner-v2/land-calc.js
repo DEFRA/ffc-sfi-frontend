@@ -1,6 +1,8 @@
 const Joi = require('joi')
+
 const session = require('./session-handler')
 const content = require('./content')
+const { logError } = require('../../services/logger')
 
 const pageDetails = {
   path: '/land-calc',
@@ -65,6 +67,7 @@ module.exports = [
           return Object.values(value).find(v => v > 0) ? value : helper.error('any.custom')
         }),
         failAction: async (request, h, error) => {
+          logError(error)
           return h.view(pageDetails.template, pageContent(request.payload, validationMsg)).takeover()
         }
       }

@@ -1,6 +1,8 @@
 const Joi = require('joi')
+
 const content = require('./content')
 const session = require('./session-handler')
+const { logError } = require('../../services/logger')
 
 const pageDetails = {
   path: '/extra-actions',
@@ -72,6 +74,7 @@ module.exports = [
           [Joi.number().positive().allow(0), Joi.string().max(0).empty('').default(0)]
         ),
         failAction: async (request, h, error) => {
+          logError(error)
           const selectedStandards = session.getValue(request, session.keys.selectedStandards)
           return h.view(pageDetails.template, pageContent(request.payload, selectedStandards, validationMsg)).takeover()
         }

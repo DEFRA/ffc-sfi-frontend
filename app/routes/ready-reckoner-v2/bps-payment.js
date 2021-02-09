@@ -1,5 +1,7 @@
 const Joi = require('joi')
+
 const session = require('./session-handler')
+const { logError } = require('../../services/logger')
 
 const pageDetails = {
   path: '/bps-payment',
@@ -71,8 +73,7 @@ module.exports = [
           'bps-payment': [Joi.number().positive().allow(0), Joi.string().max(0).empty('').default(0)]
         }),
         failAction: async (request, h, error) => {
-          console.log('FAIL')
-          console.log(request.payload['bps-payment'])
+          logError(error)
           return h.view(pageDetails.template, pageContent(request.payload['bps-payment'], validationMsg)).takeover()
         }
       }
