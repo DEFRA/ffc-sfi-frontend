@@ -1,6 +1,6 @@
 const Joi = require('joi')
 const session = require('./session-handler')
-const content = require('./content-scratch')
+const content = require('./content')
 
 const pageDetails = {
   path: '/land-calc',

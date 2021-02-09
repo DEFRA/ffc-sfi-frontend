@@ -1,5 +1,5 @@
 const Joi = require('joi')
-const content = require('./content-scratch')
+const content = require('./content')
 const session = require('./session-handler')
 
 const pageDetails = {
