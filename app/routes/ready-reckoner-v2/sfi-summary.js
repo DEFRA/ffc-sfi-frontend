@@ -1,4 +1,5 @@
-const content = require('./content-scratch')
+const content = require('./content')
+const standards = require('./standards')
 const session = require('./session-handler')
 
 function tableRowContent (col1Text, col2Text, linkAddress) {
@@ -71,9 +72,8 @@ function pageContent (categoryAmounts, actionValues, paymentAmounts) {
 }
 
 function doPaymentCalculations (landValues, actionValues, bpsPayment, selectedStandards) {
-  const standardsRates = content.standardsRates
-  const landFeatures = content.landFeatures
-  const standards = content.standards
+  const standardsRates = standards.standardsRates
+  const landFeatures = standards.landFeatures
 
   let bps = 0
   let bpsRemainder = bpsPayment
@@ -110,7 +110,7 @@ function doPaymentCalculations (landValues, actionValues, bpsPayment, selectedSt
 
       paymentTotals.sfiTotal += paymentTotals[standardId].base
 
-      standards[standardId].optionalActions.forEach((actionId, i) => {
+      standards.standards[standardId].optionalActions.forEach((actionId, i) => {
         paymentTotals[standardId].optional[actionId] = (actionValues?.[actionId] ?? 0) * standardsRates[standardId].optional[i]
 
         // Payment rates for this is in hectares, but user input is in meters square
@@ -144,8 +144,8 @@ module.exports = [
       const selectedStandards = session.getValue(request, session.keys.selectedStandards)
       const paymentAmounts = doPaymentCalculations(landValues, actionValues, bpsPayment, selectedStandards)
 
-      const landFeatures = content.landFeatures
-      const landFeatureCategories = content.landFeatureCategories
+      const landFeatures = standards.landFeatures
+      const landFeatureCategories = standards.landFeatureCategories
       const categoryAmounts = {}
 
       Object.entries(landFeatureCategories).forEach(([id, category]) => {
@@ -163,7 +163,7 @@ module.exports = [
               categoryAmounts[id].payment += paymentAmounts[standard].base
             }
 
-            content.standards[standard].optionalActions.forEach(
+            standards.standards[standard].optionalActions.forEach(
               action => (categoryAmounts[id].paymentOptional += paymentAmounts[standard].optional[action])
             )
           })
@@ -171,8 +171,6 @@ module.exports = [
 
         categoryAmounts[id].payment += categoryAmounts[id].paymentOptional
       })
-
-      console.log(paymentAmounts)
 
       return h.view(pageDetails.template, pageContent(categoryAmounts, actionValues, paymentAmounts))
     }
