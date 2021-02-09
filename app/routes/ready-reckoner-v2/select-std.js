@@ -1,6 +1,7 @@
-// const Joi = require('joi')
+const Joi = require('joi')
 const content = require('./content')
 const session = require('./session-handler')
+const { logError } = require('../../services/logger')
 
 const pageDetails = {
   path: '/select-std',
@@ -9,7 +10,7 @@ const pageDetails = {
   template: 'select-std'
 }
 
-// const validationMsg = 'Select at least one option'
+const validationMsg = 'Select at least one option'
 
 function pageContent (defaultValue, landValues, errorText = null) {
   return {
@@ -62,22 +63,17 @@ module.exports = [
       const selectedStandards = determineSelectedStandards(request.payload)
       session.setValue(request, session.keys.selectedStandards, selectedStandards)
       return h.redirect(pageDetails.nextPath)
+    },
+    options: {
+      validate: {
+        payload: Joi.object().min(1),
+        failAction: async (request, h, error) => {
+          logError(error)
+          const selectedStandards = determineSelectedStandards(request.payload)
+          const landValues = session.getValue(request, session.keys.landValues)
+          return h.view(pageDetails.template, pageContent(selectedStandards, landValues, validationMsg)).takeover()
+        }
+      }
     }
-    // TODO: replace with appropriate validation check
-    // options: {
-    //   validate: {
-    //     payload: Joi.object({
-    //       // Either a string (if one checkbox selected) or array (if multiple checkboxes selected)
-    //       // 'standards' property is required
-    //       // standards: Joi.alternatives().try(Joi.string(), Joi.array().items(Joi.string())).required()
-    //     }),
-    //     failAction: async (request, h, error) => {
-    //       console.log('******************', request.payload)
-    //       const selectedStandards = [request.payload.standards].flat()
-    //       const landValues = session.getValue(request, session.keys.landValues)
-    //       return h.view(pageDetails.template, pageContent(selectedStandards, landValues, validationMsg)).takeover()
-    //     }
-    //   }
-    // }
   }
 ]
