@@ -1,4 +1,4 @@
-const Joi = require('joi')
+// const Joi = require('joi')
 const content = require('./content')
 const session = require('./session-handler')
 
@@ -9,7 +9,7 @@ const pageDetails = {
   template: 'select-std'
 }
 
-const validationMsg = 'Select at least one option'
+// const validationMsg = 'Select at least one option'
 
 function pageContent (defaultValue, landValues, errorText = null) {
   return {
@@ -23,7 +23,7 @@ function pageContent (defaultValue, landValues, errorText = null) {
         title: standard.title,
         descriptionHtml: standard.descriptionHtml,
         checkbox: {
-          name: 'standards',
+          name: `standards-${standard.id}`,
           items: [{
             text: standard.checkboxLabel,
             value: standard.id,
@@ -33,6 +33,16 @@ function pageContent (defaultValue, landValues, errorText = null) {
       }))
     }
   }
+}
+
+function determineSelectedStandards (payload) {
+  return Object.entries(payload).reduce((acc, cur) => {
+    const [k, v] = cur
+    if (k.startsWith('standards-')) {
+      acc.push(v)
+    }
+    return acc
+  }, [])
 }
 
 module.exports = [
@@ -49,24 +59,25 @@ module.exports = [
     method: 'POST',
     path: pageDetails.path,
     handler: async (request, h) => {
-      // request.payload.standards is a string if only a single standard is chosen, array otherwise
-      // so force it to be alway be an array to avoid potential errors elsewhere
-      session.setValue(request, session.keys.selectedStandards, [request.payload.standards].flat())
+      const selectedStandards = determineSelectedStandards(request.payload)
+      session.setValue(request, session.keys.selectedStandards, selectedStandards)
       return h.redirect(pageDetails.nextPath)
-    },
-    options: {
-      validate: {
-        payload: Joi.object({
-          // Either a string (if one checkbox selected) or array (if multiple checkboxes selected)
-          // 'standards' property is required
-          standards: Joi.alternatives().try(Joi.string(), Joi.array().items(Joi.string())).required()
-        }),
-        failAction: async (request, h, error) => {
-          const selectedStandards = [request.payload.standards].flat()
-          const landValues = session.getValue(request, session.keys.landValues)
-          return h.view(pageDetails.template, pageContent(selectedStandards, landValues, validationMsg)).takeover()
-        }
-      }
     }
+    // TODO: replace with appropriate validation check
+    // options: {
+    //   validate: {
+    //     payload: Joi.object({
+    //       // Either a string (if one checkbox selected) or array (if multiple checkboxes selected)
+    //       // 'standards' property is required
+    //       // standards: Joi.alternatives().try(Joi.string(), Joi.array().items(Joi.string())).required()
+    //     }),
+    //     failAction: async (request, h, error) => {
+    //       console.log('******************', request.payload)
+    //       const selectedStandards = [request.payload.standards].flat()
+    //       const landValues = session.getValue(request, session.keys.landValues)
+    //       return h.view(pageDetails.template, pageContent(selectedStandards, landValues, validationMsg)).takeover()
+    //     }
+    //   }
+    // }
   }
 ]
