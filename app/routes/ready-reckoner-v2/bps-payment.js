@@ -24,6 +24,7 @@ function pageContent (defaultValue, errorText = null) {
     backPath: pageDetails.backPath,
     components: {
       input: {
+        id: 'bps-payment',
         name: 'bps-payment',
         prefix: { text: '£' },
         label: {

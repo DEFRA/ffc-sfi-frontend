@@ -25,6 +25,7 @@ function pageContent (defaultValue, selectedStandards, errorText = null) {
         actions: standard.actions.map(action => ({
           preHtml: action.preHtml,
           input: {
+            id: action.id,
             name: action.id,
             suffix: { html: action.unit },
             label: { html: action.label },
