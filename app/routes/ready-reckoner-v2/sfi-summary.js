@@ -49,8 +49,9 @@ function pageContent (categoryAmounts, actionValues, paymentAmounts) {
             action => tableRowContent(
               action.label(actionValues?.[action.id] ?? 0),
               paymentAmounts[action.standard].optional[action.id],
-              '/extra-actions')
+              '/extra-actions'
             )
+          )
         }
       })),
       radios: {
@@ -69,7 +70,7 @@ function pageContent (categoryAmounts, actionValues, paymentAmounts) {
   }
 }
 
-function doPaymentCalculations(landValues, actionValues, bpsPayment, selectedStandards) {
+function doPaymentCalculations (landValues, actionValues, bpsPayment, selectedStandards) {
   const standardsRates = content.standardsRates
   const landFeatures = content.landFeatures
   const standards = content.standards
@@ -79,16 +80,20 @@ function doPaymentCalculations(landValues, actionValues, bpsPayment, selectedSta
 
   switch (true) {
     case (bpsRemainder > 150000):
-      bps += (bpsRemainder - 150000) * 0.75 // 25% reduction over 150000
+      // 25% reduction over 150000
+      bps += (bpsRemainder - 150000) * 0.75
       bpsRemainder = 150000
     case (bpsRemainder > 50000):
-      bps += (bpsRemainder - 50000) * 0.8   // 20% reduction between 50000 and 150000
+      // 20% reduction between 50000 and 150000
+      bps += (bpsRemainder - 50000) * 0.8
       bpsRemainder = 50000
     case (bpsRemainder > 30000):
-      bps += (bpsRemainder - 30000) * 0.9   // 10% reduction between 30000 and 50000
+      // 10% reduction between 30000 and 50000
+      bps += (bpsRemainder - 30000) * 0.9
       bpsRemainder = 30000
     default:
-      bps += bpsRemainder * 0.95            // 5% reduction up to 30000
+      // 5% reduction up to 30000
+      bps += bpsRemainder * 0.95
   }
 
   const paymentTotals = {
@@ -118,8 +123,8 @@ function doPaymentCalculations(landValues, actionValues, bpsPayment, selectedSta
     })
   })
 
-  paymentTotals['sfiMonthly'] = paymentTotals.sfiTotal / 12
-  paymentTotals['grandTotal'] = paymentTotals.sfiTotal + paymentTotals.bpsPayment
+  paymentTotals.sfiMonthly = paymentTotals.sfiTotal / 12
+  paymentTotals.grandTotal = paymentTotals.sfiTotal + paymentTotals.bpsPayment
 
   return paymentTotals
 }
