@@ -10,6 +10,7 @@ const pageDetails = {
   template: 'select-std'
 }
 
+const standardsIdPrefix = 'standards-'
 const validationMsg = 'Select at least one option'
 
 function pageContent (defaultValue, landValues, errorText = null) {
@@ -24,7 +25,7 @@ function pageContent (defaultValue, landValues, errorText = null) {
         title: standard.title,
         descriptionHtml: standard.descriptionHtml,
         checkbox: {
-          name: `standards-${standard.id}`,
+          name: `${standardsIdPrefix}${standard.id}`,
           items: [{
             text: standard.checkboxLabel,
             value: standard.id,
@@ -66,7 +67,10 @@ module.exports = [
     },
     options: {
       validate: {
-        payload: Joi.object().min(1),
+        payload: Joi.object().pattern(
+          Joi.string().pattern(RegExp(`^${standardsIdPrefix}`)),
+          Joi.string() // potentially this could be checking against the actual standards
+        ).min(1),
         failAction: async (request, h, error) => {
           logError(error)
           const selectedStandards = determineSelectedStandards(request.payload)
