@@ -1,6 +1,3 @@
-const stdDescription = require('./content-std-description')
-const fundingSummary = require('./content-funding-summary')
-
 const landFeatures = {
   'improved-grassland': {
     label: 'Improved grassland',
