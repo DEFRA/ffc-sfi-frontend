@@ -26,6 +26,7 @@ function pageContent (defaultValue, errorText = null) {
       standards: content.getLandFeatureCategories().map(category => ({
         title: category.label,
         inputs: category.features.map(feature => ({
+          id: feature.id,
           name: feature.id,
           suffix: { text: feature.unit },
           label: { html: feature.label },
