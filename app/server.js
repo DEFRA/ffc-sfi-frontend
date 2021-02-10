@@ -16,7 +16,12 @@ const routes = [
   require('./routes/ready-reckoner/loading'),
   ...require('./routes/ready-reckoner/land-values'),
   ...require('./routes/ready-reckoner/select-standard'),
-  ...require('./routes/ready-reckoner/selected-summary')
+  ...require('./routes/ready-reckoner/selected-summary'),
+  ...require('./routes/ready-reckoner-v2/bps-payment'),
+  ...require('./routes/ready-reckoner-v2/land-calc'),
+  ...require('./routes/ready-reckoner-v2/select-std'),
+  ...require('./routes/ready-reckoner-v2/extra-actions'),
+  ...require('./routes/ready-reckoner-v2/sfi-summary')
 ]
 
 async function createServer () {
