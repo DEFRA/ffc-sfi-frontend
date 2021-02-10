@@ -1,4 +1,4 @@
-const session = require('../ready-reckoner-v2/session-handler')
+const session = require('./session-handler')
 
 const pageDetails = {
   path: '/selected-summary',
