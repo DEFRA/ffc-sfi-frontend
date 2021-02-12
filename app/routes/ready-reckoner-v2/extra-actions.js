@@ -6,7 +6,7 @@ const { logError } = require('../../services/logger')
 
 const pageDetails = {
   path: '/extra-actions',
-  nextPath: '/sfi-summary',
+  nextPath: '/calculating',
   backPath: '/select-std',
   template: 'extra-actions'
 }

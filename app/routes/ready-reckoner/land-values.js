@@ -101,6 +101,7 @@ module.exports = [
         id: 'standardsSet',
         standards: hydrateStandards(payload)
       }
+      console.log(standardsSet)
       const correlationId = uuid()
       const msg = { body: standardsSet, correlationId }
       await updateAgreement(msg)

@@ -51,6 +51,14 @@ const landFeatureCategories = {
 }
 
 const standardsRates = {
+  arable: {
+    mandatory: 28,
+    optional: [13]
+  },
+  'arable-soils': {
+    mandatory: 30,
+    optional: [114]
+  },
   'improved-grassland': {
     mandatory: 27,
     optional: [3]
@@ -62,14 +70,6 @@ const standardsRates = {
   'unimproved-grassland': {
     mandatory: 22,
     optional: []
-  },
-  arable: {
-    mandatory: 28,
-    optional: [13]
-  },
-  'arable-soils': {
-    mandatory: 30,
-    optional: [114]
   },
   hedgerows: {
     mandatory: 200,
@@ -86,6 +86,14 @@ const standardsRates = {
 }
 
 const standards = {
+  arable: {
+    title: 'Arable and horticultural land',
+    optionalActions: ['arable0']
+  },
+  'arable-soils': {
+    title: 'Arable and horticultural soils',
+    optionalActions: ['arable-soils0']
+  },
   'improved-grassland': {
     title: 'Improved grassland',
     optionalActions: ['improved-grassland0']
@@ -97,14 +105,6 @@ const standards = {
   'unimproved-grassland': {
     title: 'Semi-improved and unimproved grassland',
     optionalActions: []
-  },
-  arable: {
-    title: 'Arable and horticultural land',
-    optionalActions: ['arable0']
-  },
-  'arable-soils': {
-    title: 'Arable and horticultural soils',
-    optionalActions: ['arable-soils0']
   },
   hedgerows: {
     title: 'Hedgerows',

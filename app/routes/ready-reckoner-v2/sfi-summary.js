@@ -1,6 +1,9 @@
+const Wreck = require('@hapi/wreck')
+
 const content = require('./content')
 const standards = require('./standards')
 const session = require('./session-handler')
+const { agreementServiceBaseUrl } = require('../../config/general')
 
 function tableRowContent (col1Text, col2Text, linkAddress) {
   return [
@@ -129,13 +132,22 @@ function doPaymentCalculations (landValues, actionValues, bpsPayment, selectedSt
   return paymentTotals
 }
 
+// TODO: Figure out why the page is being requested twice
 module.exports = [
   {
     method: 'GET',
     path: pageDetails.path,
-    handler: (request, h) => {
+    handler: async (request, h) => {
+      console.log('********************GET to sfi-summary', Date.now())
       // FIXME: is there a nicer way of doing this?
-      pageDetails.backPath = '/' + request.info.referrer.split('/').slice(-1)[0]
+      pageDetails.backPath = 'javascript:history.go(-1)'
+
+      // TODO: Update this with a call to the agreement service to get the calculation msg
+      const correlationId = session.getValue(request, session.keys.correlationId)
+      console.log('***************correlationId', correlationId)
+      const url = `${agreementServiceBaseUrl}/value?correlationId=${correlationId}`
+      const { payload } = await Wreck.get(url, { json: true })
+      console.log('payload', payload)
 
       // Do payment calculation
       const landValues = session.getValue(request, session.keys.landValues)
@@ -172,14 +184,11 @@ module.exports = [
         categoryAmounts[id].payment += categoryAmounts[id].paymentOptional
       })
 
+      console.log('categoryAmount', categoryAmounts)
+      console.log('actionValues', actionValues)
+      console.log('paymentAmounts', paymentAmounts)
+
       return h.view(pageDetails.template, pageContent(categoryAmounts, actionValues, paymentAmounts))
-    }
-  },
-  {
-    method: 'POST',
-    path: pageDetails.path,
-    handler: async (request, h) => {
-      return h.redirect(pageDetails.nextPath)
     }
   }
 ]
