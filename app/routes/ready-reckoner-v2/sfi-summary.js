@@ -74,10 +74,7 @@ function pageContent (categoryAmounts, actionValues, paymentAmounts) {
   }
 }
 
-function doPaymentCalculations (landValues, actionValues, bpsPayment, selectedStandards) {
-  const standardsRates = standards.standardsRates
-  const landFeatures = standards.landFeatures
-
+function doPaymentCalculations (payload, bpsPayment) {
   let bps = 0
   let bpsRemainder = bpsPayment
 
@@ -99,37 +96,64 @@ function doPaymentCalculations (landValues, actionValues, bpsPayment, selectedSt
       bps += bpsRemainder * 0.95
   }
 
-  const paymentTotals = {
-    sfiTotal: 0,
-    bpsPayment: bps
-  }
+  // Object.entries(landFeatures).forEach(([featureId, feature]) => {
+  //   feature.standards.forEach(standardId => {
+  //     paymentTotals[standardId] = {
+  //       base: (selectedStandards.includes(standardId) ? landValues[featureId] : 0) * standardsRates[standardId].mandatory,
+  //       optional: {}
+  //     }
 
-  Object.entries(landFeatures).forEach(([featureId, feature]) => {
-    feature.standards.forEach(standardId => {
-      paymentTotals[standardId] = {
-        base: (selectedStandards.includes(standardId) ? landValues[featureId] : 0) * standardsRates[standardId].mandatory,
-        optional: {}
+  //     paymentTotals.sfiTotal += paymentTotals[standardId].base
+
+  //     standards.standards[standardId].optionalActions.forEach((actionId, i) => {
+  //       paymentTotals[standardId].optional[actionId] = (actionValues?.[actionId] ?? 0) * standardsRates[standardId].optional[i]
+
+  //       // Payment rates for this is in hectares, but user input is in meters square
+  //       if (actionId === 'woodland0') {
+  //         paymentTotals[standardId].optional[actionId] /= 10000
+  //       }
+
+  //       paymentTotals.sfiTotal += paymentTotals[standardId].optional[actionId]
+  //     })
+  //   })
+  // })
+
+  const totalPayment = payload.payments.totalPayment
+
+  // Previously 0 was returned for the optionalActions amounts, it is now 'undefined'
+  // TODO: make this more dynamic
+  return {
+    sfiTotal: totalPayment,
+    bpsPayment: bps,
+    arable: {
+      base: payload.standards.arable.payment,
+      optional: { arable0: payload.standards.arable.optionalActions.find(oa => oa.id === 'arable0')?.payment }
+    },
+    'arable-soils': {
+      base: payload.standards['arable-soils'].payment,
+      optional: { 'arable-soils0': payload.standards['arable-soils'].optionalActions.find(oa => oa.id === 'arable-soils0')?.payment }
+    },
+    hedgerows: { base: payload.standards.hedgerows.payment, optional: { } },
+    'improved-grassland': {
+      base: payload.standards['improved-grassland']?.payment,
+      optional: { 'improved-grassland0': payload.standards['improved-grassland'].optionalActions.find(oa => oa.id === 'improved-grassland0')?.payment }
+    },
+    'improved-grassland-soils': {
+      base: payload.standards['improved-grassland-soils']?.payment,
+      optional: {
+        'improved-grassland-soils0': payload.standards['improved-grassland-soils'].optionalActions.find(oa => oa.id === 'improved-grassland-soils0')?.payment,
+        'improved-grassland-soils1': payload.standards['improved-grassland-soils'].optionalActions.find(oa => oa.id === 'improved-grassland-soils1')?.payment
       }
-
-      paymentTotals.sfiTotal += paymentTotals[standardId].base
-
-      standards.standards[standardId].optionalActions.forEach((actionId, i) => {
-        paymentTotals[standardId].optional[actionId] = (actionValues?.[actionId] ?? 0) * standardsRates[standardId].optional[i]
-
-        // Payment rates for this is in hectares, but user input is in meters square
-        if (actionId === 'woodland0') {
-          paymentTotals[standardId].optional[actionId] /= 10000
-        }
-
-        paymentTotals.sfiTotal += paymentTotals[standardId].optional[actionId]
-      })
-    })
-  })
-
-  paymentTotals.sfiMonthly = paymentTotals.sfiTotal / 12
-  paymentTotals.grandTotal = paymentTotals.sfiTotal + paymentTotals.bpsPayment
-
-  return paymentTotals
+    },
+    'unimproved-grassland': { base: payload.standards['unimproved-grassland'].payment, optional: { } },
+    'waterbody-buffers': {
+      base: payload.standards['waterbody-buffers'].payment,
+      optional: { 'waterbody-buffers0': payload.standards['waterbody-buffers'].optionalActions.find(oa => oa.id === 'waterbody-buffers0')?.payment }
+    },
+    woodland: { base: payload.standards.woodland.payment, optional: { woodland0: payload.standards.woodland.optionalActions.find(oa => oa.id === 'woodland0')?.payment } },
+    sfiMonthly: totalPayment / 12,
+    grandTotal: totalPayment + bps
+  }
 }
 
 // TODO: Figure out why the page is being requested twice
@@ -142,23 +166,25 @@ module.exports = [
       // FIXME: is there a nicer way of doing this?
       pageDetails.backPath = 'javascript:history.go(-1)'
 
-      // TODO: Update this with a call to the agreement service to get the calculation msg
       const correlationId = session.getValue(request, session.keys.correlationId)
-      console.log('***************correlationId', correlationId)
       const url = `${agreementServiceBaseUrl}/value?correlationId=${correlationId}`
       const { payload } = await Wreck.get(url, { json: true })
-      console.log('payload', payload)
+      console.log('msg response', JSON.stringify(payload, null, 2))
 
-      // Do payment calculation
+      // TODO: potentially replace with the data from the msg
       const landValues = session.getValue(request, session.keys.landValues)
+      // TODO: potentially replace with the data from the msg
       const actionValues = session.getValue(request, session.keys.actionValues)
-      const bpsPayment = session.getValue(request, session.keys.bpsPayment)
+      // TODO: potentially replace with the data from the msg
       const selectedStandards = session.getValue(request, session.keys.selectedStandards)
-      const paymentAmounts = doPaymentCalculations(landValues, actionValues, bpsPayment, selectedStandards)
+      const bpsPayment = session.getValue(request, session.keys.bpsPayment)
+      const paymentAmounts = doPaymentCalculations(payload.body, bpsPayment)
 
       const landFeatures = standards.landFeatures
       const landFeatureCategories = standards.landFeatureCategories
       const categoryAmounts = {}
+
+      // TODO: Use the message response to populate the view model
 
       Object.entries(landFeatureCategories).forEach(([id, category]) => {
         categoryAmounts[id] = {

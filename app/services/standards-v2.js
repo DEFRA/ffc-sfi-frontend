@@ -1,8 +1,16 @@
 module.exports = [{
   id: 'arable',
+  calculations: [{
+    condition: 'true',
+    expression: 'inputValue * paymentRate'
+  }],
   landType: 'arable', // assume landtype is a 1-to-1 with standard
   optionalActions: [{
     id: 'arable0',
+    calculations: [{
+      condition: 'true',
+      expression: 'inputValue * paymentRate'
+    }],
     paymentRate: 13,
     units: {
       name: 'Number of trees',
@@ -17,9 +25,17 @@ module.exports = [{
   }
 }, {
   id: 'arable-soils',
+  calculations: [{
+    condition: 'true',
+    expression: 'inputValue * paymentRate'
+  }],
   landType: 'arable',
   optionalActions: [{
     id: 'arable-soils0',
+    calculations: [{
+      condition: 'true',
+      expression: 'inputValue * paymentRate'
+    }],
     paymentRate: 114,
     units: {
       name: 'hectares',
@@ -34,9 +50,17 @@ module.exports = [{
   }
 }, {
   id: 'improved-grassland',
+  calculations: [{
+    condition: 'true',
+    expression: 'inputValue * paymentRate'
+  }],
   landType: 'improved-grassland',
   optionalActions: [{
     id: 'improved-grassland0',
+    calculations: [{
+      condition: 'true',
+      expression: 'inputValue * paymentRate'
+    }],
     paymentRate: 3,
     units: {
       name: 'Number of trees',
@@ -51,9 +75,17 @@ module.exports = [{
   }
 }, {
   id: 'improved-grassland-soils',
+  calculations: [{
+    condition: 'true',
+    expression: 'inputValue * paymentRate'
+  }],
   landType: 'improved-grassland',
   optionalActions: [{
     id: 'improved-grassland-soils0',
+    calculations: [{
+      condition: 'true',
+      expression: 'inputValue * paymentRate'
+    }],
     paymentRate: 88,
     units: {
       name: 'hectares',
@@ -61,6 +93,10 @@ module.exports = [{
     }
   }, {
     id: 'improved-grassland-soils1',
+    calculations: [{
+      condition: 'true',
+      expression: 'inputValue * paymentRate'
+    }],
     paymentRate: 56,
     units: {
       name: 'hectares',
@@ -75,6 +111,10 @@ module.exports = [{
   }
 }, {
   id: 'unimproved-grassland',
+  calculations: [{
+    condition: 'true',
+    expression: 'inputValue * paymentRate'
+  }],
   landType: 'unimproved-grassland',
   optionalActions: [],
   paymentRate: 22,
@@ -85,6 +125,10 @@ module.exports = [{
   }
 }, {
   id: 'hedgerows',
+  calculations: [{
+    condition: 'true',
+    expression: 'inputValue * paymentRate'
+  }],
   landType: 'hedgerows',
   optionalActions: [],
   paymentRate: 16,
@@ -95,9 +139,17 @@ module.exports = [{
   }
 }, {
   id: 'waterbody-buffers',
+  calculations: [{
+    condition: 'true',
+    expression: 'inputValue * paymentRate'
+  }],
   landType: 'waterbody-buffers',
   optionalActions: [{
     id: 'waterbody-buffers0',
+    calculations: [{
+      condition: 'true',
+      expression: 'inputValue * paymentRate'
+    }],
     paymentRate: 0.05,
     units: {
       name: 'Number of square meters',
@@ -112,9 +164,17 @@ module.exports = [{
   }
 }, {
   id: 'woodland',
+  calculations: [{
+    condition: 'true',
+    expression: 'inputValue * paymentRate'
+  }],
   landType: 'woodland',
   optionalActions: [{
     id: 'woodland0',
+    calculations: [{
+      condition: 'true',
+      expression: 'inputValue * paymentRate'
+    }],
     paymentRate: 200,
     units: {
       name: 'Number of square meters',
