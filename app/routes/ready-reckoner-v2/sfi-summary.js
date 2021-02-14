@@ -1,9 +1,11 @@
 const Wreck = require('@hapi/wreck')
 
-const content = require('./content')
-const standards = require('./standards')
-const session = require('./session-handler')
 const { agreementServiceBaseUrl } = require('../../config/general')
+const content = require('./content')
+const { log } = require('../../services/logger')
+const session = require('./session-handler')
+const standards = require('./standards')
+const standardsV2 = require('../../services/standards-v2')
 
 function tableRowContent (col1Text, col2Text, linkAddress) {
   return [
@@ -18,7 +20,7 @@ const pageDetails = {
   template: 'sfi-summary'
 }
 
-function pageContent (categoryAmounts, actionValues, paymentAmounts) {
+function pageContent (categoryAmounts, actionValues, paymentAmounts, selectedStandards) {
   return {
     title: 'Summary',
     hint: 'How much you will get in 2022.',
@@ -26,10 +28,10 @@ function pageContent (categoryAmounts, actionValues, paymentAmounts) {
     components: {
       insetText: {
         html: content.getTotalFunding(
-          paymentAmounts.sfiTotal,
-          paymentAmounts.sfiMonthly,
-          paymentAmounts.bpsPayment,
-          paymentAmounts.grandTotal
+          paymentAmounts.payments.sfiTotal,
+          paymentAmounts.payments.sfiMonthly,
+          paymentAmounts.payments.bpsPayment,
+          paymentAmounts.payments.grandTotal
         )
       },
       summaryTitle: 'Funding breakdown',
@@ -41,18 +43,18 @@ function pageContent (categoryAmounts, actionValues, paymentAmounts) {
           exists: categoryAmounts[details.id].payment > 0,
           noTableMsg: '<p class="govuk-body">No standards selected. <a href="/select-std">Change</a></p>',
           head: [{ text: 'Standard', classes: 'govuk-!-width-three-quarters' }, { text: 'Payment' }, { text: '' }],
-          rows: details.standards.filter(standard => paymentAmounts[standard.id].base > 0).map(standard =>
-            tableRowContent(standard.title, paymentAmounts[standard.id].base, '/select-std')
+          rows: details.standards.filter(standard => selectedStandards.includes(standard.id)).map(standard =>
+            tableRowContent(standard.title, paymentAmounts.standards[standard.id].base, '/select-std')
           )
         },
         actionsTable: {
           exists: categoryAmounts[details.id].paymentOptional > 0,
           noTableMsg: '<p class="govuk-body">No extra actions selected. <a href="/extra-actions">Change</a></p>',
           head: [{ text: 'Extra action', classes: 'govuk-!-width-three-quarters' }, { text: 'Payment' }, { text: '' }],
-          rows: details.extraActions.filter(action => paymentAmounts[action.standard].optional[action.id] > 0).map(
+          rows: details.extraActions.filter(action => paymentAmounts.standards[action.standard].optional[action.id] > 0).map(
             action => tableRowContent(
               action.label(actionValues?.[action.id] ?? 0),
-              paymentAmounts[action.standard].optional[action.id],
+              paymentAmounts.standards[action.standard].optional[action.id],
               '/extra-actions'
             )
           )
@@ -96,95 +98,59 @@ function doPaymentCalculations (payload, bpsPayment) {
       bps += bpsRemainder * 0.95
   }
 
-  // Object.entries(landFeatures).forEach(([featureId, feature]) => {
-  //   feature.standards.forEach(standardId => {
-  //     paymentTotals[standardId] = {
-  //       base: (selectedStandards.includes(standardId) ? landValues[featureId] : 0) * standardsRates[standardId].mandatory,
-  //       optional: {}
-  //     }
-
-  //     paymentTotals.sfiTotal += paymentTotals[standardId].base
-
-  //     standards.standards[standardId].optionalActions.forEach((actionId, i) => {
-  //       paymentTotals[standardId].optional[actionId] = (actionValues?.[actionId] ?? 0) * standardsRates[standardId].optional[i]
-
-  //       // Payment rates for this is in hectares, but user input is in meters square
-  //       if (actionId === 'woodland0') {
-  //         paymentTotals[standardId].optional[actionId] /= 10000
-  //       }
-
-  //       paymentTotals.sfiTotal += paymentTotals[standardId].optional[actionId]
-  //     })
-  //   })
-  // })
-
   const totalPayment = payload.payments.totalPayment
 
-  // Previously 0 was returned for the optionalActions amounts, it is now 'undefined'
-  // TODO: make this more dynamic
-  return {
-    sfiTotal: totalPayment,
-    bpsPayment: bps,
-    arable: {
-      base: payload.standards.arable.payment,
-      optional: { arable0: payload.standards.arable.optionalActions.find(oa => oa.id === 'arable0')?.payment }
-    },
-    'arable-soils': {
-      base: payload.standards['arable-soils'].payment,
-      optional: { 'arable-soils0': payload.standards['arable-soils'].optionalActions.find(oa => oa.id === 'arable-soils0')?.payment }
-    },
-    hedgerows: { base: payload.standards.hedgerows.payment, optional: { } },
-    'improved-grassland': {
-      base: payload.standards['improved-grassland']?.payment,
-      optional: { 'improved-grassland0': payload.standards['improved-grassland'].optionalActions.find(oa => oa.id === 'improved-grassland0')?.payment }
-    },
-    'improved-grassland-soils': {
-      base: payload.standards['improved-grassland-soils']?.payment,
-      optional: {
-        'improved-grassland-soils0': payload.standards['improved-grassland-soils'].optionalActions.find(oa => oa.id === 'improved-grassland-soils0')?.payment,
-        'improved-grassland-soils1': payload.standards['improved-grassland-soils'].optionalActions.find(oa => oa.id === 'improved-grassland-soils1')?.payment
+  const standardsPayments = Object.values(standardsV2).reduce((acc, cur) => {
+    const id = cur.id
+    const payments = {
+      base: payload.standards[id].payment,
+      optional: { }
+    }
+    cur.optionalActions.forEach(oa => {
+      payments.optional[oa.id] = payload.standards[id].optionalActions.find(poa => poa.id === oa.id)?.payment ?? 0
+      if (oa.id === 'woodland0') {
+        payments.optional[oa.id] /= 10000
       }
+    })
+    acc[id] = payments
+    return acc
+  }, {})
+
+  return {
+    payments: {
+      bpsPayment: bps,
+      grandTotal: totalPayment + bps,
+      sfiMonthly: totalPayment / 12,
+      sfiTotal: totalPayment
     },
-    'unimproved-grassland': { base: payload.standards['unimproved-grassland'].payment, optional: { } },
-    'waterbody-buffers': {
-      base: payload.standards['waterbody-buffers'].payment,
-      optional: { 'waterbody-buffers0': payload.standards['waterbody-buffers'].optionalActions.find(oa => oa.id === 'waterbody-buffers0')?.payment }
-    },
-    woodland: { base: payload.standards.woodland.payment, optional: { woodland0: payload.standards.woodland.optionalActions.find(oa => oa.id === 'woodland0')?.payment } },
-    sfiMonthly: totalPayment / 12,
-    grandTotal: totalPayment + bps
+    standards: standardsPayments
   }
 }
 
-// TODO: Figure out why the page is being requested twice
 module.exports = [
   {
     method: 'GET',
     path: pageDetails.path,
     handler: async (request, h) => {
-      console.log('********************GET to sfi-summary', Date.now())
       // FIXME: is there a nicer way of doing this?
       pageDetails.backPath = 'javascript:history.go(-1)'
 
       const correlationId = session.getValue(request, session.keys.correlationId)
       const url = `${agreementServiceBaseUrl}/value?correlationId=${correlationId}`
       const { payload } = await Wreck.get(url, { json: true })
-      console.log('msg response', JSON.stringify(payload, null, 2))
+      log('msg response', JSON.stringify(payload, null, 2))
 
       // TODO: potentially replace with the data from the msg
       const landValues = session.getValue(request, session.keys.landValues)
-      // TODO: potentially replace with the data from the msg
       const actionValues = session.getValue(request, session.keys.actionValues)
-      // TODO: potentially replace with the data from the msg
       const selectedStandards = session.getValue(request, session.keys.selectedStandards)
+
       const bpsPayment = session.getValue(request, session.keys.bpsPayment)
       const paymentAmounts = doPaymentCalculations(payload.body, bpsPayment)
 
       const landFeatures = standards.landFeatures
       const landFeatureCategories = standards.landFeatureCategories
       const categoryAmounts = {}
-
-      // TODO: Use the message response to populate the view model
 
       Object.entries(landFeatureCategories).forEach(([id, category]) => {
         categoryAmounts[id] = {
@@ -197,12 +163,13 @@ module.exports = [
           categoryAmounts[id][feature] = landValues[feature]
           landFeatures[feature].standards.forEach(standard => {
             if (selectedStandards.includes(standard)) {
+              console.log(paymentAmounts.standards[standard])
               categoryAmounts[id].visible = true
-              categoryAmounts[id].payment += paymentAmounts[standard].base
+              categoryAmounts[id].payment += paymentAmounts.standards[standard].base
             }
 
             standards.standards[standard].optionalActions.forEach(
-              action => (categoryAmounts[id].paymentOptional += paymentAmounts[standard].optional[action])
+              action => (categoryAmounts[id].paymentOptional += paymentAmounts.standards[standard].optional[action])
             )
           })
         })
@@ -210,11 +177,7 @@ module.exports = [
         categoryAmounts[id].payment += categoryAmounts[id].paymentOptional
       })
 
-      console.log('categoryAmount', categoryAmounts)
-      console.log('actionValues', actionValues)
-      console.log('paymentAmounts', paymentAmounts)
-
-      return h.view(pageDetails.template, pageContent(categoryAmounts, actionValues, paymentAmounts))
+      return h.view(pageDetails.template, pageContent(categoryAmounts, actionValues, paymentAmounts, selectedStandards))
     }
   }
 ]

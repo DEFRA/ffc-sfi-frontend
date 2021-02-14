@@ -37,14 +37,8 @@ module.exports = [{
     const selectedStandards = session.getValue(request, session.keys.selectedStandards)
     const standards = hydrateStandards(landValues, actionValues, selectedStandards)
 
-    console.log('landValues', landValues)
-    console.log('actionValues', actionValues)
-    console.log('selectedStandards', selectedStandards)
-    console.log('standards')
-    console.log(JSON.stringify(standards, null, 2))
-
     // TODO: msg format doesn't include calculations. calc MS has been updated
-    //       to work like this, breaking RRv1
+    //       to support msgs with and without calculations
     const standardsSet = {
       id: 'standardsSet',
       standards
