@@ -164,7 +164,6 @@ module.exports = [
           categoryAmounts[id][feature] = landValues[feature]
           landFeatures[feature].standards.forEach(standard => {
             if (selectedStandards.includes(standard)) {
-              console.log(paymentAmounts.standards[standard])
               categoryAmounts[id].visible = true
               categoryAmounts[id].payment += paymentAmounts.standards[standard].base
             }
