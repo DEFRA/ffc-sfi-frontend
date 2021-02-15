@@ -20,7 +20,8 @@ const pageDetails = {
   template: 'sfi-summary'
 }
 
-function pageContent (categoryAmounts, actionValues, paymentAmounts, selectedStandards) {
+function pageContent (data) {
+  const { actionValues, categoryAmounts, paymentAmounts: { payments, standards: payStandards }, selectedStandards } = data
   return {
     title: 'Summary',
     hint: 'How much you will get in 2022.',
@@ -28,10 +29,10 @@ function pageContent (categoryAmounts, actionValues, paymentAmounts, selectedSta
     components: {
       insetText: {
         html: content.getTotalFunding(
-          paymentAmounts.payments.sfiTotal,
-          paymentAmounts.payments.sfiMonthly,
-          paymentAmounts.payments.bpsPayment,
-          paymentAmounts.payments.grandTotal
+          payments.sfiTotal,
+          payments.sfiMonthly,
+          payments.bpsPayment,
+          payments.grandTotal
         )
       },
       summaryTitle: 'Funding breakdown',
@@ -44,17 +45,17 @@ function pageContent (categoryAmounts, actionValues, paymentAmounts, selectedSta
           noTableMsg: '<p class="govuk-body">No standards selected. <a href="/select-std">Change</a></p>',
           head: [{ text: 'Standard', classes: 'govuk-!-width-three-quarters' }, { text: 'Payment' }, { text: '' }],
           rows: details.standards.filter(standard => selectedStandards.includes(standard.id)).map(standard =>
-            tableRowContent(standard.title, paymentAmounts.standards[standard.id].base, '/select-std')
+            tableRowContent(standard.title, payStandards[standard.id].base, '/select-std')
           )
         },
         actionsTable: {
           exists: categoryAmounts[details.id].paymentOptional > 0,
           noTableMsg: '<p class="govuk-body">No extra actions selected. <a href="/extra-actions">Change</a></p>',
           head: [{ text: 'Extra action', classes: 'govuk-!-width-three-quarters' }, { text: 'Payment' }, { text: '' }],
-          rows: details.extraActions.filter(action => paymentAmounts.standards[action.standard].optional[action.id] > 0).map(
+          rows: details.extraActions.filter(action => payStandards[action.standard].optional[action.id] > 0).map(
             action => tableRowContent(
               action.label(actionValues?.[action.id] ?? 0),
-              paymentAmounts.standards[action.standard].optional[action.id],
+              payStandards[action.standard].optional[action.id],
               '/extra-actions'
             )
           )
@@ -177,7 +178,13 @@ module.exports = [
         categoryAmounts[id].payment += categoryAmounts[id].paymentOptional
       })
 
-      return h.view(pageDetails.template, pageContent(categoryAmounts, actionValues, paymentAmounts, selectedStandards))
+      const pageData = {
+        actionValues,
+        categoryAmounts,
+        paymentAmounts,
+        selectedStandards
+      }
+      return h.view(pageDetails.template, pageContent(pageData))
     }
   }
 ]
