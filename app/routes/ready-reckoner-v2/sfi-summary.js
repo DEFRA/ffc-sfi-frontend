@@ -185,5 +185,12 @@ module.exports = [
       }
       return h.view(pageDetails.template, pageContent(pageData))
     }
+  },
+  {
+    method: 'POST',
+    path: pageDetails.path,
+    handler: async (_request, h) => {
+      return h.redirect(pageDetails.nextPath)
+    }
   }
 ]
