@@ -1,6 +1,11 @@
+const Wreck = require('@hapi/wreck')
+
+const { agreementServiceBaseUrl } = require('../../config/general')
 const content = require('./content')
-const standards = require('./standards')
+const { log } = require('../../services/logger')
 const session = require('./session-handler')
+const standards = require('./standards')
+const standardsV2 = require('../../services/standards-v2')
 
 function tableRowContent (col1Text, col2Text, linkAddress) {
   return [
@@ -15,7 +20,8 @@ const pageDetails = {
   template: 'sfi-summary'
 }
 
-function pageContent (categoryAmounts, actionValues, paymentAmounts) {
+function pageContent (data) {
+  const { actionValues, categoryAmounts, paymentAmounts: { payments, standards: payStandards }, selectedStandards } = data
   return {
     title: 'Summary',
     hint: 'How much you will get in 2022.',
@@ -23,10 +29,10 @@ function pageContent (categoryAmounts, actionValues, paymentAmounts) {
     components: {
       insetText: {
         html: content.getTotalFunding(
-          paymentAmounts.sfiTotal,
-          paymentAmounts.sfiMonthly,
-          paymentAmounts.bpsPayment,
-          paymentAmounts.grandTotal
+          payments.sfiTotal,
+          payments.sfiMonthly,
+          payments.bpsPayment,
+          payments.grandTotal
         )
       },
       summaryTitle: 'Funding breakdown',
@@ -38,18 +44,18 @@ function pageContent (categoryAmounts, actionValues, paymentAmounts) {
           exists: categoryAmounts[details.id].payment > 0,
           noTableMsg: '<p class="govuk-body">No standards selected. <a href="/select-std">Change</a></p>',
           head: [{ text: 'Standard', classes: 'govuk-!-width-three-quarters' }, { text: 'Payment' }, { text: '' }],
-          rows: details.standards.filter(standard => paymentAmounts[standard.id].base > 0).map(standard =>
-            tableRowContent(standard.title, paymentAmounts[standard.id].base, '/select-std')
+          rows: details.standards.filter(standard => selectedStandards.includes(standard.id)).map(standard =>
+            tableRowContent(standard.title, payStandards[standard.id].base, '/select-std')
           )
         },
         actionsTable: {
           exists: categoryAmounts[details.id].paymentOptional > 0,
           noTableMsg: '<p class="govuk-body">No extra actions selected. <a href="/extra-actions">Change</a></p>',
           head: [{ text: 'Extra action', classes: 'govuk-!-width-three-quarters' }, { text: 'Payment' }, { text: '' }],
-          rows: details.extraActions.filter(action => paymentAmounts[action.standard].optional[action.id] > 0).map(
+          rows: details.extraActions.filter(action => payStandards[action.standard].optional[action.id] > 0).map(
             action => tableRowContent(
               action.label(actionValues?.[action.id] ?? 0),
-              paymentAmounts[action.standard].optional[action.id],
+              payStandards[action.standard].optional[action.id],
               '/extra-actions'
             )
           )
@@ -71,10 +77,7 @@ function pageContent (categoryAmounts, actionValues, paymentAmounts) {
   }
 }
 
-function doPaymentCalculations (landValues, actionValues, bpsPayment, selectedStandards) {
-  const standardsRates = standards.standardsRates
-  const landFeatures = standards.landFeatures
-
+function doPaymentCalculations (payload, bpsPayment) {
   let bps = 0
   let bpsRemainder = bpsPayment
 
@@ -96,53 +99,55 @@ function doPaymentCalculations (landValues, actionValues, bpsPayment, selectedSt
       bps += bpsRemainder * 0.95
   }
 
-  const paymentTotals = {
-    sfiTotal: 0,
-    bpsPayment: bps
-  }
+  const totalPayment = payload.payments.totalPayment
 
-  Object.entries(landFeatures).forEach(([featureId, feature]) => {
-    feature.standards.forEach(standardId => {
-      paymentTotals[standardId] = {
-        base: (selectedStandards.includes(standardId) ? landValues[featureId] : 0) * standardsRates[standardId].mandatory,
-        optional: {}
+  const standardsPayments = Object.values(standardsV2).reduce((acc, cur) => {
+    const id = cur.id
+    const payments = {
+      base: payload.standards[id].payment,
+      optional: { }
+    }
+    cur.optionalActions.forEach(oa => {
+      payments.optional[oa.id] = payload.standards[id].optionalActions.find(poa => poa.id === oa.id)?.payment ?? 0
+      if (oa.id === 'woodland0') {
+        payments.optional[oa.id] /= 10000
       }
-
-      paymentTotals.sfiTotal += paymentTotals[standardId].base
-
-      standards.standards[standardId].optionalActions.forEach((actionId, i) => {
-        paymentTotals[standardId].optional[actionId] = (actionValues?.[actionId] ?? 0) * standardsRates[standardId].optional[i]
-
-        // Payment rates for this is in hectares, but user input is in meters square
-        if (actionId === 'woodland0') {
-          paymentTotals[standardId].optional[actionId] /= 10000
-        }
-
-        paymentTotals.sfiTotal += paymentTotals[standardId].optional[actionId]
-      })
     })
-  })
+    acc[id] = payments
+    return acc
+  }, {})
 
-  paymentTotals.sfiMonthly = paymentTotals.sfiTotal / 12
-  paymentTotals.grandTotal = paymentTotals.sfiTotal + paymentTotals.bpsPayment
-
-  return paymentTotals
+  return {
+    payments: {
+      bpsPayment: bps,
+      grandTotal: totalPayment + bps,
+      sfiMonthly: totalPayment / 12,
+      sfiTotal: totalPayment
+    },
+    standards: standardsPayments
+  }
 }
 
 module.exports = [
   {
     method: 'GET',
     path: pageDetails.path,
-    handler: (request, h) => {
+    handler: async (request, h) => {
       // FIXME: is there a nicer way of doing this?
-      pageDetails.backPath = '/' + request.info.referrer.split('/').slice(-1)[0]
+      pageDetails.backPath = 'javascript:history.go(-1)'
 
-      // Do payment calculation
+      const correlationId = session.getValue(request, session.keys.correlationId)
+      const url = `${agreementServiceBaseUrl}/value?correlationId=${correlationId}`
+      const { payload } = await Wreck.get(url, { json: true })
+      log('msg response', payload)
+
+      // TODO: potentially replace with the data from the msg
       const landValues = session.getValue(request, session.keys.landValues)
       const actionValues = session.getValue(request, session.keys.actionValues)
-      const bpsPayment = session.getValue(request, session.keys.bpsPayment)
       const selectedStandards = session.getValue(request, session.keys.selectedStandards)
-      const paymentAmounts = doPaymentCalculations(landValues, actionValues, bpsPayment, selectedStandards)
+
+      const bpsPayment = session.getValue(request, session.keys.bpsPayment)
+      const paymentAmounts = doPaymentCalculations(payload.body, bpsPayment)
 
       const landFeatures = standards.landFeatures
       const landFeatureCategories = standards.landFeatureCategories
@@ -160,11 +165,11 @@ module.exports = [
           landFeatures[feature].standards.forEach(standard => {
             if (selectedStandards.includes(standard)) {
               categoryAmounts[id].visible = true
-              categoryAmounts[id].payment += paymentAmounts[standard].base
+              categoryAmounts[id].payment += paymentAmounts.standards[standard].base
             }
 
             standards.standards[standard].optionalActions.forEach(
-              action => (categoryAmounts[id].paymentOptional += paymentAmounts[standard].optional[action])
+              action => (categoryAmounts[id].paymentOptional += paymentAmounts.standards[standard].optional[action])
             )
           })
         })
@@ -172,13 +177,19 @@ module.exports = [
         categoryAmounts[id].payment += categoryAmounts[id].paymentOptional
       })
 
-      return h.view(pageDetails.template, pageContent(categoryAmounts, actionValues, paymentAmounts))
+      const pageData = {
+        actionValues,
+        categoryAmounts,
+        paymentAmounts,
+        selectedStandards
+      }
+      return h.view(pageDetails.template, pageContent(pageData))
     }
   },
   {
     method: 'POST',
     path: pageDetails.path,
-    handler: async (request, h) => {
+    handler: async (_, h) => {
       return h.redirect(pageDetails.nextPath)
     }
   }

@@ -18,6 +18,7 @@ const routes = [
   ...require('./routes/ready-reckoner/select-standard'),
   ...require('./routes/ready-reckoner/selected-summary'),
   ...require('./routes/ready-reckoner-v2/bps-payment'),
+  ...require('./routes/ready-reckoner-v2/calculating'),
   ...require('./routes/ready-reckoner-v2/land-calc'),
   ...require('./routes/ready-reckoner-v2/select-std'),
   ...require('./routes/ready-reckoner-v2/extra-actions'),

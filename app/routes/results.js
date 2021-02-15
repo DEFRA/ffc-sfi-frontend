@@ -18,7 +18,7 @@ function results (server) {
         payload: Joi.object({
           sbi: Joi.string().pattern(/^[0-9]{9}/).required()
         }),
-        failAction: (request, h, error) => {
+        failAction: (_, h, error) => {
           logError(error)
           return h.view('sbi', { errors: [{ text: 'Please enter an SBI', href: '#sbi' }] }).takeover()
         }

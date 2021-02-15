@@ -107,7 +107,7 @@ module.exports = [
   {
     method: 'POST',
     path: pageDetails.path,
-    handler: (request, h) => {
+    handler: (_, h) => {
       return h.redirect('/')
     }
   }

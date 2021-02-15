@@ -1,7 +1,7 @@
 module.exports = {
   method: 'GET',
   path: '/sbi',
-  handler: (request, h) => {
+  handler: (_, h) => {
     return h.view('sbi')
   }
 }
