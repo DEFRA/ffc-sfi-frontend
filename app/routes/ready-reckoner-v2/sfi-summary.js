@@ -189,7 +189,7 @@ module.exports = [
   {
     method: 'POST',
     path: pageDetails.path,
-    handler: async (_request, h) => {
+    handler: async (_, h) => {
       return h.redirect(pageDetails.nextPath)
     }
   }
