@@ -120,8 +120,8 @@ module.exports = [{
   paymentRate: 22,
   title: 'Semi-improved and unimproved grassland',
   units: {
-    name: 'meters',
-    symbol: 'm'
+    name: 'hectares',
+    symbol: 'ha'
   }
 }, {
   id: 'hedgerows',
@@ -131,11 +131,11 @@ module.exports = [{
   }],
   landType: 'hedgerows',
   optionalActions: [],
-  paymentRate: 16,
+  paymentRate: 200,
   title: 'Hedgerows',
   units: {
-    name: 'meters',
-    symbol: 'm'
+    name: 'hectares',
+    symbol: 'ha'
   }
 }, {
   id: 'waterbody-buffers',
