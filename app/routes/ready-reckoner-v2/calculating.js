@@ -4,18 +4,12 @@ const baseStandards = require('../../services/standards-v2')
 const session = require('./session-handler')
 const { updateAgreement } = require('../../messaging/senders')
 
-// NOTE: map the land types to the standards. doesn't matter which way round as
-//       the relationship is assumed to be 1-to-1
 function hydrateStandards (baseStandards, selectedStandards, landValues, actionValues) {
-  // Could filter landValues to only those with a value greater than 0 but by
-  // not doing this, they can run through the calculation and everything will
-  // work, it'll be easier to reason about and if they were to be required
-  // within the calculation at some point they are already there
   const actionValueList = Object.keys(actionValues)
   return Object.entries(landValues).reduce((acc, cur) => {
-    const [k, v] = cur
-    baseStandards.filter(s => s.landType === k).forEach(s => {
-      s.inputValue = Number(v)
+    const [id, value] = cur
+    baseStandards.filter(s => s.landType === id).forEach(s => {
+      s.inputValue = value
       // flag to determine which standard(s) are included in total payment calc
       s.selected = selectedStandards.includes(s.id)
       acc[s.id] = s
