@@ -139,7 +139,7 @@ module.exports = [
       const correlationId = session.getValue(request, session.keys.correlationId)
       const url = `${agreementServiceBaseUrl}/value?correlationId=${correlationId}`
       const { payload } = await Wreck.get(url, { json: true })
-      log('msg response', JSON.stringify(payload, null, 2))
+      log('msg response', payload)
 
       // TODO: potentially replace with the data from the msg
       const landValues = session.getValue(request, session.keys.landValues)
