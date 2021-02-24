@@ -26,8 +26,10 @@ module.exports = [{
   method: 'GET',
   path: '/calculating',
   handler: async (request, h) => {
+    // actionValues might not have been set if no standards with additional options was selected
+    // thus by-passing that page, so default to empty object
+    const actionValues = session.getValue(request, session.keys.actionValues) || {}
     const landValues = session.getValue(request, session.keys.landValues)
-    const actionValues = session.getValue(request, session.keys.actionValues)
     const selectedStandards = session.getValue(request, session.keys.selectedStandards)
     const standards = hydrateStandards(baseStandards, selectedStandards, landValues, actionValues)
 
