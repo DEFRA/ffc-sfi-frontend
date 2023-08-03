@@ -26,7 +26,7 @@
     "@hapi/catbox": "^11.1.1",
     "@hapi/catbox-memory": "^5.0.0",
     "@hapi/hapi": "^20.0.3",
-    "@hapi/inert": "^6.0.3",
+    "@hapi/inert": "^6.0.5",
     "@hapi/joi": "^17.1.1",
     "@hapi/vision": "^6.0.1",
     "@hapi/wreck": "^17.1.0",
