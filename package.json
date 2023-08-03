@@ -35,7 +35,7 @@
     "bunyan": "^1.8.15",
     "ffc-messaging": "^2.1.1",
     "govuk-frontend": "^3.10.2",
-    "json-rules-engine": "^6.0.0",
+    "json-rules-engine": "^6.3.1",
     "nunjucks": "^3.2.2",
     "uuid": "^8.3.2"
   },
