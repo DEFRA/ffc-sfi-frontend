@@ -33,7 +33,7 @@
     "@hapi/yar": "^10.1.1",
     "applicationinsights": "^1.8.10",
     "bunyan": "^1.8.15",
-    "ffc-messaging": "^2.1.1",
+    "ffc-messaging": "^2.7.0",
     "govuk-frontend": "^3.10.2",
     "json-rules-engine": "^6.0.0",
     "nunjucks": "^3.2.2",
